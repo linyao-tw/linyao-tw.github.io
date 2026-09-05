@@ -1,0 +1,172 @@
+---
+import { intro } from "../../lib/copy";
+---
+
+<section class="intro" id="intro" aria-labelledby="d02-intro-h">
+	<div class="ghost" aria-hidden="true">想</div>
+
+	<p class="marker" aria-hidden="true"><span>C</span><span class="m-line"></span><span>INTRO</span></p>
+
+	<h2 class="h" id="d02-intro-h" aria-label={intro.headline} data-d02-lines>
+		<span class="ln ln-a"><span class="d02-li">{intro.headlineParts[0]}</span></span>
+		<span class="ln ln-b"><span class="d02-li">{intro.headlineParts[1]}</span></span>
+	</h2>
+
+	<div class="hang">
+		<span class="hang-rule d02-rule" aria-hidden="true"></span>
+		<p class="body" lang="zh-Hant">
+			{intro.body.map(line => <span class="bl">{line}</span>)}
+		</p>
+		<p class="idx" aria-hidden="true">002 / 麟曜 / STUDIO PROFILE</p>
+	</div>
+</section>
+
+<style>
+	.intro {
+		position: relative;
+		overflow: clip;
+		padding: clamp(5rem, 16vh, 11rem) var(--edge) clamp(5rem, 16vh, 10rem);
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: clamp(2.5rem, 7vh, 5rem);
+		border-bottom: var(--hairline) solid var(--rule);
+	}
+
+	.ghost {
+		position: absolute;
+		inset-block-end: -11vw;
+		inset-inline-start: -7vw;
+		font-family: var(--font-cjk);
+		font-size: 48vw;
+		font-weight: 700;
+		line-height: 0.78;
+		color: transparent;
+		-webkit-text-stroke: 1px var(--ghost-line);
+		user-select: none;
+		pointer-events: none;
+	}
+
+	.marker {
+		position: absolute;
+		top: clamp(5rem, 16vh, 11rem);
+		right: calc(var(--edge) * 0.35);
+		display: none;
+		writing-mode: vertical-rl;
+		align-items: center;
+		gap: 0.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.58rem;
+		letter-spacing: 0.28em;
+		color: var(--dim);
+	}
+
+	.m-line {
+		display: block;
+		width: 1px;
+		height: 4rem;
+		background: var(--accent);
+	}
+
+	.h {
+		position: relative;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		color: var(--ink);
+		display: grid;
+	}
+
+	.ln {
+		display: block;
+		overflow: clip;
+		/* Noto Sans TC's font box is 1.45em (asc 1.160 + desc 0.290) and its ink
+		   sits low in it, so at these line-heights the glyph overflows the line
+		   box by up to 0.148em below. Pad the clip box past that and cancel the
+		   padding with an equal negative margin so layout is unchanged. */
+		padding-block: 0.16em;
+		margin-block: -0.16em;
+	}
+
+	.ln .d02-li {
+		display: block;
+		line-height: 0.86;
+		white-space: nowrap;
+		will-change: transform;
+	}
+
+	.ln-a {
+		font-size: clamp(2.4rem, 8.4vw, 7rem);
+	}
+
+	.ln-a .d02-li {
+		letter-spacing: 0.04em;
+		margin-inline-start: var(--in-x, 0);
+		color: var(--dim);
+	}
+
+	.ln-b {
+		margin-block-start: 0.5rem;
+	}
+
+	.ln-b {
+		font-size: clamp(3rem, 12.6vw, 11rem);
+	}
+
+	.ln-b .d02-li {
+		letter-spacing: -0.035em;
+		margin-inline-start: -0.06em;
+	}
+
+	/* narrow measure hung off the right */
+	.hang {
+		display: grid;
+		gap: 1.1rem;
+		justify-self: end;
+		max-width: var(--measure);
+		position: relative;
+	}
+
+	.hang-rule {
+		display: block;
+		height: 1px;
+		background: var(--accent);
+		transform-origin: left center;
+	}
+
+	.body {
+		display: grid;
+		gap: 0.15rem;
+		font-family: var(--font-cjk);
+		font-size: clamp(0.82rem, 1.05vw, 0.95rem);
+		line-height: 2;
+		letter-spacing: 0.06em;
+		color: var(--quiet);
+	}
+
+	.bl {
+		display: block;
+	}
+
+	.idx {
+		font-family: var(--font-mono);
+		font-size: 0.58rem;
+		letter-spacing: 0.18em;
+		color: var(--dim);
+	}
+
+	@media (min-width: 62rem) {
+		.intro {
+			--in-x: 18vw;
+			align-items: start;
+			gap: clamp(2rem, 8vh, 5rem);
+			padding-inline-end: calc(var(--edge) + 2.5rem);
+		}
+
+		.marker {
+			display: flex;
+		}
+
+		.hang {
+			margin-inline-end: clamp(0rem, 6vw, 6rem);
+		}
+	}
+</style>

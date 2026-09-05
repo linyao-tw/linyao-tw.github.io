@@ -1,0 +1,125 @@
+---
+import { brand, nav } from "../../lib/copy";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="ft">
+	<h2 class="visually-hidden">頁尾資訊</h2>
+
+	<div class="top">
+		<p class="zh" lang="zh-Hant">{brand.nameZh}</p>
+		<nav class="links" aria-label="頁尾導覽">
+			<ul>
+				{
+					nav.map(n => (
+						<li>
+							<a href={n.href}>{n.label}</a>
+						</li>
+					))
+				}
+				<li><a href={`mailto:${brand.email}`}>EMAIL</a></li>
+			</ul>
+		</nav>
+	</div>
+
+	<p class="word" aria-hidden="true">{brand.nameEn}</p>
+	<p class="visually-hidden">{brand.nameEn}</p>
+
+	<div class="base">
+		<p class="eq">{brand.equation}</p>
+		<a class="mail" href={`mailto:${brand.email}`}>{brand.email}</a>
+		<p class="cr">{brand.copyright} — {year}</p>
+	</div>
+</footer>
+
+<style>
+	.ft {
+		position: relative;
+		overflow: clip;
+		padding-block-start: clamp(2.5rem, 8vh, 4.5rem);
+		border-top: var(--hairline) solid var(--ink);
+	}
+
+	.top {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem 2rem;
+		padding-inline: var(--edge);
+		padding-block-end: clamp(1.5rem, 5vh, 2.5rem);
+	}
+
+	.zh {
+		font-family: var(--font-cjk);
+		font-weight: 600;
+		font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+		letter-spacing: 0.36em;
+		color: var(--ink);
+	}
+
+	.links ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1.4rem;
+	}
+
+	.links a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.6rem;
+		letter-spacing: 0.22em;
+		color: var(--dim);
+	}
+
+	.links a:hover,
+	.links a:focus-visible {
+		color: var(--accent-txt);
+	}
+
+	.word {
+		font-family: var(--font-grotesk);
+		font-weight: 800;
+		font-size: 7.6vw;
+		line-height: 0.78;
+		letter-spacing: -0.045em;
+		color: var(--ink);
+		white-space: nowrap;
+		padding-inline: var(--edge);
+		margin-inline-start: -0.02em;
+	}
+
+	.base {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 0.5rem 1.5rem;
+		margin-block-start: clamp(1.5rem, 5vh, 2.5rem);
+		padding: 0.85rem var(--edge) 1.1rem;
+		border-top: var(--hairline) solid var(--rule);
+		font-family: var(--font-mono);
+		font-size: 0.58rem;
+		letter-spacing: 0.2em;
+		color: var(--dim);
+	}
+
+	.eq {
+		color: var(--ink);
+	}
+
+	.mail:hover,
+	.mail:focus-visible {
+		color: var(--accent-txt);
+	}
+
+	@media (max-width: 48rem) {
+		.word {
+			font-size: 15vw;
+			white-space: normal;
+		}
+	}
+</style>

@@ -1,0 +1,188 @@
+---
+import { manifesto } from "../../lib/copy";
+---
+
+<section class="man" id="manifesto" aria-labelledby="d02-man-h">
+	<div class="ghost" aria-hidden="true">驗</div>
+
+	<p class="side" aria-hidden="true">MANIFESTO / 02</p>
+
+	<h2 class="h" id="d02-man-h" data-d02-lines>
+		<span class="ln neg">
+			<span class="d02-li">
+				<span class="neg-w">
+					<span class="neg-t">{manifesto.headlineParts[0]}</span>
+					<span class="strike d02-strike" aria-hidden="true"></span>
+				</span>
+			</span>
+		</span>
+		<span class="ln pos"><span class="d02-li">{manifesto.headlineParts[1]}</span></span>
+	</h2>
+
+	<div class="note">
+		<p class="body" lang="zh-Hant">
+			{manifesto.body.map(line => <span class="bl">{line}</span>)}
+		</p>
+		<p class="sig" aria-hidden="true">
+			<span class="sig-r"></span>
+			<span>LINYAO / POSITION</span>
+		</p>
+	</div>
+</section>
+
+<style>
+	.man {
+		position: relative;
+		overflow: clip;
+		display: grid;
+		align-content: center;
+		gap: clamp(2rem, 6vh, 4rem);
+		min-height: 86vh;
+		padding: clamp(5rem, 14vh, 9rem) var(--edge);
+		border-top: var(--hairline) solid var(--rule);
+	}
+
+	.ghost {
+		position: absolute;
+		inset-block-start: -14vw;
+		inset-inline-end: -9vw;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: 64vw;
+		line-height: 0.78;
+		color: var(--ghost-strong);
+		user-select: none;
+		pointer-events: none;
+	}
+
+	.side {
+		position: absolute;
+		top: 50%;
+		left: calc(var(--edge) * 0.26);
+		transform: translateY(-50%);
+		writing-mode: vertical-rl;
+		font-family: var(--font-mono);
+		font-size: 0.58rem;
+		letter-spacing: 0.34em;
+		color: var(--dim);
+		display: none;
+	}
+
+	.h {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+	}
+
+	.ln {
+		display: block;
+		overflow: clip;
+		/* Noto Sans TC's font box is 1.45em (asc 1.160 + desc 0.290) and its ink
+		   sits low in it, so at these line-heights the glyph overflows the line
+		   box by up to 0.148em below. Pad the clip box past that and cancel the
+		   padding with an equal negative margin so layout is unchanged. */
+		padding-block: 0.16em;
+		margin-block: -0.16em;
+	}
+
+	.ln .d02-li {
+		display: block;
+		position: relative;
+		line-height: 0.86;
+		white-space: nowrap;
+		will-change: transform;
+	}
+
+	.neg {
+		font-size: clamp(1.9rem, 8vw, 6.75rem);
+	}
+
+	.neg .d02-li {
+		letter-spacing: 0.06em;
+	}
+
+	.neg-w {
+		position: relative;
+		display: inline-block;
+	}
+
+	.neg-t {
+		color: transparent;
+		-webkit-text-stroke: 1px color-mix(in oklab, var(--ink) 55%, var(--paper));
+	}
+
+	.strike {
+		position: absolute;
+		inset-block-start: 52%;
+		inset-inline-start: -0.06em;
+		width: calc(100% + 0.12em);
+		height: 0.14rem;
+		background: var(--accent);
+		transform-origin: left center;
+	}
+
+	.pos {
+		margin-block-start: 0.3rem;
+	}
+
+	.pos {
+		font-size: clamp(3rem, 14.5vw, 12.5rem);
+	}
+
+	.pos .d02-li {
+		letter-spacing: -0.035em;
+		margin-inline-start: -0.06em;
+		color: var(--ink-deep);
+	}
+
+	.note {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		gap: 1.25rem;
+		justify-self: end;
+		max-width: var(--measure);
+	}
+
+	.body {
+		display: grid;
+		gap: 0.1rem;
+		font-family: var(--font-cjk);
+		font-size: clamp(0.82rem, 1.05vw, 0.95rem);
+		line-height: 2.05;
+		letter-spacing: 0.08em;
+		color: var(--quiet);
+	}
+
+	.bl {
+		display: block;
+	}
+
+	.sig {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.56rem;
+		letter-spacing: 0.24em;
+		color: var(--dim);
+	}
+
+	.sig-r {
+		width: 2.5rem;
+		height: 1px;
+		background: var(--accent);
+	}
+
+	@media (min-width: 62rem) {
+		.side {
+			display: block;
+		}
+
+		.man {
+			gap: clamp(1.5rem, 4vh, 3rem);
+		}
+	}
+</style>
