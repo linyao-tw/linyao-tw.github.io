@@ -2,7 +2,7 @@ import { defineConfig, fontProviders } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://studio.elvismao.com",
+	site: "https://linyao.tw",
 	fonts: [
 		{
 			// Latin display and UI
