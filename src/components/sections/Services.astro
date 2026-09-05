@@ -11,12 +11,12 @@ const rows = [
 ];
 ---
 
-<section class="svc" id="services" aria-labelledby="d02-svc-h">
+<section class="svc" id="services" aria-labelledby="ly-svc-h">
 	<div class="lead">
-		<h2 class="lead-h" id="d02-svc-h" aria-label={services.lead} data-d02-lines>
-			<span class="ln l1"><span class="d02-li">{leadParts[0]}</span></span>
-			<span class="ln l2"><span class="d02-li">{leadParts[1]}</span></span>
-			<span class="ln l3"><span class="d02-li">{leadParts[2]}</span></span>
+		<h2 class="lead-h" id="ly-svc-h" aria-label={services.lead} data-ly-lines>
+			<span class="ln l1"><span class="ly-li">{leadParts[0]}</span></span>
+			<span class="ln l2"><span class="ly-li">{leadParts[1]}</span></span>
+			<span class="ln l3"><span class="ly-li">{leadParts[2]}</span></span>
 		</h2>
 	</div>
 
@@ -34,7 +34,7 @@ const rows = [
 		<span class="d-k d-end">03 DISCIPLINES</span>
 	</div>
 
-	<div class="run d02-run">
+	<div class="run ly-run">
 		{rows.map((r, i) => <ServiceRow item={r.item} variant={r.variant} nameLines={r.nameLines} i={i} />)}
 	</div>
 </section>
@@ -67,7 +67,7 @@ const rows = [
 		margin-block: -0.16em;
 	}
 
-	.ln .d02-li {
+	.ln .ly-li {
 		display: block;
 		line-height: 0.95;
 		white-space: nowrap;
@@ -78,7 +78,7 @@ const rows = [
 		font-size: clamp(1.15rem, 4vw, 2.9rem);
 	}
 
-	.l1 .d02-li {
+	.l1 .ly-li {
 		letter-spacing: 0.08em;
 		color: var(--dim);
 	}
@@ -87,7 +87,7 @@ const rows = [
 		font-size: clamp(2rem, 8.4vw, 6.5rem);
 	}
 
-	.l2 .d02-li {
+	.l2 .ly-li {
 		letter-spacing: -0.02em;
 		margin-inline-start: -0.04em;
 	}
@@ -96,13 +96,15 @@ const rows = [
 		font-size: clamp(0.9rem, 2.6vw, 1.9rem);
 	}
 
-	.l3 .d02-li {
+	.l3 .ly-li {
 		letter-spacing: 0.24em;
 		color: var(--dim);
 	}
 
 	.l3 {
-		justify-self: end;
+		/* hangs off the left edge like the lines above it, tabbed in */
+		justify-self: start;
+		margin-inline-start: 2.6em;
 		margin-block-start: 0.75rem;
 	}
 

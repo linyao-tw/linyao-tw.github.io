@@ -4,25 +4,25 @@ import { brand, hero } from "../../lib/copy";
 const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 ---
 
-<section class="hero d02-hero" id="top" aria-labelledby="d02-h1">
+<section class="hero ly-hero" id="top" aria-labelledby="ly-h1">
 	<div class="ghost" aria-hidden="true">動</div>
 
 	<p class="side" aria-hidden="true">{brand.disciplines}</p>
 
-	<div class="type" data-d02-hero>
-		<h1 class="h1" id="d02-h1" aria-label={hero.headline}>
-			<span class="ln ln-a"><span class="d02-li">{hero.headlineParts[0]}</span></span>
-			<span class="ln ln-b"><span class="d02-li" data-d02-track="0.34em">{hero.headlineParts[1]}</span></span>
+	<div class="type" data-ly-hero>
+		<h1 class="h1" id="ly-h1" aria-label={hero.headline}>
+			<span class="ln ln-a"><span class="ly-li">{hero.headlineParts[0]}</span></span>
+			<span class="ln ln-b"><span class="ly-li" data-ly-track="0.34em">{hero.headlineParts[1]}</span></span>
 			<span class="ln ln-c">
-				<span class="d02-li"><span class="solid">體</span><span class="hollow">驗</span></span>
+				<span class="ly-li"><span class="solid">數位</span><span class="hollow">體驗</span></span>
 			</span>
 		</h1>
 	</div>
 
-	<div class="disc" lang="zh-Hant" data-d02-track="0.95em">{brand.disciplines}</div>
+	<div class="disc" lang="zh-Hant" data-ly-track="0.95em">{brand.disciplines}</div>
 
 	<div class="eq" aria-label={brand.equation}>
-		<div class="eq-track d02-eq-track" aria-hidden="true">
+		<div class="eq-track ly-eq-track" aria-hidden="true">
 			{
 				eqRepeat.map(i => (
 					<span class="eq-item">
@@ -37,9 +37,9 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 	<div class="foot">
 		<p class="cue">{hero.scrollCue}</p>
 		<p class="loc">
-			<span>25.0330°N</span>
-			<span>121.5654°E</span>
-			<span>TAIPEI</span>
+			<span>24.1616°N</span>
+			<span>120.6742°E</span>
+			<span>TAICHUNG</span>
 		</p>
 	</div>
 </section>
@@ -112,7 +112,7 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 		margin-block: -0.16em;
 	}
 
-	.ln .d02-li {
+	.ln .ly-li {
 		display: block;
 		line-height: 0.82;
 		white-space: nowrap;
@@ -123,7 +123,7 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 		font-size: var(--h-a);
 	}
 
-	.ln-a .d02-li {
+	.ln-a .ly-li {
 		margin-inline-start: -0.19em;
 		letter-spacing: -0.02em;
 	}
@@ -136,7 +136,7 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 		font-size: var(--h-b);
 	}
 
-	.ln-b .d02-li {
+	.ln-b .ly-li {
 		margin-inline-start: var(--h-b-x);
 		letter-spacing: 0.02em;
 		color: var(--dim);
@@ -150,7 +150,7 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 		font-size: var(--h-c);
 	}
 
-	.ln-c .d02-li {
+	.ln-c .ly-li {
 		margin-inline-start: var(--h-c-x);
 		letter-spacing: -0.03em;
 	}
@@ -164,8 +164,8 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 		--h-a: 17.5vw;
 		--h-b: 6.4vw;
 		--h-b-x: 34vw;
-		--h-c: 21.5vw;
-		--h-c-x: 15vw;
+		--h-c: 17vw;
+		--h-c-x: 6vw;
 	}
 
 	/* --- disciplines line --------------------------------------------- */
@@ -255,8 +255,8 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 			--h-a: 29vw;
 			--h-b: 10.5vw;
 			--h-b-x: 22vw;
-			--h-c: 34vw;
-			--h-c-x: 8vw;
+			--h-c: 21vw;
+			--h-c-x: 4vw;
 		}
 
 		.ghost {
@@ -279,8 +279,8 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 			--h-a: 15vw;
 			--h-b: 5.2vw;
 			--h-b-x: 42vw;
-			--h-c: 18.5vw;
-			--h-c-x: 20vw;
+			--h-c: 18vw;
+			--h-c-x: 14vw;
 		}
 	}
 </style>

@@ -1,27 +1,25 @@
 ---
-import Credibility from "../components/design-02/Credibility.astro";
-import Cta from "../components/design-02/Cta.astro";
-import Footer from "../components/design-02/Footer.astro";
-import Header from "../components/design-02/Header.astro";
-import Hero from "../components/design-02/Hero.astro";
-import InquiryDialog from "../components/design-02/InquiryDialog.astro";
-import Intro from "../components/design-02/Intro.astro";
-import Manifesto from "../components/design-02/Manifesto.astro";
-import Marquee from "../components/design-02/Marquee.astro";
-import Motion from "../components/design-02/Motion.astro";
-import Process from "../components/design-02/Process.astro";
-import Services from "../components/design-02/Services.astro";
-import Tokens from "../components/design-02/Tokens.astro";
-import SiteLayout from "../layouts/SiteLayout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Footer from "../components/layout/Footer.astro";
+import Header from "../components/layout/Header.astro";
+import Credibility from "../components/sections/Credibility.astro";
+import Cta from "../components/sections/Cta.astro";
+import Hero from "../components/sections/Hero.astro";
+import Intro from "../components/sections/Intro.astro";
+import Manifesto from "../components/sections/Manifesto.astro";
+import Marquee from "../components/sections/Marquee.astro";
+import Process from "../components/sections/Process.astro";
+import Services from "../components/sections/Services.astro";
+import InquiryDialog from "../components/ui/InquiryDialog.astro";
+import Motion from "../components/ui/Motion.astro";
+import { hero } from "../lib/copy";
+import { site } from "../lib/site";
 ---
 
-<SiteLayout
-	title="麟曜數位工作室 LINYAO DIGITAL STUDIO — DESIGN × CODE × MOTION"
-	description="麟曜數位工作室 LINYAO DIGITAL STUDIO — DESIGN × CODE × MOTION。品牌設計・網頁設計・系統開發。你敢想像，我們敢做出來。"
-	bodyClass="d-02"
-	themeColor="#e5e0d7"
+<BaseLayout
+	title={`${site.name} ${site.nameEn}｜${hero.headline}`}
+	description="麟曜數位工作室 LINYAO DIGITAL STUDIO 是一間以設計與技術為核心的獨立數位工作室，結合設計、程式與動態特效，提供品牌設計、網頁設計、系統開發與創意開發服務。你敢想像，我們敢做出來。"
 >
-	<Tokens />
 	<a class="skip-link" href="#main">跳至主要內容</a>
 	<Header />
 	<main id="main">
@@ -37,4 +35,4 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 	<Footer />
 	<InquiryDialog />
 	<Motion />
-</SiteLayout>
+</BaseLayout>

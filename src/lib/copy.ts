@@ -18,9 +18,9 @@ export const brand = {
 } as const;
 
 export const hero = {
-	headline: "創造令人驚艷的體驗",
-	/** hand-broken for large display settings: 創造 / 令人驚艷的 / 體驗 */
-	headlineParts: ["創造", "令人驚艷的", "體驗"],
+	headline: "創造令人驚艷的數位體驗",
+	/** hand-broken for large display settings: 創造 / 令人驚艷的 / 數位體驗 */
+	headlineParts: ["創造", "令人驚艷的", "數位體驗"],
 	scrollCue: "SCROLL TO EXPLORE ↓"
 } as const;
 

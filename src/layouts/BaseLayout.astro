@@ -1,0 +1,48 @@
+---
+import { Font } from "astro:assets";
+import Seo from "../components/seo/Seo.astro";
+import { site } from "../lib/site";
+import "../styles/global.css";
+import "../styles/tokens.css";
+
+interface Props {
+	title: string;
+	description: string;
+	schemaType?: string;
+	noindex?: boolean;
+	bodyClass?: string;
+}
+
+const { title, description, schemaType, noindex, bodyClass } = Astro.props;
+---
+
+<!doctype html>
+<html lang={site.lang}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+
+		<Seo title={title} description={description} schemaType={schemaType} noindex={noindex} />
+
+		{
+			/* GenKiGothicTW carries both the Latin and the Traditional Chinese voice.
+		    Only the three weights the design uses are requested — the umbrella
+		    GenKiGothicTW.css @imports all six in series, which is a slower
+		    waterfall and ~2,000 unused @font-face rules to parse. */
+		}
+		<link rel="preconnect" href="https://font.emtech.cc" crossorigin />
+		<link rel="stylesheet" href="https://font.emtech.cc/css/GenKiGothicTW/400" />
+		<link rel="stylesheet" href="https://font.emtech.cc/css/GenKiGothicTW/700" />
+		<link rel="stylesheet" href="https://font.emtech.cc/css/GenKiGothicTW/900" />
+
+		{/* technical notation stays monospaced, self-hosted */}
+		<Font cssVariable="--font-noto-sans-mono" preload />
+
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+	</head>
+	<body class={bodyClass}>
+		<slot />
+	</body>
+</html>

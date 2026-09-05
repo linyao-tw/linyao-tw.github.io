@@ -6,15 +6,15 @@ const setB = capabilities.slice(7);
 const reps = [0, 1, 2];
 ---
 
-<section class="mq d02-mq" aria-labelledby="d02-mq-h">
-	<h2 class="side" id="d02-mq-h">CAPABILITIES</h2>
+<section class="mq ly-mq" aria-labelledby="ly-mq-h">
+	<h2 class="side" id="ly-mq-h">CAPABILITIES</h2>
 
 	<ul class="sr visually-hidden">
 		{capabilities.map(c => <li>{c}</li>)}
 	</ul>
 
 	<div class="band band-a">
-		<div class="track d02-band-a" aria-hidden="true">
+		<div class="track ly-band-a" aria-hidden="true">
 			{
 				reps.map(() =>
 					setA.map(c => (
@@ -29,7 +29,7 @@ const reps = [0, 1, 2];
 	</div>
 
 	<div class="band band-b">
-		<div class="track d02-band-b" aria-hidden="true">
+		<div class="track ly-band-b" aria-hidden="true">
 			{
 				reps.map(() =>
 					setB.map(c => (

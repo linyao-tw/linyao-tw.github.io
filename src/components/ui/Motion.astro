@@ -13,24 +13,24 @@
 
 	motion(
 		({ gsap, ScrollTrigger }) => {
-			document.body.classList.add("d02-js");
+			document.body.classList.add("ly-js");
 
 			/* ---------- hero: mask reveal + letter-spacing settle ---------- */
-			const heroLines = document.querySelectorAll("[data-d02-hero] .d02-li");
+			const heroLines = document.querySelectorAll("[data-ly-hero] .ly-li");
 			const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
 
 			if (heroLines.length) {
 				tl.from(heroLines, { yPercent: 150, duration: 1.3, stagger: 0.085 });
 			}
 
-			document.querySelectorAll("[data-d02-track]").forEach((el, i) => {
-				const from = el.getAttribute("data-d02-track") || "0.4em";
+			document.querySelectorAll("[data-ly-track]").forEach((el, i) => {
+				const from = el.getAttribute("data-ly-track") || "0.4em";
 				tl.from(el, { letterSpacing: from, opacity: 0, duration: 1.5 }, 0.35 + i * 0.14);
 			});
 
 			/* ---------- every hand-broken headline: per-line masks --------- */
-			gsap.utils.toArray<HTMLElement>("[data-d02-lines]").forEach(block => {
-				const lines = block.querySelectorAll(".d02-li");
+			gsap.utils.toArray<HTMLElement>("[data-ly-lines]").forEach(block => {
+				const lines = block.querySelectorAll(".ly-li");
 				if (!lines.length) return;
 				gsap.from(lines, {
 					yPercent: 150,
@@ -42,7 +42,7 @@
 			});
 
 			/* ---------- hairline draws ------------------------------------- */
-			gsap.utils.toArray<HTMLElement>(".d02-rule").forEach(el => {
+			gsap.utils.toArray<HTMLElement>(".ly-rule").forEach(el => {
 				gsap.from(el, {
 					scaleX: 0,
 					ease: "none",
@@ -50,7 +50,7 @@
 				});
 			});
 
-			gsap.utils.toArray<HTMLElement>(".d02-strike").forEach(el => {
+			gsap.utils.toArray<HTMLElement>(".ly-strike").forEach(el => {
 				gsap.from(el, {
 					scaleX: 0,
 					ease: "none",
@@ -59,7 +59,7 @@
 			});
 
 			/* ---------- hero equation band: scrubbed xPercent -------------- */
-			const eqTrack = document.querySelector(".d02-eq-track");
+			const eqTrack = document.querySelector(".ly-eq-track");
 			if (eqTrack) {
 				gsap.fromTo(
 					eqTrack,
@@ -67,15 +67,15 @@
 					{
 						xPercent: -34,
 						ease: "none",
-						scrollTrigger: { trigger: ".d02-hero", start: "top top", end: "bottom top", scrub: 0.5 }
+						scrollTrigger: { trigger: ".ly-hero", start: "top top", end: "bottom top", scrub: 0.5 }
 					}
 				);
 			}
 
 			/* ---------- signature: one glyph, three crops, one travel ------ */
-			const run = document.querySelector<HTMLElement>(".d02-run");
+			const run = document.querySelector<HTMLElement>(".ly-run");
 			if (run) {
-				const crops = Array.from(run.querySelectorAll<HTMLElement>(".d02-glyph-crop"));
+				const crops = Array.from(run.querySelectorAll<HTMLElement>(".ly-glyph-crop"));
 
 				const wide = window.matchMedia("(min-width: 62rem)");
 
@@ -99,7 +99,7 @@
 				ScrollTrigger.addEventListener("refresh", placeCrops);
 
 				gsap.fromTo(
-					".d02-glyph-track",
+					".ly-glyph-track",
 					{ xPercent: 17 },
 					{
 						xPercent: -17,
@@ -110,7 +110,7 @@
 			}
 
 			/* ---------- service names: outline fills solid on entry -------- */
-			gsap.utils.toArray<HTMLElement>(".d02-fill").forEach(el => {
+			gsap.utils.toArray<HTMLElement>(".ly-fill").forEach(el => {
 				const row = el.closest("article") || el;
 				gsap.fromTo(
 					el,
@@ -124,26 +124,31 @@
 			});
 
 			/* ---------- capability bands: counter-scrolling ---------------- */
-			const mq = document.querySelector(".d02-mq");
+			const mq = document.querySelector(".ly-mq");
 			if (mq) {
 				const range = { trigger: mq, start: "top bottom", end: "bottom top", scrub: 0.5 };
-				gsap.fromTo(".d02-band-a", { xPercent: -2 }, { xPercent: -26, ease: "none", scrollTrigger: { ...range } });
-				gsap.fromTo(".d02-band-b", { xPercent: -30 }, { xPercent: -4, ease: "none", scrollTrigger: { ...range } });
+				gsap.fromTo(".ly-band-a", { xPercent: -2 }, { xPercent: -26, ease: "none", scrollTrigger: { ...range } });
+				gsap.fromTo(".ly-band-b", { xPercent: -30 }, { xPercent: -4, ease: "none", scrollTrigger: { ...range } });
 			}
 
-			/* ---------- 01—05 horizontal type sequence --------------------- */
+			/* ---------- 01—05 horizontal type sequence ---------------------
+			   With JS the strip is 190% wide with much larger type, so it has to
+			   travel for 05 to be reachable. It must not start travelling until
+			   the whole section has been on screen, otherwise 01 has already slid
+			   away by the time the reader arrives. */
 			const mm = gsap.matchMedia();
 			mm.add("(min-width: 48rem)", () => {
-				const strip = document.querySelector(".d02-strip");
-				const proc = document.querySelector(".d02-proc");
+				const strip = document.querySelector(".ly-strip");
+				const proc = document.querySelector(".ly-proc");
 				if (!strip || !proc) return;
 				gsap.fromTo(
 					strip,
 					{ xPercent: 0 },
 					{
-						xPercent: -47,
+						// 190% wide strip -> 47.4% of it overflows; 48 clears 05 of the edge
+						xPercent: -48,
 						ease: "none",
-						scrollTrigger: { trigger: proc, start: "top bottom", end: "bottom top", scrub: 0.55 }
+						scrollTrigger: { trigger: proc, start: "bottom bottom", end: "bottom 35%", scrub: 0.7 }
 					}
 				);
 			});

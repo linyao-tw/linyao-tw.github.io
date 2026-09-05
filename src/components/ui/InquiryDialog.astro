@@ -2,11 +2,11 @@
 import { brand, inquiryFields } from "../../lib/copy";
 ---
 
-<dialog class="dlg" id="d02-inquiry" aria-labelledby="d02-dlg-h">
+<dialog class="dlg" id="ly-inquiry" aria-labelledby="ly-dlg-h">
 	<div class="panel">
 		<div class="bar">
-			<p class="bar-l" id="d02-dlg-h">詢案表單 / INQUIRY</p>
-			<button class="x" type="button" data-d02-close>
+			<p class="bar-l" id="ly-dlg-h">詢案表單 / INQUIRY</p>
+			<button class="x" type="button" data-ly-close>
 				<span class="visually-hidden">關閉表單</span>
 				<span aria-hidden="true">CLOSE ✕</span>
 			</button>
@@ -17,12 +17,12 @@ import { brand, inquiryFields } from "../../lib/copy";
 			<span class="big-b">{brand.equation}</span>
 		</div>
 
-		<form class="form" id="d02-form" novalidate>
+		<form class="form" id="ly-form" novalidate>
 			<div class="fields">
 				{
 					inquiryFields.map((f, i) => (
 						<p class="f">
-							<label for={`d02-f-${f.name}`}>
+							<label for={`ly-f-${f.name}`}>
 								<span class="f-i">{String(i + 1).padStart(2, "0")}</span>
 								<span class="f-t">{f.label}</span>
 								{f.required && (
@@ -31,21 +31,21 @@ import { brand, inquiryFields } from "../../lib/copy";
 									</span>
 								)}
 							</label>
-							<input id={`d02-f-${f.name}`} name={f.name} type={f.type} required={f.required} autocomplete={f.autocomplete} />
+							<input id={`ly-f-${f.name}`} name={f.name} type={f.type} required={f.required} autocomplete={f.autocomplete} />
 						</p>
 					))
 				}
 				<p class="f f-wide">
-					<label for="d02-f-message">
+					<label for="ly-f-message">
 						<span class="f-i">05</span>
 						<span class="f-t">專案內容 / MESSAGE</span>
 						<span class="f-q" aria-hidden="true">必填</span>
 					</label>
-					<textarea id="d02-f-message" name="message" rows="4" required></textarea>
+					<textarea id="ly-f-message" name="message" rows="4" required></textarea>
 				</p>
 			</div>
 
-			<p class="err" id="d02-err" role="status"></p>
+			<p class="err" id="ly-err" role="status"></p>
 
 			<div class="act">
 				<button class="send" type="submit">送出詢問 ↗</button>
@@ -56,9 +56,9 @@ import { brand, inquiryFields } from "../../lib/copy";
 </dialog>
 
 <script>
-	const dlg = document.getElementById("d02-inquiry") as HTMLDialogElement | null;
-	const form = document.getElementById("d02-form") as HTMLFormElement | null;
-	const err = document.getElementById("d02-err");
+	const dlg = document.getElementById("ly-inquiry") as HTMLDialogElement | null;
+	const form = document.getElementById("ly-form") as HTMLFormElement | null;
+	const err = document.getElementById("ly-err");
 
 	if (dlg && form) {
 		let opener: HTMLElement | null = null;
@@ -66,8 +66,8 @@ import { brand, inquiryFields } from "../../lib/copy";
 		const open = (trigger: HTMLElement) => {
 			// opened from inside the full-screen menu: close that first so the
 			// scroll lock is released and focus has somewhere sane to return to
-			const menu = document.getElementById("d02-menu");
-			const burger = document.getElementById("d02-burger");
+			const menu = document.getElementById("ly-menu");
+			const burger = document.getElementById("ly-burger");
 			if (menu && burger && !menu.hidden && menu.contains(trigger)) {
 				burger.click();
 				opener = burger;
@@ -79,11 +79,11 @@ import { brand, inquiryFields } from "../../lib/copy";
 			dlg.querySelector<HTMLInputElement>("input, textarea")?.focus();
 		};
 
-		document.querySelectorAll<HTMLElement>("[data-d02-inquiry]").forEach(btn => {
+		document.querySelectorAll<HTMLElement>("[data-ly-inquiry]").forEach(btn => {
 			btn.addEventListener("click", () => open(btn));
 		});
 
-		dlg.querySelectorAll<HTMLElement>("[data-d02-close]").forEach(btn => {
+		dlg.querySelectorAll<HTMLElement>("[data-ly-close]").forEach(btn => {
 			btn.addEventListener("click", () => dlg.close());
 		});
 
@@ -108,7 +108,7 @@ import { brand, inquiryFields } from "../../lib/copy";
 			if (!name || !email || !message) {
 				if (err) err.textContent = "請填寫姓名、信箱與專案內容。";
 				const first = !name ? "name" : !email ? "email" : "message";
-				document.getElementById(`d02-f-${first}`)?.focus();
+				document.getElementById(`ly-f-${first}`)?.focus();
 				return;
 			}
 
@@ -137,6 +137,15 @@ import { brand, inquiryFields } from "../../lib/copy";
 	.dlg {
 		border: 0;
 		padding: 0;
+		/* open/close transition — `overlay` and `display` are discrete
+		   properties, so they need allow-discrete to animate at all */
+		opacity: 0;
+		transform: translateY(1.25rem) scale(0.985);
+		transition:
+			opacity 320ms ease,
+			transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+			overlay 420ms allow-discrete,
+			display 420ms allow-discrete;
 		max-width: min(56rem, 100vw - 1.5rem);
 		width: 100%;
 		max-height: 92svh;
@@ -146,9 +155,47 @@ import { brand, inquiryFields } from "../../lib/copy";
 		margin: auto;
 	}
 
+	.dlg[open] {
+		opacity: 1;
+		transform: none;
+	}
+
+	/* entry state must be declared after the open state */
+	@starting-style {
+		.dlg[open] {
+			opacity: 0;
+			transform: translateY(1.25rem) scale(0.985);
+		}
+	}
+
 	.dlg::backdrop {
 		/* ::backdrop cannot see the page custom properties — the --void tone, literal */
+		background: rgb(14 14 13 / 0);
+		transition:
+			background 320ms ease,
+			overlay 420ms allow-discrete,
+			display 420ms allow-discrete;
+	}
+
+	.dlg[open]::backdrop {
 		background: rgb(14 14 13 / 0.7);
+	}
+
+	@starting-style {
+		.dlg[open]::backdrop {
+			background: rgb(14 14 13 / 0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.dlg,
+		.dlg::backdrop {
+			transition: none;
+		}
+
+		.dlg {
+			transform: none;
+		}
 	}
 
 	.panel {

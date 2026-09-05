@@ -2,18 +2,18 @@
 import { intro } from "../../lib/copy";
 ---
 
-<section class="intro" id="intro" aria-labelledby="d02-intro-h">
+<section class="intro" id="intro" aria-labelledby="ly-intro-h">
 	<div class="ghost" aria-hidden="true">想</div>
 
 	<p class="marker" aria-hidden="true"><span>C</span><span class="m-line"></span><span>INTRO</span></p>
 
-	<h2 class="h" id="d02-intro-h" aria-label={intro.headline} data-d02-lines>
-		<span class="ln ln-a"><span class="d02-li">{intro.headlineParts[0]}</span></span>
-		<span class="ln ln-b"><span class="d02-li">{intro.headlineParts[1]}</span></span>
+	<h2 class="h" id="ly-intro-h" aria-label={intro.headline} data-ly-lines>
+		<span class="ln ln-a"><span class="ly-li">{intro.headlineParts[0]}</span></span>
+		<span class="ln ln-b"><span class="ly-li">{intro.headlineParts[1]}</span></span>
 	</h2>
 
 	<div class="hang">
-		<span class="hang-rule d02-rule" aria-hidden="true"></span>
+		<span class="hang-rule ly-rule" aria-hidden="true"></span>
 		<p class="body" lang="zh-Hant">
 			{intro.body.map(line => <span class="bl">{line}</span>)}
 		</p>
@@ -86,7 +86,7 @@ import { intro } from "../../lib/copy";
 		margin-block: -0.16em;
 	}
 
-	.ln .d02-li {
+	.ln .ly-li {
 		display: block;
 		line-height: 0.86;
 		white-space: nowrap;
@@ -97,7 +97,7 @@ import { intro } from "../../lib/copy";
 		font-size: clamp(2.4rem, 8.4vw, 7rem);
 	}
 
-	.ln-a .d02-li {
+	.ln-a .ly-li {
 		letter-spacing: 0.04em;
 		margin-inline-start: var(--in-x, 0);
 		color: var(--dim);
@@ -111,7 +111,7 @@ import { intro } from "../../lib/copy";
 		font-size: clamp(3rem, 12.6vw, 11rem);
 	}
 
-	.ln-b .d02-li {
+	.ln-b .ly-li {
 		letter-spacing: -0.035em;
 		margin-inline-start: -0.06em;
 	}

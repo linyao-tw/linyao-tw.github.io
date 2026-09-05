@@ -2,12 +2,12 @@
 import { cta } from "../../lib/copy";
 ---
 
-<section class="cta" id="contact" aria-labelledby="d02-cta-h">
+<section class="cta" id="contact" aria-labelledby="ly-cta-h">
 	<div class="ghost" aria-hidden="true">實</div>
 
-	<h2 class="h" id="d02-cta-h" aria-label={cta.headline} data-d02-lines>
-		<span class="ln a"><span class="d02-li">{cta.headlineParts[0]}</span></span>
-		<span class="ln b"><span class="d02-li">{cta.headlineParts[1]}</span></span>
+	<h2 class="h" id="ly-cta-h" aria-label={cta.headline} data-ly-lines>
+		<span class="ln a"><span class="ly-li">{cta.headlineParts[0]}</span></span>
+		<span class="ln b"><span class="ly-li">{cta.headlineParts[1]}</span></span>
 	</h2>
 
 	<div class="under">
@@ -15,7 +15,7 @@ import { cta } from "../../lib/copy";
 			{cta.body.map(line => <span class="bl">{line}</span>)}
 		</p>
 
-		<button class="ask" type="button" data-d02-inquiry>
+		<button class="ask" type="button" data-ly-inquiry>
 			<span class="ask-t">{cta.button}</span>
 			<span class="ask-r" aria-hidden="true"></span>
 		</button>
@@ -65,7 +65,7 @@ import { cta } from "../../lib/copy";
 		margin-block: -0.16em;
 	}
 
-	.ln .d02-li {
+	.ln .ly-li {
 		display: block;
 		line-height: 0.86;
 		white-space: nowrap;
@@ -76,7 +76,7 @@ import { cta } from "../../lib/copy";
 		font-size: clamp(2rem, 7.4vw, 6rem);
 	}
 
-	.a .d02-li {
+	.a .ly-li {
 		letter-spacing: 0.06em;
 		color: var(--dim);
 	}
@@ -89,7 +89,7 @@ import { cta } from "../../lib/copy";
 		font-size: clamp(2.6rem, 11.6vw, 9.5rem);
 	}
 
-	.b .d02-li {
+	.b .ly-li {
 		letter-spacing: -0.03em;
 		margin-inline-start: -0.05em;
 	}

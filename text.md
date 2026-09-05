@@ -1,5 +1,5 @@
 # COVER
-# 創造令人驚艷的體驗
+# 創造令人驚艷的數位體驗
 **DESIGN × CODE × MOTION**
 麟曜數位工作室
 LINYAO DIGITAL STUDIO

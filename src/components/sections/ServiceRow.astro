@@ -14,12 +14,12 @@ interface Props {
 }
 
 const { item, variant, nameLines, i } = Astro.props;
-const headingId = `d02-svc-${item.index}`;
+const headingId = `ly-svc-${item.index}`;
 ---
 
 <article class:list={["row", `v-${variant}`]} style={`--i:${i}`} aria-labelledby={headingId}>
-	<div class="crop d02-glyph-crop" aria-hidden="true">
-		<div class="gtrack d02-glyph-track"><span class="g">體</span></div>
+	<div class="crop ly-glyph-crop" aria-hidden="true">
+		<div class="gtrack ly-glyph-track"><span class="g">體</span></div>
 	</div>
 
 	<p class="idx" aria-hidden="true"><span class="idx-n">{item.index}</span><span class="idx-l">SERVICE</span></p>
@@ -30,7 +30,7 @@ const headingId = `d02-svc-${item.index}`;
 				<span class="nl">
 					<span class="stackword">
 						<span class="ol">{word}</span>
-						<span class="fl d02-fill" aria-hidden="true">
+						<span class="fl ly-fill" aria-hidden="true">
 							{word}
 						</span>
 					</span>

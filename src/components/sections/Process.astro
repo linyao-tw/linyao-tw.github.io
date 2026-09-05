@@ -2,19 +2,19 @@
 import { process } from "../../lib/copy";
 ---
 
-<section class="proc d02-proc" id="process" aria-labelledby="d02-proc-h">
+<section class="proc ly-proc" id="process" aria-labelledby="ly-proc-h">
 	<div class="ghost" aria-hidden="true">創</div>
 
 	<div class="top">
-		<h2 class="h" id="d02-proc-h" aria-label={`${process.headlineParts[0]}${process.headlineParts[1]}`} data-d02-lines>
-			<span class="ln a"><span class="d02-li">{process.headlineParts[0]}</span></span>
-			<span class="ln b"><span class="d02-li">{process.headlineParts[1]}</span></span>
+		<h2 class="h" id="ly-proc-h" aria-label={`${process.headlineParts[0]}${process.headlineParts[1]}`} data-ly-lines>
+			<span class="ln a"><span class="ly-li">{process.headlineParts[0]}</span></span>
+			<span class="ln b"><span class="ly-li">{process.headlineParts[1]}</span></span>
 		</h2>
 		<p class="hw" aria-hidden="true">{process.kicker}</p>
 	</div>
 
 	<div class="clip">
-		<ol class="strip d02-strip">
+		<ol class="strip ly-strip">
 			{
 				process.steps.map(s => (
 					<li class="step">
@@ -83,7 +83,7 @@ import { process } from "../../lib/copy";
 		margin-block: -0.16em;
 	}
 
-	.ln .d02-li {
+	.ln .ly-li {
 		display: block;
 		line-height: 0.88;
 		white-space: nowrap;
@@ -94,7 +94,7 @@ import { process } from "../../lib/copy";
 		font-size: clamp(1.4rem, 4.6vw, 3.5rem);
 	}
 
-	.a .d02-li {
+	.a .ly-li {
 		letter-spacing: 0.14em;
 		color: var(--dim);
 	}
@@ -103,7 +103,7 @@ import { process } from "../../lib/copy";
 		font-size: clamp(2.6rem, 11vw, 8.5rem);
 	}
 
-	.b .d02-li {
+	.b .ly-li {
 		letter-spacing: -0.02em;
 		margin-inline-start: -0.04em;
 	}
@@ -216,19 +216,19 @@ import { process } from "../../lib/copy";
 		}
 	}
 
-	:global(body.d02-js) .strip {
+	:global(body.ly-js) .strip {
 		--st: clamp(1.7rem, 4.6vw, 4.25rem);
 		--sn: clamp(3rem, 8vw, 7rem);
 	}
 
 	@media (min-width: 48rem) {
-		:global(body.d02-js) .strip {
+		:global(body.ly-js) .strip {
 			width: 190%;
 		}
 	}
 
 	@media (max-width: 47.99rem) {
-		:global(body.d02-js) .strip {
+		:global(body.ly-js) .strip {
 			--st: clamp(1.6rem, 8.5vw, 2.6rem);
 			--sn: clamp(2.25rem, 13vw, 4rem);
 		}

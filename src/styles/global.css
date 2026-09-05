@@ -113,13 +113,14 @@ img {
 	--rule: color-mix(in oklab, var(--graphite) 32%, transparent);
 
 	/* --- type ---------------------------------------------------------
-	   Noto Sans across the board: Latin, Traditional Chinese and mono.
-	   Self-hosted and subset by astro:fonts (see astro.config.ts).
-	   The Latin stacks deliberately carry no generic family so that CJK
-	   glyphs fall through to Noto Sans TC instead of a system default. */
-	--font-grotesk: var(--font-noto-sans), var(--font-noto-sans-tc);
-	--font-mono: var(--font-noto-sans-mono), var(--font-noto-sans-tc);
-	--font-cjk: var(--font-noto-sans-tc);
+	   GenKiGothicTW (font.emtech.cc) is the studio voice and covers both the
+	   Latin and the Traditional Chinese sets, so display and body share one
+	   family. Only technical notation switches to a monospace, self-hosted
+	   by astro:fonts. */
+	--font-genki: "GenKiGothicTW";
+	--font-grotesk: var(--font-genki), "Helvetica Neue", Helvetica, Arial, sans-serif;
+	--font-cjk: var(--font-genki), "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+	--font-mono: var(--font-noto-sans-mono), var(--font-genki), monospace;
 
 	/* --- space (rem only) --------------------------------------------- */
 	--s-1: 0.25rem;

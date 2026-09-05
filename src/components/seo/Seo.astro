@@ -1,0 +1,58 @@
+---
+/**
+ * Every head tag that is not a font or a stylesheet: canonical, robots,
+ * Open Graph, Twitter, and the Schema.org @graph for this page.
+ */
+import { buildSchema } from "../../lib/schema";
+import { site } from "../../lib/site";
+
+interface Props {
+	title: string;
+	description: string;
+	/** page @type for structured data, e.g. "AboutPage" */
+	schemaType?: string;
+	/** keep this page out of the index (used by 404) */
+	noindex?: boolean;
+}
+
+const { title, description, schemaType, noindex = false } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL(site.ogImage, site.url).href;
+const schema = buildSchema({ url: canonical, title, description, type: schemaType });
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+{noindex && <meta name="robots" content="noindex, follow" />}
+{!noindex && <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />}
+
+<meta name="author" content={site.name} />
+<meta name="publisher" content={site.name} />
+<meta name="theme-color" content={site.themeColor} />
+<meta name="format-detection" content="telephone=no" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={`${site.name} ${site.nameEn}`} />
+<meta property="og:locale" content="zh_TW" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:alt" content={`${site.name} ${site.nameEn}`} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content={`${site.name} ${site.nameEn}`} />
+
+<meta name="geo.region" content="TW-TXG" />
+<meta name="geo.placename" content={site.address.city} />
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />

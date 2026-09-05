@@ -1,7 +1,6 @@
 ---
 import { brand, nav } from "../../lib/copy";
-
-const year = new Date().getFullYear();
+import { copyrightLine, registrationLine, site } from "../../lib/site";
 ---
 
 <footer class="ft">
@@ -28,9 +27,19 @@ const year = new Date().getFullYear();
 
 	<div class="base">
 		<p class="eq">{brand.equation}</p>
-		<a class="mail" href={`mailto:${brand.email}`}>{brand.email}</a>
-		<p class="cr">{brand.copyright} — {year}</p>
+		<p class="cr">{copyrightLine}</p>
 	</div>
+
+	<address class="legal">
+		<span class="reg">{registrationLine}</span>
+		<span class="street">{site.address.full}</span>
+		<span class="ct">
+			<a href={`mailto:${site.email}`}>{site.email}</a>
+			<span class="sep" aria-hidden="true">·</span>
+			<span class="wl">網址</span>
+			<a href={site.url}>{site.domain}</a>
+		</span>
+	</address>
 </footer>
 
 <style>
@@ -111,9 +120,47 @@ const year = new Date().getFullYear();
 		color: var(--ink);
 	}
 
-	.mail:hover,
-	.mail:focus-visible {
+	/* --- registration + address ---------------------------------------- */
+	.legal {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem 1.5rem;
+		padding: 0 var(--edge) clamp(1.5rem, 4vh, 2.25rem);
+		font-family: var(--font-cjk);
+		font-style: normal;
+		font-size: 0.75rem;
+		line-height: 1.9;
+		letter-spacing: 0.06em;
+		color: var(--dim);
+	}
+
+	.ct {
+		display: inline-flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.4rem;
+	}
+
+	.ct a {
+		border-bottom: var(--hairline) solid var(--rule-soft);
+	}
+
+	.ct a:hover,
+	.ct a:focus-visible {
 		color: var(--accent-txt);
+		border-bottom-color: currentColor;
+	}
+
+	.sep,
+	.wl {
+		color: var(--quiet);
+	}
+
+	@media (max-width: 40rem) {
+		.legal {
+			flex-direction: column;
+			gap: 0.15rem;
+		}
 	}
 
 	@media (max-width: 48rem) {
