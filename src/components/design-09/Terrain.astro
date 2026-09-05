@@ -1,0 +1,163 @@
+---
+/**
+ * The signature layer: a topographic contour field running the full height of
+ * the page (density varies band by band) plus one flowing orange ribbon that
+ * crosses every section continuously and resolves into the CTA field.
+ *
+ * Stacking inside #main: grounds (-1) · terrain (0) · ribbon (1) · content (2).
+ */
+import { osc, vRibbon } from "./geo";
+
+const centre = (t: number) => {
+	const swing = osc(t, [
+		{ amp: 11, freq: 3.4, phase: 0.55 },
+		{ amp: 5.5, freq: 7.1, phase: 3.1 },
+		{ amp: 2.4, freq: 12.6, phase: 1.2 }
+	]);
+	const resolve = Math.max(0, (t - 0.78) / 0.22);
+	return 76 + swing - 30 * resolve * resolve;
+};
+
+const width = (t: number) => {
+	const bulge = Math.max(0, (t - 0.84) / 0.16);
+	return 3.9 + 1.6 * Math.sin(t * Math.PI * 5.3 + 0.5) + 26 * bulge * bulge;
+};
+
+const ribbon = vRibbon({ height: 1000, samples: 160, centre, width });
+---
+
+<div class="terrain" aria-hidden="true">
+	<svg class="zone z1" viewBox="-320 -260 640 520"><use class="c" href="#d09-peak-a" opacity="0.62"></use></svg>
+	<svg class="zone z2" viewBox="0 -22 1000 320"><use class="c" href="#d09-ridge-a" opacity="0.5"></use></svg>
+	<svg class="zone z3" viewBox="-110 -100 220 200"><use class="c" href="#d09-peak-c" opacity="0.6"></use></svg>
+	<svg class="zone z4" viewBox="0 -12 1000 330"><use class="c" href="#d09-ridge-b" opacity="0.42"></use></svg>
+	<svg class="zone z5" viewBox="-380 -430 760 860"><use class="c f" href="#d09-peak-b" opacity="0.5"></use></svg>
+	<svg class="zone z6" viewBox="0 -22 1000 320"><use class="c" href="#d09-ridge-a" opacity="0.55"></use></svg>
+	<svg class="zone z7" viewBox="-320 -260 640 520"><use class="c" href="#d09-peak-a" opacity="0.34"></use></svg>
+</div>
+
+<div class="ribbonlayer" aria-hidden="true">
+	<svg class="d09-ribbon" viewBox="0 0 100 1000" preserveAspectRatio="none">
+		<path class="fill" d={ribbon.fill}></path>
+		<path class="edge" d={ribbon.fill} vector-effect="non-scaling-stroke"></path>
+	</svg>
+</div>
+
+<style>
+	.terrain,
+	.ribbonlayer {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		overflow: clip;
+	}
+
+	.terrain {
+		z-index: 0;
+	}
+
+	.ribbonlayer {
+		z-index: 1;
+		top: -4%;
+		bottom: auto;
+		height: 108%;
+	}
+
+	.zone {
+		position: absolute;
+		height: auto;
+		will-change: transform;
+	}
+
+	.c {
+		stroke: var(--line-soft);
+		fill: none;
+	}
+
+	.f {
+		filter: url(#d09-organic);
+	}
+
+	.z1 {
+		width: 54%;
+		aspect-ratio: 640 / 520;
+		top: 0.5%;
+		right: -13%;
+	}
+
+	.z2 {
+		width: 76%;
+		aspect-ratio: 1000 / 320;
+		top: 8.5%;
+		left: -16%;
+	}
+
+	.z3 {
+		width: 15%;
+		aspect-ratio: 1;
+		top: 20.5%;
+		right: 7%;
+	}
+
+	.z4 {
+		width: 62%;
+		aspect-ratio: 1000 / 330;
+		top: 31%;
+		left: -9%;
+	}
+
+	.z5 {
+		width: 46%;
+		aspect-ratio: 760 / 860;
+		top: 47%;
+		left: 2%;
+	}
+
+	.z6 {
+		width: 72%;
+		aspect-ratio: 1000 / 320;
+		top: 68%;
+		right: -18%;
+	}
+
+	.z7 {
+		width: 40%;
+		aspect-ratio: 640 / 520;
+		top: 88%;
+		left: -12%;
+	}
+
+	.d09-ribbon {
+		width: 100%;
+		height: 100%;
+		will-change: transform;
+	}
+
+	.fill {
+		fill: var(--orange);
+	}
+
+	.edge {
+		fill: none;
+		stroke: var(--ink-black);
+		stroke-width: 1;
+		opacity: 0.34;
+	}
+
+	@media (max-width: 60rem) {
+		.z3,
+		.z7 {
+			display: none;
+		}
+
+		.z1 {
+			width: 82%;
+			right: -26%;
+		}
+
+		.z5 {
+			width: 78%;
+			left: -14%;
+		}
+	}
+</style>

@@ -1,0 +1,255 @@
+---
+import { brand, manifesto, services } from "../../lib/copy";
+
+const meta = [
+	["EQUATION", brand.equation],
+	["SCOPE", services.items.map(s => s.zh).join(" / ")],
+	["CONTACT", brand.email],
+	["INDEX", "04 / 09"]
+];
+---
+
+<section id="credibility" class="d06-cred d06-dark" aria-labelledby="cred-h">
+	<div class="cr__slab">
+		<div class="cr__plane" aria-hidden="true"></div>
+
+		<div class="cr__in d06-wrap">
+			<div class="d06-run">
+				<span class="d06-run__i">SECTION 04 / 09</span>
+				<span class="d06-run__l"></span>
+				<span class="d06-run__d">WIPE · WITH THE GROUND</span>
+				<span class="d06-run__t">RECORD</span>
+			</div>
+
+			<div class="cr__body">
+				<h2 id="cred-h" class="cr__h"><span>RECORD 紀錄</span></h2>
+
+				<ol class="cr__list">
+					{
+						manifesto.credibility.map((c, i) => (
+							<li class="cr__item">
+								<span class="cr__n">{String(i + 1).padStart(2, "0")}</span>
+								<span class="cr__fig">{c.figure}</span>
+								<span class="cr__zh">{c.label}</span>
+								<span class="cr__en">{c.en}</span>
+							</li>
+						))
+					}
+				</ol>
+			</div>
+
+			<dl class="cr__meta">
+				{
+					meta.map(([k, v]) => (
+						<div class="cr__meta-row">
+							<dt>{k}</dt>
+							<dd>{v}</dd>
+						</div>
+					))
+				}
+			</dl>
+		</div>
+	</div>
+</section>
+
+<style>
+	.d06-cred {
+		position: relative;
+	}
+
+	.cr__slab {
+		position: relative;
+		overflow: clip;
+	}
+
+	.cr__plane {
+		position: absolute;
+		inset: 0;
+		background: repeating-linear-gradient(to right, color-mix(in oklab, var(--paper) 10%, transparent) 0 var(--hairline), transparent var(--hairline) 3rem);
+		pointer-events: none;
+	}
+
+	.cr__in {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		gap: clamp(2rem, 5vh, 3rem);
+		padding-block: clamp(3.5rem, 10vh, 6rem) clamp(3rem, 8vh, 5rem);
+	}
+
+	.cr__body {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: clamp(1.5rem, 4vw, 3rem);
+		align-items: start;
+	}
+
+	.cr__h {
+		grid-column: 2;
+		writing-mode: vertical-rl;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.42em;
+		text-transform: uppercase;
+		color: var(--fg-dim);
+		border-left: var(--hairline) solid var(--rule);
+		padding-left: 0.75rem;
+		align-self: stretch;
+	}
+
+	.cr__list {
+		grid-column: 1;
+		display: grid;
+		border-top: var(--hairline) solid var(--rule-hi);
+	}
+
+	.cr__item {
+		display: grid;
+		grid-template-columns: 2.75rem auto minmax(0, 1fr);
+		grid-template-areas: "n f z" "n f e";
+		align-items: baseline;
+		column-gap: clamp(0.75rem, 2.5vw, 2.25rem);
+		row-gap: 0.15rem;
+		border-bottom: var(--hairline) solid var(--rule);
+		padding-block: clamp(0.9rem, 2.4vh, 1.5rem);
+	}
+
+	.cr__n {
+		grid-area: n;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.16em;
+		color: var(--fg-dim);
+	}
+
+	.cr__fig {
+		grid-area: f;
+		font-size: clamp(1.375rem, 3.4vw, 2.75rem);
+		line-height: 0.95;
+		letter-spacing: -0.02em;
+		font-weight: 600;
+		color: var(--orange);
+		align-self: center;
+		white-space: nowrap;
+		word-break: normal;
+		overflow-wrap: normal;
+	}
+
+	.cr__zh {
+		grid-area: z;
+		font-size: clamp(0.9375rem, 1.5vw, 1.25rem);
+		letter-spacing: 0.03em;
+		align-self: end;
+	}
+
+	.cr__en {
+		grid-area: e;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.2em;
+		color: var(--fg-dim);
+	}
+
+	.cr__meta {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 0;
+		border-top: var(--hairline) solid var(--rule-hi);
+	}
+
+	.cr__meta-row {
+		display: grid;
+		gap: 0.3rem;
+		padding: 0.85rem clamp(0.6rem, 1.5vw, 1.25rem) 0.85rem 0;
+		border-right: var(--hairline) solid var(--rule);
+	}
+
+	.cr__meta-row:last-child {
+		border-right: 0;
+	}
+
+	.cr__meta dt {
+		display: flex;
+		align-items: center;
+		gap: 0.45rem;
+		font-family: var(--font-mono);
+		font-size: 0.5625rem;
+		letter-spacing: 0.22em;
+		color: var(--fg-dim);
+	}
+
+	.cr__meta dt::before {
+		content: "";
+		width: 0.3125rem;
+		height: 0.3125rem;
+		background: var(--orange);
+		flex: none;
+	}
+
+	.cr__meta dd {
+		font-size: 0.75rem;
+		line-height: 1.5;
+		letter-spacing: 0.04em;
+		color: var(--fg-dim);
+		word-break: break-word;
+	}
+
+	@media (max-width: 63.99rem) {
+		.cr__meta {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+		.cr__meta-row:nth-child(2n) {
+			border-right: 0;
+		}
+		.cr__meta-row:nth-child(n + 3) {
+			border-top: var(--hairline) solid var(--rule);
+		}
+	}
+
+	@media (max-width: 47.99rem) {
+		.cr__body {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.cr__h {
+			grid-column: 1;
+			grid-row: 2;
+			writing-mode: horizontal-tb;
+			border-left: 0;
+			border-top: var(--hairline) solid var(--rule);
+			padding-left: 0;
+			padding-top: 0.6rem;
+			letter-spacing: 0.3em;
+		}
+		.cr__list {
+			grid-row: 1;
+		}
+		.cr__item {
+			grid-template-columns: 2.25rem minmax(0, 1fr);
+			grid-template-areas: "n f" ". z" ". e";
+			row-gap: 0.25rem;
+		}
+		.cr__fig {
+			align-self: baseline;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		/* junction wipe 01 of 02 — the band itself is drawn in left to right,
+		   against the graphite plane that has already arrived beneath it. The
+		   from-state is set here and never in CSS, so with JavaScript off or
+		   under reduced motion the band is simply present. */
+		gsap.fromTo(
+			".cr__slab",
+			{ clipPath: "inset(0% 100% 0% 0%)" },
+			{
+				clipPath: "inset(0% 0% 0% 0%)",
+				ease: "power2.inOut",
+				scrollTrigger: { trigger: "#credibility", start: "top 88%", end: "top 28%", scrub: 0.4 }
+			}
+		);
+	});
+</script>

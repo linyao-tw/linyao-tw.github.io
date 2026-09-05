@@ -1,0 +1,416 @@
+---
+/**
+ * design-04 · sheets 04–06 — service plates
+ *
+ * One catalogue plate per service. Each carries its own abstract technical
+ * drawing (schematic, never iconography), a figure caption, and a printed
+ * specification list of the stack. Plate geometry is computed here so the
+ * markup stays exact.
+ */
+import Plate from "./Plate.astro";
+
+interface Props {
+	item: {
+		index: string;
+		en: string;
+		zh: string;
+		position: string;
+		body: readonly string[];
+		stack: readonly string[];
+	};
+	id: string;
+	sheet: string;
+	plate: string;
+	fig: string;
+	flip?: boolean;
+	tone?: "hi" | "paper";
+}
+
+const { item, id, sheet, plate, fig, flip = false, tone = "hi" } = Astro.props;
+
+const r2 = (n: number) => Math.round(n * 100) / 100;
+
+/* --- drawing 01: concentric rings + leader lines --------------------- */
+const cx1 = 152;
+const cy1 = 162;
+const leaders1 = [
+	{ r: 120, deg: 56, y: 62, label: "R120 · CLIENT" },
+	{ r: 94, deg: 24, y: 122, label: "R094 · API" },
+	{ r: 66, deg: -7, y: 176, label: "R066 · DATA" },
+	{ r: 38, deg: -46, y: 232, label: "R038 · CORE" }
+].map(l => {
+	const a = (l.deg * Math.PI) / 180;
+	const px = r2(cx1 + l.r * Math.cos(a));
+	const py = r2(cy1 - l.r * Math.sin(a));
+	return { ...l, px, py, d: `M${px} ${py}L${r2(px + 26)} ${l.y}L296 ${l.y}` };
+});
+
+/* --- drawing 03: radial tick plate + swept arc ------------------------ */
+const cx3 = 160;
+const cy3 = 166;
+const R3 = 118;
+const ticks3 = Array.from({ length: 72 }, (_, i) => {
+	const a = (i / 72) * Math.PI * 2;
+	const len = 5 + 11 * Math.abs(Math.sin((i / 72) * Math.PI * 3));
+	return `M${r2(cx3 + R3 * Math.cos(a))} ${r2(cy3 - R3 * Math.sin(a))}L${r2(cx3 + (R3 - len) * Math.cos(a))} ${r2(cy3 - (R3 - len) * Math.sin(a))}`;
+}).join("");
+const arc3 = Array.from({ length: 61 }, (_, i) => {
+	const a = ((136 - i * 4) * Math.PI) / 180;
+	return `${i === 0 ? "M" : "L"}${r2(cx3 + 96 * Math.cos(a))} ${r2(cy3 - 96 * Math.sin(a))}`;
+}).join("");
+const vecA = (42 * Math.PI) / 180;
+const vec3 = { x: r2(cx3 + R3 * Math.cos(vecA)), y: r2(cy3 - R3 * Math.sin(vecA)) };
+const leaders3 = [
+	{ y: 96, label: "CH.01 · WEBGL" },
+	{ y: 156, label: "CH.02 · CANVAS" },
+	{ y: 216, label: "CH.03 · MOTION" }
+];
+---
+
+<Plate as="section" id={id} labelledby={`${id}-h`} plate={plate} sheet={sheet} tone={tone} pad="md" clip>
+	<div class:list={["wrap", { flip }]}>
+		<div class="type">
+			<p class="idx">
+				<span class="big" aria-hidden="true">{item.index}</span>
+				<span class="pos">{item.position}</span>
+			</p>
+			<h2 id={`${id}-h`}>
+				<span class="en">{item.en}</span>
+				<span class="zh">{item.zh}</span>
+			</h2>
+			<p class="copy">{item.body.map(line => <span class="l">{line}</span>)}</p>
+		</div>
+
+		<figure class="fig">
+			<div class="draw" data-reg={flip ? "flip" : ""}>
+				{
+					item.index === "01" && (
+						<svg viewBox="0 0 470 330" font-size="13" role="presentation" aria-hidden="true" focusable="false">
+							<path class="thin" d={`M${cx1} 30V294M22 ${cy1}H286`} />
+							<circle class="dash" cx={cx1} cy={cy1} r="120" />
+							<circle class="thin" cx={cx1} cy={cy1} r="94" />
+							<circle class="hi" cx={cx1} cy={cy1} r="66" />
+							<circle class="thin" cx={cx1} cy={cy1} r="38" />
+							<circle class="dot" cx={cx1} cy={cy1} r="4.5" />
+							{leaders1.map(l => (
+								<g>
+									<path class="lead" d={l.d} />
+									<circle class="node" cx={l.px} cy={l.py} r="2.6" />
+									<text class="tx" x="302" y={l.y + 3.5}>
+										{l.label}
+									</text>
+								</g>
+							))}
+							<path class="thin" d={`M32 310H272M32 304v12M272 304v12`} />
+							<text class="tx dimtx" x="152" y="326" text-anchor="middle">
+								Ø 240 · 01/01
+							</text>
+						</svg>
+					)
+				}
+
+				{
+					item.index === "02" && (
+						<svg viewBox="0 0 470 330" font-size="13" role="presentation" aria-hidden="true" focusable="false">
+							<path class="dash" d="M172 18V318" />
+							<text class="tx dimtx" x="176" y="316">
+								FOLD
+							</text>
+							<rect class="dash" x="40" y="46" width="190" height="190" />
+							<rect class="thin" x="64" y="70" width="190" height="190" />
+							<rect class="hi" x="88" y="94" width="190" height="190" />
+							<path class="thin" d="M88 156h190M88 218h190M150 94v190M212 94v190" opacity="0.45" />
+							<path class="thin" d="M40 32h238M40 26v12M278 26v12" />
+							<text class="tx dimtx" x="159" y="22" text-anchor="middle">
+								W 238
+							</text>
+							<path class="thin" d="M26 46v238M20 46h12M20 284h12" />
+							<text class="tx dimtx" x="18" y="165" text-anchor="middle" transform="rotate(-90 18 165)">
+								H 238
+							</text>
+							<path class="lead" d="M230 128H300" />
+							<circle class="node" cx="230" cy="128" r="2.6" />
+							<text class="tx" x="306" y="131">
+								LYR.01 · DEVICE
+							</text>
+							<path class="lead" d="M254 180H300" />
+							<circle class="node" cx="254" cy="180" r="2.6" />
+							<text class="tx" x="306" y="183">
+								LYR.02 · DATA
+							</text>
+							<path class="lead" d="M278 232H300" />
+							<circle class="node" cx="278" cy="232" r="2.6" />
+							<text class="tx" x="306" y="235">
+								LYR.03 · ADMIN
+							</text>
+							<text class="tx dimtx" x="306" y="300">
+								OFFSET 24 · 3 PLATES
+							</text>
+						</svg>
+					)
+				}
+
+				{
+					item.index === "03" && (
+						<svg viewBox="0 0 470 330" font-size="13" role="presentation" aria-hidden="true" focusable="false">
+							<circle class="thin" cx={cx3} cy={cy3} r={R3} />
+							<circle class="dash" cx={cx3} cy={cy3} r="76" />
+							<path class="thin" d={ticks3} />
+							<path class="hi" d={arc3} />
+							<path class="thin" d={`M${cx3} ${cy3}L${vec3.x} ${vec3.y}`} />
+							<circle class="dot" cx={vec3.x} cy={vec3.y} r="4.5" />
+							<circle class="node" cx={cx3} cy={cy3} r="2.6" />
+							<text class="tx dimtx" x={vec3.x + 8} y={vec3.y - 6}>
+								θ 042°
+							</text>
+							{leaders3.map(l => (
+								<g>
+									<path class="lead" d={`M290 ${l.y}H300`} />
+									<text class="tx" x="306" y={l.y + 3.5}>
+										{l.label}
+									</text>
+								</g>
+							))}
+							<path class="thin" d={`M${cx3} 300h118M${cx3} 294v12M278 294v12`} />
+							<text class="tx dimtx" x="219" y="322" text-anchor="middle">
+								R118 · AMP 0.68
+							</text>
+						</svg>
+					)
+				}
+			</div>
+			<figcaption>{fig}</figcaption>
+		</figure>
+
+		<div class="specs">
+			<p class="stitle">SPECIFICATION — {item.en}</p>
+			<ul>
+				{
+					item.stack.map((s, i) => (
+						<li>
+							<span class="k">S.{String(i + 1).padStart(2, "0")}</span>
+							<span class="v">{s}</span>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+</Plate>
+
+<style>
+	.wrap {
+		display: grid;
+		gap: clamp(1.75rem, 4vw, 3rem);
+	}
+
+	/* ---- type block ---------------------------------------------------- */
+	.idx {
+		display: flex;
+		align-items: baseline;
+		gap: 0.9rem;
+		border-bottom: 1px solid var(--rule);
+		padding-bottom: 0.5rem;
+	}
+
+	.big {
+		font-family: var(--font-grotesk);
+		font-weight: 800;
+		font-size: clamp(2.75rem, 8vw, 5.5rem);
+		line-height: 0.8;
+		letter-spacing: -0.05em;
+		color: var(--accent);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.pos {
+		font-family: var(--font-cjk);
+		font-size: 0.85rem;
+		letter-spacing: 0.08em;
+		color: color-mix(in oklab, currentColor 62%, transparent);
+	}
+
+	h2 {
+		display: grid;
+		gap: 0.35rem;
+		margin-top: clamp(1rem, 2.5vw, 1.75rem);
+	}
+
+	.en {
+		display: inline-block;
+		transform: scaleX(0.92);
+		transform-origin: 0 50%;
+		font-family: var(--font-grotesk);
+		font-weight: 800;
+		font-size: clamp(1.75rem, 1rem + 3.9vw, 4.25rem);
+		line-height: 0.9;
+		letter-spacing: -0.03em;
+		color: var(--ink-black);
+	}
+
+	.zh {
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(1.2rem, 0.95rem + 1.4vw, 2rem);
+		letter-spacing: 0.2em;
+		color: var(--ink);
+	}
+
+	.copy {
+		display: grid;
+		gap: 0.3rem;
+		margin-top: clamp(1rem, 2.5vw, 1.5rem);
+		max-width: 32rem;
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9rem, 0.86rem + 0.25vw, 1.05rem);
+		line-height: 1.85;
+		letter-spacing: 0.03em;
+	}
+
+	.copy .l {
+		display: block;
+	}
+
+	/* ---- drawing ------------------------------------------------------- */
+	.draw {
+		margin-right: calc(var(--plate-x) * -1);
+	}
+
+	@media (min-width: 34rem) {
+		.draw {
+			max-width: 34rem;
+			margin-right: 0;
+		}
+	}
+
+	.draw svg {
+		width: 100%;
+		height: auto;
+	}
+
+	.thin,
+	.dash,
+	.hi,
+	.lead {
+		fill: none;
+		stroke: var(--rule);
+		stroke-width: 1.1;
+	}
+
+	.dash {
+		stroke-dasharray: 5 4;
+	}
+
+	.hi {
+		stroke: var(--accent);
+		stroke-width: 2;
+	}
+
+	.lead {
+		stroke: color-mix(in oklab, var(--ink) 40%, transparent);
+		stroke-width: 1;
+	}
+
+	.dot {
+		fill: var(--accent);
+		stroke: none;
+	}
+
+	.node {
+		fill: var(--ink);
+		stroke: none;
+	}
+
+	.tx {
+		fill: color-mix(in oklab, var(--ink) 68%, transparent);
+		font-family: var(--font-mono);
+		letter-spacing: 0.1em;
+	}
+
+	.dimtx {
+		fill: color-mix(in oklab, var(--ink) 48%, transparent);
+	}
+
+	.fig figcaption {
+		margin-top: 0.6rem;
+		padding-top: 0.45rem;
+		border-top: 1px solid var(--rule);
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: color-mix(in oklab, currentColor 62%, transparent);
+	}
+
+	/* ---- specification ------------------------------------------------- */
+	.stitle {
+		padding-bottom: 0.45rem;
+		border-bottom: 1px solid var(--rule);
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: var(--accent-text);
+	}
+
+	.specs ul {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		column-gap: clamp(1rem, 3vw, 2.5rem);
+	}
+
+	.specs li {
+		display: flex;
+		align-items: baseline;
+		gap: 0.6rem;
+		padding-block: 0.55rem;
+		border-bottom: 1px solid var(--rule-faint);
+		font-family: var(--font-mono);
+		font-size: var(--mono-lg);
+		letter-spacing: 0.06em;
+	}
+
+	.specs .k {
+		color: color-mix(in oklab, currentColor 45%, transparent);
+	}
+
+	/* ---- composition --------------------------------------------------- */
+	@media (min-width: 60rem) {
+		.wrap {
+			grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+			grid-template-areas:
+				"type fig"
+				"specs fig";
+			column-gap: clamp(2rem, 5vw, 5rem);
+			row-gap: clamp(2rem, 4vw, 3.5rem);
+			align-items: start;
+		}
+
+		.draw {
+			max-width: none;
+		}
+
+		.type {
+			grid-area: type;
+		}
+
+		.fig {
+			grid-area: fig;
+			align-self: stretch;
+		}
+
+		.specs {
+			grid-area: specs;
+			align-self: end;
+		}
+
+		.wrap.flip {
+			grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+			grid-template-areas:
+				"fig type"
+				"fig specs";
+		}
+
+		.specs ul {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+</style>

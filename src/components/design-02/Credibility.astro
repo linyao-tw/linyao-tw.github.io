@@ -1,0 +1,176 @@
+---
+import { manifesto } from "../../lib/copy";
+
+/** specimen sizes — a real type specimen sets each string to a different body size */
+const sizes = [
+	{ d: "clamp(3.5rem, 15vw, 12rem)", m: "clamp(3rem, 17vw, 4.5rem)" },
+	{ d: "clamp(2rem, 7.6vw, 6rem)", m: "clamp(2rem, 11vw, 3rem)" },
+	{ d: "clamp(1.15rem, 4.3vw, 3.4rem)", m: "clamp(1.15rem, 6.4vw, 1.8rem)" }
+];
+---
+
+<section class="cred" aria-labelledby="d02-cred-h">
+	<h2 class="side" id="d02-cred-h">RECORD</h2>
+
+	<div class="head" aria-hidden="true">
+		<span>TYPE SPECIMEN</span>
+		<span class="hr"></span>
+		<span>GROTESK 800 / CJK 700</span>
+	</div>
+
+	<div class="specs">
+		<span class="baseline" aria-hidden="true"></span>
+		{
+			manifesto.credibility.map((c, i) => (
+				<Fragment>
+					<span class="fig" style={`--fs:${sizes[i].d}; --fs-m:${sizes[i].m}; --c:${i + 1}`}>
+						{c.figure}
+					</span>
+					<div class="meta" style={`--c:${i + 1}`}>
+						<h3 class="lab" lang="zh-Hant">
+							{c.label}
+						</h3>
+						<p class="en">
+							<span class="ref">{`SPEC. 0${i + 1}`}</span>
+							<span>{c.en}</span>
+						</p>
+					</div>
+				</Fragment>
+			))
+		}
+	</div>
+</section>
+
+<style>
+	.cred {
+		position: relative;
+		padding: clamp(3rem, 9vh, 6rem) var(--edge) clamp(3rem, 9vh, 5rem);
+		border-top: var(--hairline) solid var(--rule);
+		overflow: clip;
+	}
+
+	.side {
+		font-family: var(--font-mono);
+		font-size: 0.58rem;
+		letter-spacing: 0.34em;
+		color: var(--accent-txt);
+		margin-block-end: 0.75rem;
+	}
+
+	.head {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding-block-end: clamp(1.5rem, 5vh, 3rem);
+		font-family: var(--font-mono);
+		font-size: 0.55rem;
+		letter-spacing: 0.24em;
+		color: var(--dim);
+	}
+
+	.hr {
+		flex: 1;
+		height: 1px;
+		background: var(--rule-soft);
+	}
+
+	.specs {
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	.baseline {
+		display: none;
+	}
+
+	.fig {
+		font-family: var(--font-grotesk);
+		font-weight: 800;
+		font-size: var(--fs-m);
+		line-height: 0.74;
+		letter-spacing: -0.045em;
+		color: var(--ink);
+	}
+
+	.meta {
+		display: grid;
+		gap: 0.3rem;
+		padding-block-end: 1.1rem;
+		margin-block-end: 0.6rem;
+		border-bottom: var(--hairline) solid var(--rule-soft);
+	}
+
+	.lab {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.85rem, 2.6vw, 1rem);
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		color: var(--ink);
+	}
+
+	.en {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.3rem 0.9rem;
+		font-family: var(--font-mono);
+		font-size: 0.56rem;
+		letter-spacing: 0.2em;
+		color: var(--dim);
+	}
+
+	.ref {
+		color: var(--accent-txt);
+	}
+
+	@media (min-width: 62rem) {
+		.cred {
+			padding-inline-start: calc(var(--edge) + 3.5rem);
+		}
+
+		.side {
+			position: absolute;
+			top: clamp(3rem, 9vh, 6rem);
+			left: var(--edge);
+			writing-mode: vertical-rl;
+			margin: 0;
+		}
+
+		.specs {
+			grid-template-columns: repeat(3, minmax(0, auto));
+			grid-template-rows: auto auto;
+			justify-content: space-between;
+			align-items: end;
+			column-gap: clamp(1.5rem, 4vw, 4rem);
+			row-gap: 1.1rem;
+		}
+
+		.baseline {
+			display: block;
+			grid-row: 1;
+			grid-column: 1 / -1;
+			align-self: end;
+			height: 1px;
+			background: var(--ink);
+		}
+
+		.fig {
+			grid-row: 1;
+			grid-column: var(--c);
+			align-self: end;
+			font-size: var(--fs);
+		}
+
+		.meta {
+			grid-row: 2;
+			grid-column: var(--c);
+			max-width: 17rem;
+			border-bottom: 0;
+			padding-block-end: 0;
+			margin-block-end: 0;
+		}
+
+		.lab {
+			font-size: clamp(0.85rem, 1.15vw, 1rem);
+		}
+	}
+</style>

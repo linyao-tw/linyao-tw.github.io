@@ -1,0 +1,40 @@
+---
+import Credibility from "../components/design-06/Credibility.astro";
+import Cta from "../components/design-06/Cta.astro";
+import Footer from "../components/design-06/Footer.astro";
+import Header from "../components/design-06/Header.astro";
+import Hero from "../components/design-06/Hero.astro";
+import InquiryDialog from "../components/design-06/InquiryDialog.astro";
+import Intro from "../components/design-06/Intro.astro";
+import Manifesto from "../components/design-06/Manifesto.astro";
+import Marquee from "../components/design-06/Marquee.astro";
+import Process from "../components/design-06/Process.astro";
+import Services from "../components/design-06/Services.astro";
+import Stage from "../components/design-06/Stage.astro";
+import Tokens from "../components/design-06/Tokens.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout
+	title="麟曜數位工作室 LINYAO DIGITAL STUDIO — 06 MOTION SYSTEM"
+	description="麟曜數位工作室 LINYAO DIGITAL STUDIO — DESIGN × CODE × MOTION。動態系統：一條橘色軌道貫穿整份文件，隨捲動改變角色。"
+	bodyClass="d-06"
+	themeColor="#d3ccc1"
+>
+	<Tokens />
+	<a class="skip-link" href="#main">跳至主要內容</a>
+	<Stage />
+	<Header />
+	<main id="main" class="d06-doc">
+		<Hero />
+		<Intro />
+		<Services />
+		<Credibility />
+		<Manifesto />
+		<Process />
+		<Marquee />
+		<Cta />
+	</main>
+	<Footer />
+	<InquiryDialog />
+</SiteLayout>

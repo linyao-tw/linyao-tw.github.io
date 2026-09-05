@@ -1,0 +1,57 @@
+---
+import Credibility from "../components/design-07/Credibility.astro";
+import Cta from "../components/design-07/Cta.astro";
+import Footer from "../components/design-07/Footer.astro";
+import Header from "../components/design-07/Header.astro";
+import Hero from "../components/design-07/Hero.astro";
+import InquiryDialog from "../components/design-07/InquiryDialog.astro";
+import Intro from "../components/design-07/Intro.astro";
+import Manifesto from "../components/design-07/Manifesto.astro";
+import Marquee from "../components/design-07/Marquee.astro";
+import Process from "../components/design-07/Process.astro";
+import ServicePanel from "../components/design-07/ServicePanel.astro";
+import ServicesIndex from "../components/design-07/ServicesIndex.astro";
+import Tokens from "../components/design-07/Tokens.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { services } from "../lib/copy";
+---
+
+<SiteLayout title="麟曜數位工作室 LINYAO DIGITAL STUDIO — 007 DARK GRAPHITE" bodyClass="d-07" themeColor="#4d4d4d">
+	<Tokens />
+	<a class="skip-link" href="#main">跳至主要內容</a>
+	<Header />
+	<main id="main">
+		<Hero />
+		<Intro />
+		<ServicesIndex />
+		{services.items.map((item, i) => <ServicePanel item={item} variant={(i + 1) as 1 | 2 | 3} />)}
+		<Manifesto />
+		<Credibility />
+		<Process />
+		<Marquee />
+		<Cta />
+	</main>
+	<Footer />
+	<InquiryDialog />
+</SiteLayout>
+
+<script>
+	import { bindAnchorScroll, motion } from "../lib/motion";
+
+	bindAnchorScroll();
+
+	motion(
+		({ gsap }) => {
+			gsap.utils.toArray<HTMLElement>("[data-d07-reveal]").forEach(el => {
+				gsap.from(el, {
+					opacity: 0,
+					y: 16,
+					duration: 1.1,
+					ease: "power2.out",
+					scrollTrigger: { trigger: el, start: "top 88%" }
+				});
+			});
+		},
+		{ smooth: true }
+	);
+</script>

@@ -1,0 +1,212 @@
+---
+import { manifesto } from "../../lib/copy";
+import { osc, polyD, waveLine, type Pt } from "./geo";
+
+const layers = [
+	{ amp: 5.6, freq: 1, phase: 0.62 },
+	{ amp: 2.1, freq: 2.4, phase: 3.2 }
+];
+const base = 20;
+
+const baseline = polyD(waveLine({ width: 100, base, layers, samples: 200 }));
+
+const vpts: Pt[] = [];
+for (let i = 0; i <= 200; i++) {
+	const t = i / 200;
+	vpts.push([osc(t, layers, base) * 0.9, t * 100]);
+}
+const vline = polyD(vpts);
+
+const spots = [0.16, 0.5, 0.84];
+const figures = manifesto.credibility.map((c, i) => ({
+	...c,
+	x: spots[i] * 100,
+	y: (osc(spots[i], layers, base) / 40) * 100
+}));
+
+const scale = ["clamp(3.2rem, 8vw, 7rem)", "clamp(2.2rem, 5vw, 4.4rem)", "clamp(1.5rem, 3.4vw, 3rem)"];
+---
+
+<section class="cred" aria-labelledby="d09-cred-h">
+	<div class="ground" aria-hidden="true"></div>
+
+	<div class="wrap">
+		<h2 class="side" id="d09-cred-h"><span aria-hidden="true">F</span> <span>CREDIBILITY</span> <span>實績</span></h2>
+
+		<div class="scene">
+			<svg class="baseline" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+				<path d={baseline} vector-effect="non-scaling-stroke"></path>
+			</svg>
+
+			<svg class="vline" viewBox="0 0 40 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+				<path d={vline} vector-effect="non-scaling-stroke"></path>
+			</svg>
+
+			<ul class="figs">
+				{
+					figures.map((f, i) => (
+						<li style={`--x:${f.x}%;--y:${f.y}%;--fs:${scale[i]};--in:${(i * 2.1).toFixed(1)}rem`}>
+							<p class="fig">{f.figure}</p>
+							<span class="tick" aria-hidden="true" />
+							<p class="lab">{f.label}</p>
+							<p class="en">{f.en}</p>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+</section>
+
+<style>
+	.cred {
+		padding-block: clamp(4rem, 11vh, 8.5rem);
+	}
+
+	.ground {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: var(--band-a);
+		clip-path: var(--arc-both);
+	}
+
+	.wrap {
+		position: relative;
+		z-index: 2;
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: clamp(1.5rem, 4vw, 4.5rem);
+		padding-inline: var(--pad);
+	}
+
+	.side {
+		writing-mode: vertical-rl;
+		display: flex;
+		gap: 1.4rem;
+		align-items: center;
+		font-size: var(--meta);
+		letter-spacing: 0.32em;
+		color: var(--ink-2);
+	}
+
+	.side span:first-child {
+		color: var(--orange);
+	}
+
+	.scene {
+		position: relative;
+		height: clamp(20rem, 38vh, 27rem);
+	}
+
+	.baseline,
+	.vline {
+		position: absolute;
+		fill: none;
+		stroke: var(--line);
+		stroke-width: 1;
+	}
+
+	.baseline {
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.vline {
+		display: none;
+	}
+
+	.figs {
+		position: absolute;
+		inset: 0;
+	}
+
+	.figs li {
+		position: absolute;
+		left: var(--x);
+		top: var(--y);
+		translate: -50% -50%;
+		display: grid;
+		justify-items: center;
+		gap: 0.55rem;
+		width: max-content;
+		max-width: 16rem;
+		text-align: center;
+	}
+
+	.fig {
+		font-family: var(--font-serif);
+		font-size: var(--fs);
+		line-height: 1;
+		letter-spacing: 0.02em;
+		color: var(--fg);
+	}
+
+	.tick {
+		width: 1px;
+		height: 2.2rem;
+		background: var(--orange);
+	}
+
+	.lab {
+		font-family: var(--font-serif);
+		font-size: clamp(0.85rem, 1.05vw, 1.05rem);
+		line-height: 1.75;
+		letter-spacing: 0.12em;
+		max-width: 15rem;
+	}
+
+	.en {
+		font-size: 0.62rem;
+		letter-spacing: 0.26em;
+		color: var(--fg);
+	}
+
+	@media (max-width: 60rem) {
+		.wrap {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.side {
+			writing-mode: horizontal-tb;
+			gap: 1rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.scene {
+			height: auto;
+		}
+
+		.baseline {
+			display: none;
+		}
+
+		.vline {
+			display: block;
+			inset: 0 auto 0 0;
+			width: 3.5rem;
+			height: 100%;
+		}
+
+		.figs {
+			position: static;
+			display: grid;
+			gap: clamp(2.5rem, 7vh, 4rem);
+		}
+
+		.figs li {
+			position: static;
+			translate: none;
+			justify-items: start;
+			text-align: start;
+			margin-inline-start: var(--in);
+			max-width: 100%;
+		}
+
+		.tick {
+			width: 2.6rem;
+			height: 1px;
+		}
+	}
+</style>

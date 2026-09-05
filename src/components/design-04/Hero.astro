@@ -1,0 +1,351 @@
+---
+/**
+ * design-04 · sheet 01 — cover plate
+ *
+ * A poster: outlined edition numeral in the masthead, the headline set heavy and
+ * flush over a seven-step orange halftone field that bleeds off the right trim,
+ * plate data in mono along the margins.
+ */
+import { brand, hero } from "../../lib/copy";
+import Plate from "./Plate.astro";
+---
+
+<Plate as="section" id="cover" labelledby="cover-h" plate="PL. 01 — COVER" sheet="01/09" clip>
+	<div class="cover">
+		<div class="masthead">
+			<span class="edition" aria-hidden="true">04</span>
+			<p class="pub">
+				<span class="zh">{brand.nameZh}</span>
+				<span class="en">{brand.nameEn}</span>
+			</p>
+			<p class="issue" aria-hidden="true">
+				<span>PRINT / POSTER SYSTEM</span>
+				<span>TRIM 594 × 841</span>
+				<span>REGISTER · OFFSET</span>
+			</p>
+		</div>
+
+		<h1 class="title" id="cover-h">
+			{hero.headlineParts.map((part, i) => <span class:list={["ln", `l${i}`]}>{part}</span>)}
+		</h1>
+
+		<figure class="field">
+			<svg class="ramp" viewBox="0 0 480 480" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false" data-reg>
+				<use href="#d04-halftone"></use>
+			</svg>
+			<span class="lead" aria-hidden="true"></span>
+			<figcaption>FIG. 01 — HALFTONE FIELD · 7-STEP RAMP · 24°</figcaption>
+		</figure>
+
+		<p class="eq">
+			<span class="a">{brand.equation}</span>
+			<span class="r" aria-hidden="true"></span>
+			<span class="b">{brand.disciplines}</span>
+		</p>
+
+		<div class="foot">
+			<dl class="spec">
+				<div><dt>SHEET</dt><dd>01 / 09</dd></div>
+				<div><dt>INKS</dt><dd>K01 · K02 · K03</dd></div>
+				<div><dt>SCREEN</dt><dd>85 LPI</dd></div>
+				<div><dt>STOCK</dt><dd>UNCOATED 120G</dd></div>
+			</dl>
+			<a class="cue" href="#statement">
+				<span class="cue-t">{hero.scrollCue}</span>
+				<span class="cue-r" aria-hidden="true"></span>
+			</a>
+		</div>
+	</div>
+</Plate>
+
+<style>
+	.cover {
+		position: relative;
+		display: grid;
+		gap: clamp(1.5rem, 3.5vw, 2.75rem);
+		align-content: start;
+	}
+
+	/* ---- masthead ------------------------------------------------------ */
+	.masthead {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		align-items: start;
+		gap: 0 clamp(0.75rem, 2vw, 1.5rem);
+		padding-bottom: clamp(0.75rem, 2vw, 1.25rem);
+		border-bottom: 1px solid var(--rule);
+	}
+
+	.edition {
+		grid-row: span 2;
+		font-family: var(--font-grotesk);
+		font-weight: 800;
+		font-size: clamp(3.5rem, 11vw, 7rem);
+		line-height: 0.78;
+		letter-spacing: -0.05em;
+		color: transparent;
+		-webkit-text-stroke: 1px var(--rule);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.pub {
+		display: grid;
+		gap: 0.15rem;
+		align-self: end;
+	}
+
+	.pub .zh {
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(0.95rem, 2.6vw, 1.35rem);
+		letter-spacing: 0.1em;
+	}
+
+	.pub .en {
+		display: inline-block;
+		transform: scaleX(0.92);
+		transform-origin: 0 50%;
+		font-family: var(--font-grotesk);
+		font-weight: 800;
+		font-size: clamp(1.05rem, 3.4vw, 2rem);
+		letter-spacing: -0.01em;
+		line-height: 1.05;
+	}
+
+	.issue {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem 1.25rem;
+		margin-top: 0.5rem;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: color-mix(in oklab, currentColor 55%, transparent);
+	}
+
+	/* ---- halftone field ------------------------------------------------ */
+	.field {
+		position: relative;
+		margin-right: calc(var(--plate-x) * -1);
+	}
+
+	.ramp {
+		width: 100%;
+		height: clamp(9rem, 34vw, 13rem);
+	}
+
+	.lead {
+		display: none;
+	}
+
+	.field figcaption {
+		margin-top: 0.5rem;
+		padding-top: 0.4rem;
+		border-top: 1px solid var(--rule-soft);
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: color-mix(in oklab, currentColor 62%, transparent);
+	}
+
+	/* ---- headline ------------------------------------------------------ */
+	.title {
+		position: relative;
+		z-index: 2;
+		font-family: var(--font-cjk);
+		font-weight: 800;
+		font-size: clamp(3.1rem, 12.4vw, 10.25rem);
+		line-height: 1;
+		letter-spacing: 0.005em;
+		color: var(--ink-black);
+	}
+
+	.ln {
+		display: block;
+	}
+
+	.l2 {
+		color: var(--ink-black);
+	}
+
+	/* ---- equation rule ------------------------------------------------- */
+	.eq {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem 1rem;
+		font-family: var(--font-mono);
+		font-size: var(--mono-lg);
+		letter-spacing: var(--track);
+	}
+
+	.eq .a {
+		color: var(--accent-text);
+	}
+
+	.eq .r {
+		display: none;
+		flex: 1;
+		height: 1px;
+		background: var(--rule);
+	}
+
+	.eq .b {
+		font-family: var(--font-cjk);
+		letter-spacing: 0.18em;
+		color: color-mix(in oklab, currentColor 72%, transparent);
+	}
+
+	/* ---- foot ---------------------------------------------------------- */
+	.foot {
+		display: grid;
+		gap: clamp(1rem, 2.5vw, 2rem);
+		padding-top: clamp(0.75rem, 2vw, 1.25rem);
+		border-top: 1px solid var(--rule);
+	}
+
+	.spec {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.6rem clamp(1rem, 3vw, 3rem);
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.1em;
+	}
+
+	.spec div {
+		display: grid;
+		gap: 0.2rem;
+		border-top: 1px solid var(--rule-faint);
+		padding-top: 0.35rem;
+	}
+
+	.spec dt {
+		color: color-mix(in oklab, currentColor 50%, transparent);
+	}
+
+	.spec dd {
+		color: var(--ink-black);
+	}
+
+	.cue {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		min-height: 2.75rem;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+	}
+
+	.cue-r {
+		flex: 1;
+		height: 1px;
+		background: var(--rule);
+	}
+
+	.cue:hover .cue-t {
+		color: var(--accent);
+	}
+
+	/* ---- desktop composition ------------------------------------------- */
+	@media (min-width: 60rem) {
+		.cover {
+			min-height: min(80svh, 46rem);
+			grid-template-columns: minmax(0, 1fr) min(26rem, 34%);
+			grid-template-rows: auto minmax(0, 1fr) auto auto;
+			column-gap: clamp(2rem, 5vw, 4rem);
+			row-gap: clamp(1.5rem, 3vw, 2.75rem);
+		}
+
+		.masthead {
+			grid-row: 1;
+			grid-column: 1;
+		}
+
+		.title {
+			grid-row: 2;
+			grid-column: 1 / -1;
+			align-self: center;
+			line-height: 0.94;
+			z-index: 2;
+		}
+
+		.l1 {
+			padding-left: 11vw;
+		}
+
+		.l2 {
+			padding-left: 21vw;
+		}
+
+		.field {
+			grid-row: 1 / 3;
+			grid-column: 2;
+			display: flex;
+			flex-direction: column;
+			margin-right: calc(var(--plate-x) * -1);
+			z-index: 1;
+		}
+
+		.ramp {
+			flex: 1;
+			min-height: 0;
+			height: auto;
+		}
+
+		.eq {
+			grid-row: 3;
+			grid-column: 1 / -1;
+		}
+
+		.foot {
+			grid-row: 4;
+			grid-column: 1 / -1;
+		}
+
+		.lead {
+			display: block;
+			position: absolute;
+			top: 22%;
+			left: -3.5rem;
+			width: 3.5rem;
+			height: 1px;
+			background: var(--accent);
+		}
+
+		.lead::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: -0.25rem;
+			width: 1px;
+			height: 0.5rem;
+			background: var(--accent);
+		}
+
+		.eq .r {
+			display: block;
+		}
+
+		.foot {
+			grid-template-columns: minmax(0, 1fr) auto;
+			align-items: end;
+		}
+
+		.spec {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			max-width: 46rem;
+		}
+
+		.cue {
+			width: 14rem;
+		}
+	}
+
+	@media (min-width: 90rem) {
+		.title {
+			font-size: 10.25rem;
+		}
+	}
+</style>

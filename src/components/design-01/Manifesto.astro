@@ -1,0 +1,114 @@
+---
+import { manifesto } from "../../lib/copy";
+import ColumnRules from "./ColumnRules.astro";
+---
+
+<section class="man" id="manifesto" aria-labelledby="man-title">
+	<ColumnRules tone="rev" class="man-cols" />
+
+	<div class="d01-shell man-grid">
+		<p class="d01-runhead d01-runhead--rev">
+			<b>04</b>
+			<span>Position</span>
+		</p>
+
+		<h2 class="man-title d01-lines" id="man-title">
+			{
+				manifesto.headlineParts.map(part => (
+					<span class="d01-line">
+						<span>{part}</span>
+					</span>
+				))
+			}
+		</h2>
+
+		<div class="man-note">
+			<span class="d01-rule d01-rule--mid man-note-rule d01-draw" aria-hidden="true"></span>
+			<p class="man-body">
+				{manifesto.body.map(line => <span>{line}</span>)}
+			</p>
+		</div>
+
+		<p class="man-mark d01-label" aria-hidden="true">WE DO NOT BUILD WEBSITES — WE BUILD EXPERIENCES</p>
+	</div>
+</section>
+
+<style>
+	.man {
+		position: relative;
+		background: var(--graphite);
+		color: var(--warm-gray);
+		overflow: clip;
+	}
+	.man-cols {
+		z-index: 0;
+	}
+	.man-grid {
+		position: relative;
+		z-index: 1;
+		padding-block: clamp(4.5rem, 13vh, 9rem);
+		row-gap: clamp(2rem, 5vh, 3.5rem);
+		align-items: start;
+	}
+
+	.man-title {
+		grid-column: 2 / 12;
+		font-size: var(--display-2);
+		font-weight: 700;
+		line-height: 0.92;
+		letter-spacing: var(--tr-display);
+		color: var(--paper-hi);
+	}
+	.man-title .d01-line:last-child > span {
+		padding-left: clamp(2.5rem, 14vw, 14rem);
+	}
+
+	.man-note {
+		grid-column: 8 / 13;
+		display: grid;
+		gap: 1.125rem;
+	}
+	.man-note-rule {
+		--rule-c: var(--orange);
+		--rule-w: 5rem;
+	}
+	.man-body {
+		font-size: var(--body);
+		line-height: 1.9;
+		color: var(--warm-gray);
+	}
+	.man-body span {
+		display: block;
+	}
+
+	.man-mark {
+		grid-column: 2 / 8;
+		align-self: end;
+		color: color-mix(in oklab, var(--warm-gray) 92%, transparent);
+		border-top: 1px solid var(--rule-hair-rev);
+		padding-top: 0.875rem;
+	}
+
+	@media (max-width: 64rem) {
+		.man-title {
+			grid-column: 2 / 13;
+		}
+		.man-note {
+			grid-column: 2 / 10;
+		}
+		.man-mark {
+			grid-column: 2 / 13;
+		}
+	}
+
+	@media (max-width: 60rem) {
+		.man-title,
+		.man-note,
+		.man-mark {
+			grid-column: 1 / -1;
+		}
+		.man-title .d01-line:last-child > span {
+			padding-left: clamp(1.5rem, 10vw, 5rem);
+		}
+	}
+</style>

@@ -1,0 +1,244 @@
+---
+import { manifesto } from "../../lib/copy";
+import SunDisc from "./SunDisc.astro";
+---
+
+<section class="manifesto" id="manifesto" data-scene aria-labelledby="d05-manifesto-title">
+	<div class="scene" aria-hidden="true">
+		<SunDisc drift={18} klass="mf-sun" />
+
+		<div class="datum">
+			<span class="datum-line"></span>
+			<span class="d05-anno datum-tag">EL. +12.000</span>
+		</div>
+
+		<div class="plane field" data-plane data-par="1.6"></div>
+		<div class="plane column" data-plane data-par="-3.2"></div>
+	</div>
+
+	<p class="call d05-anno" aria-hidden="true">SECTION C&ndash;C</p>
+
+	<h2 class="d05-zh title" id="d05-manifesto-title" data-reveal>
+		{manifesto.headlineParts.map(part => <span>{part}</span>)}
+	</h2>
+
+	<p class="body d05-zh" data-reveal>
+		{manifesto.body.map(line => <span>{line}</span>)}
+	</p>
+
+	<p class="el d05-anno d05-anno--paper" aria-hidden="true">EL. &minus;8.400 &nbsp;/&nbsp; GREAT ROOM</p>
+</section>
+
+<style>
+	.manifesto {
+		--sh: 118svh;
+		--ph: calc(var(--sh) + 2 * var(--ov));
+		--fy: 46svh; /* field top edge at the left margin */
+		--cx: 72vw; /* leaning column top x */
+		--cw: 4vw;
+		--dya: calc(100vw * var(--tan-a));
+		--dxb: calc(var(--ph) * var(--tan-b));
+
+		position: relative;
+		min-height: var(--sh);
+		height: var(--sh);
+		overflow: clip;
+		isolation: isolate;
+		border-top: 1px solid var(--line);
+	}
+
+	.scene {
+		position: absolute;
+		inset: 0;
+	}
+
+	.manifesto :global(.mf-sun) {
+		z-index: 1;
+		--sun-size: 46svh;
+		--sun-x: 46vw;
+		--sun-y: 38svh;
+	}
+
+	.plane {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: calc(-1 * var(--ov));
+		bottom: calc(-1 * var(--ov));
+		will-change: transform;
+	}
+
+	/* the great field — 8° */
+	.field {
+		z-index: 2;
+		background: var(--mass-deep);
+		clip-path: polygon(0 calc(var(--ov) + var(--fy)), 100% calc(var(--ov) + var(--fy) - var(--dya)), 100% 100%, 0 100%);
+	}
+
+	/* one column standing through the whole scene — 22° */
+	.column {
+		z-index: 3;
+		background: var(--mass-black);
+		clip-path: polygon(var(--cx) 0, calc(var(--cx) + var(--cw)) 0, calc(var(--cx) + var(--cw) - var(--dxb)) 100%, calc(var(--cx) - var(--dxb)) 100%);
+	}
+
+	.datum {
+		position: absolute;
+		left: 0;
+		right: 42vw;
+		top: 16svh;
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.datum-line {
+		flex: 1;
+		height: 1px;
+		background: var(--line-soft);
+	}
+
+	.datum-tag {
+		color: color-mix(in oklab, var(--graphite) 50%, transparent);
+	}
+
+	.call {
+		position: absolute;
+		z-index: 5;
+		left: var(--gutter);
+		top: clamp(2.5rem, 7svh, 4.5rem);
+		color: color-mix(in oklab, var(--graphite) 70%, transparent);
+	}
+
+	.title {
+		position: absolute;
+		z-index: 5;
+		left: var(--gutter);
+		top: 66svh;
+		font-size: clamp(1.75rem, 3.4vw, 3.125rem);
+		line-height: 1.68;
+		letter-spacing: 0.15em;
+		font-weight: 400;
+		color: var(--paper-hi);
+	}
+
+	.title span:last-child {
+		padding-left: 1.5em;
+	}
+
+	.body {
+		position: absolute;
+		z-index: 5;
+		right: var(--gutter);
+		bottom: clamp(6rem, 16svh, 10rem);
+		max-width: 20rem;
+		font-size: clamp(0.8125rem, 1vw, 0.9375rem);
+		line-height: 2.1;
+		letter-spacing: 0.06em;
+		color: color-mix(in oklab, var(--paper) 76%, transparent);
+		text-align: right;
+	}
+
+	.el {
+		position: absolute;
+		z-index: 5;
+		right: var(--gutter);
+		bottom: clamp(2rem, 5svh, 3.25rem);
+	}
+
+	@media (max-width: 64rem) {
+		.manifesto {
+			--sh: 110svh;
+			--fy: 44svh;
+			--cx: 82vw;
+		}
+
+		.manifesto :global(.mf-sun) {
+			--sun-size: 42svh;
+			--sun-x: 50vw;
+		}
+
+		.title {
+			top: 62svh;
+		}
+	}
+
+	@media (max-width: 48rem) {
+		.manifesto {
+			--sh: 104svh;
+			--fy: 42svh;
+			--cx: 92vw;
+			--cw: 5vw;
+		}
+
+		.manifesto :global(.mf-sun) {
+			--sun-size: 38svh;
+			--sun-x: 54vw;
+			--sun-y: 34svh;
+		}
+
+		.title {
+			top: 58svh;
+			font-size: clamp(1.625rem, 4.6vw, 2.25rem);
+		}
+
+		.body {
+			bottom: clamp(5rem, 14svh, 8rem);
+			max-width: 16rem;
+		}
+
+		.datum {
+			right: 30vw;
+		}
+	}
+
+	/* 390 — the column goes, the field rises, the light is cropped by the
+	   right edge: a tighter, heavier composition rather than a shrunk one */
+	@media (max-width: 30rem) {
+		.manifesto {
+			--sh: 96svh;
+			--fy: 38svh;
+		}
+
+		.column {
+			display: none;
+		}
+
+		.manifesto :global(.mf-sun) {
+			--sun-size: 40svh;
+			--sun-x: 72vw;
+			--sun-y: 25svh;
+		}
+
+		.datum {
+			right: 0;
+			top: 12svh;
+		}
+
+		.title {
+			top: 48svh;
+			font-size: 1.75rem;
+			letter-spacing: 0.12em;
+		}
+
+		.title span:last-child {
+			padding-left: 1.25em;
+		}
+
+		.body {
+			left: var(--gutter);
+			right: var(--gutter);
+			bottom: 5.5rem;
+			max-width: none;
+			text-align: left;
+			font-size: 0.8125rem;
+			line-height: 2;
+		}
+
+		.el {
+			left: var(--gutter);
+			right: auto;
+			bottom: 2rem;
+		}
+	}
+</style>

@@ -1,0 +1,159 @@
+---
+import { capabilities } from "../../lib/copy";
+
+const items = [...capabilities];
+---
+
+<section class="mq" aria-labelledby="d09-mq-h">
+	<h2 class="side" id="d09-mq-h"><span aria-hidden="true">H</span> <span>CAPABILITIES</span> <span>能力範圍</span></h2>
+
+	<div class="tilt">
+		<div class="band a">
+			<div class="track d09-mq-a">
+				<ul>
+					{
+						items.map(c => (
+							<li>
+								{c}
+								<span class="s" aria-hidden="true" />
+							</li>
+						))
+					}
+				</ul>
+				<ul aria-hidden="true">
+					{
+						items.map(c => (
+							<li>
+								{c}
+								<span class="s" />
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</div>
+
+		<div class="band b">
+			<div class="track d09-mq-b">
+				<ul aria-hidden="true">
+					{
+						items.map(c => (
+							<li>
+								{c}
+								<span class="s" />
+							</li>
+						))
+					}
+				</ul>
+				<ul aria-hidden="true">
+					{
+						items.map(c => (
+							<li>
+								{c}
+								<span class="s" />
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.mq {
+		overflow: clip;
+		padding-block: clamp(2.5rem, 7vh, 5rem);
+	}
+
+	.side {
+		position: relative;
+		z-index: 2;
+		writing-mode: vertical-rl;
+		display: flex;
+		gap: 1.4rem;
+		align-items: center;
+		font-size: var(--meta);
+		letter-spacing: 0.32em;
+		color: var(--ink-2);
+		margin: 0 0 clamp(1rem, 2.5vh, 2rem) var(--pad);
+	}
+
+	.side span:first-child {
+		color: var(--orange);
+	}
+
+	.tilt {
+		position: relative;
+		z-index: 2;
+		width: 114%;
+		margin-inline-start: -7%;
+		rotate: -2.2deg;
+	}
+
+	.band {
+		overflow: clip;
+		height: clamp(3.6rem, 7vw, 6rem);
+		display: flex;
+		align-items: center;
+	}
+
+	.a {
+		background: var(--orange);
+		clip-path: ellipse(72% 100% at 50% 100%);
+	}
+
+	.b {
+		background: var(--band-a);
+		clip-path: ellipse(72% 100% at 50% 0%);
+		border-top: 1px solid var(--ink-black);
+	}
+
+	.track {
+		display: flex;
+		width: max-content;
+		will-change: transform;
+	}
+
+	.track ul {
+		display: flex;
+		align-items: center;
+	}
+
+	.track li {
+		display: flex;
+		align-items: center;
+		gap: clamp(1rem, 2.4vw, 2.4rem);
+		padding-inline-end: clamp(1rem, 2.4vw, 2.4rem);
+		font-size: clamp(0.85rem, 1.9vw, 1.7rem);
+		letter-spacing: 0.24em;
+		font-weight: 500;
+		white-space: nowrap;
+		color: var(--ink-black);
+	}
+
+	.s {
+		width: 0.4rem;
+		height: 0.4rem;
+		border-radius: 50%;
+		background: currentcolor;
+		flex: none;
+	}
+
+	.b .s {
+		background: var(--orange);
+		width: 0.5rem;
+		height: 0.5rem;
+	}
+
+	@media (max-width: 48rem) {
+		.tilt {
+			rotate: -1.4deg;
+		}
+
+		.side {
+			writing-mode: horizontal-tb;
+			gap: 1rem;
+		}
+	}
+</style>

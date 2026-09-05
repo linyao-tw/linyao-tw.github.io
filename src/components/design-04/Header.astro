@@ -1,0 +1,431 @@
+---
+/**
+ * design-04 · running head
+ *
+ * A printed running head: publisher on the left, edition data centre, the plate
+ * index on the right. Below 60rem the index folds into a full-sheet contents
+ * panel with real focus handling.
+ */
+import { brand, nav } from "../../lib/copy";
+---
+
+<header class="head">
+	<div class="row">
+		<a class="mast" href="#cover">
+			<span class="zh">{brand.nameZh}</span>
+			<span class="en">{brand.nameEn}</span>
+		</a>
+
+		<p class="edition" aria-hidden="true">ED. 04 — PRINT SYSTEM<span class="dot">·</span>MMXXVI</p>
+
+		<nav class="index" aria-label="章節索引">
+			<ul>
+				{
+					nav.map((item, i) => (
+						<li>
+							<a href={item.href}>
+								<span class="n">{String(i + 1).padStart(2, "0")}</span>
+								<span class="t">{item.label}</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<button class="inq" type="button" data-d04-inquiry>
+			<span>我要詢案</span>
+			<span class="arw" aria-hidden="true">↗</span>
+		</button>
+
+		<button class="toggle" type="button" aria-expanded="false" aria-controls="d04-contents" id="d04-toggle">
+			<span class="visually-hidden">開啟章節索引</span>
+			<span class="bars" aria-hidden="true"><i></i><i></i></span>
+			<span class="tw" aria-hidden="true">INDEX</span>
+		</button>
+	</div>
+
+	<div class="panel" id="d04-contents" hidden>
+		<span class="pcrop tl" aria-hidden="true"></span>
+		<span class="pcrop tr" aria-hidden="true"></span>
+		<span class="pcrop bl" aria-hidden="true"></span>
+		<span class="pcrop br" aria-hidden="true"></span>
+		<p class="pnote" aria-hidden="true">CONTENTS — SHEETS 01–09</p>
+		<nav aria-label="章節索引（行動版）">
+			<ul class="plist">
+				{
+					nav.map((item, i) => (
+						<li>
+							<a href={item.href} data-panel-link>
+								<span class="n">{String(i + 1).padStart(2, "0")}</span>
+								<span class="t">{item.label}</span>
+								<span class="z">{item.zh}</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+		<button class="pinq" type="button" data-d04-inquiry data-panel-link>我要詢案 <span aria-hidden="true">↗</span></button>
+		<p class="pmail"><a href={`mailto:${brand.email}`} data-panel-link>{brand.email}</a></p>
+	</div>
+</header>
+
+<style>
+	.head {
+		position: sticky;
+		top: 0;
+		z-index: 80;
+		background: var(--paper-hi);
+		border-bottom: 1px solid var(--rule);
+	}
+
+	.row {
+		display: flex;
+		align-items: center;
+		gap: clamp(0.75rem, 2vw, 2rem);
+		min-height: var(--head-h);
+		padding-inline: var(--plate-x);
+	}
+
+	.mast {
+		display: flex;
+		align-items: baseline;
+		gap: 0.55rem;
+		flex: 0 1 auto;
+		min-width: 0;
+	}
+
+	.mast .zh {
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: 0.9rem;
+		letter-spacing: 0.06em;
+		white-space: nowrap;
+	}
+
+	.mast .en {
+		display: none;
+		transform: scaleX(0.92);
+		transform-origin: 0 50%;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: color-mix(in oklab, currentColor 58%, transparent);
+		white-space: nowrap;
+	}
+
+	.edition {
+		display: none;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: color-mix(in oklab, currentColor 52%, transparent);
+	}
+
+	.dot {
+		padding-inline: 0.5rem;
+		color: var(--accent);
+	}
+
+	.index {
+		display: none;
+		margin-left: auto;
+	}
+
+	.index ul {
+		display: flex;
+		gap: clamp(0.75rem, 1.6vw, 1.6rem);
+	}
+
+	.index a {
+		display: flex;
+		align-items: center;
+		gap: 0.35rem;
+		min-height: 2.75rem;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.12em;
+	}
+
+	.index .n {
+		color: var(--accent-text);
+	}
+
+	.index .t {
+		border-bottom: 1px solid transparent;
+		padding-bottom: 0.1rem;
+	}
+
+	.index a:hover .t {
+		border-bottom-color: currentColor;
+	}
+
+	.inq {
+		display: none;
+		align-items: center;
+		gap: 0.4rem;
+		min-height: 2.25rem;
+		padding: 0.35rem 0.85rem;
+		white-space: nowrap;
+		background: var(--accent);
+		color: var(--ink-black);
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.1em;
+	}
+
+	.inq:hover {
+		background: var(--ink-black);
+		color: var(--paper-hi);
+	}
+
+	.toggle {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-left: auto;
+		min-height: 2.75rem;
+		min-width: 2.75rem;
+		justify-content: flex-end;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+	}
+
+	.bars {
+		display: grid;
+		gap: 0.28rem;
+		width: 1.1rem;
+	}
+
+	.bars i {
+		display: block;
+		height: 1px;
+		background: currentColor;
+	}
+
+	.toggle[aria-expanded="true"] .bars i:first-child {
+		background: var(--accent);
+	}
+
+	/* ---- contents panel ---------------------------------------------- */
+	.panel {
+		position: fixed;
+		inset: var(--head-h) 0 0 0;
+		z-index: 79;
+		display: grid;
+		align-content: start;
+		gap: clamp(1rem, 3vw, 2rem);
+		padding: clamp(2rem, 7vw, 3.5rem) var(--plate-x);
+		background: var(--paper-hi);
+		border-top: 1px solid var(--rule-faint);
+		overflow-y: auto;
+	}
+
+	.panel[hidden] {
+		display: none;
+	}
+
+	.pcrop {
+		position: absolute;
+		width: var(--crop-len);
+		height: var(--crop-len);
+		color: var(--rule);
+	}
+
+	.pcrop::before,
+	.pcrop::after {
+		content: "";
+		position: absolute;
+		background: currentColor;
+	}
+
+	.pcrop::before {
+		width: 100%;
+		height: 1px;
+	}
+
+	.pcrop::after {
+		width: 1px;
+		height: 100%;
+	}
+
+	.pcrop.tl {
+		top: var(--crop-inset);
+		left: var(--crop-inset);
+	}
+	.pcrop.tl::before,
+	.pcrop.tl::after {
+		top: 0;
+		left: 0;
+	}
+	.pcrop.tr {
+		top: var(--crop-inset);
+		right: var(--crop-inset);
+	}
+	.pcrop.tr::before,
+	.pcrop.tr::after {
+		top: 0;
+		right: 0;
+	}
+	.pcrop.bl {
+		bottom: var(--crop-inset);
+		left: var(--crop-inset);
+	}
+	.pcrop.bl::before,
+	.pcrop.bl::after {
+		bottom: 0;
+		left: 0;
+	}
+	.pcrop.br {
+		bottom: var(--crop-inset);
+		right: var(--crop-inset);
+	}
+	.pcrop.br::before,
+	.pcrop.br::after {
+		bottom: 0;
+		right: 0;
+	}
+
+	.pnote {
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: color-mix(in oklab, currentColor 55%, transparent);
+		border-bottom: 1px solid var(--rule-soft);
+		padding-bottom: 0.6rem;
+	}
+
+	.plist li + li {
+		border-top: 1px solid var(--rule-faint);
+	}
+
+	.plist a {
+		display: grid;
+		grid-template-columns: 2.5rem 1fr auto;
+		align-items: baseline;
+		gap: 0.75rem;
+		min-height: 3.25rem;
+		align-content: center;
+		padding-block: 0.75rem;
+	}
+
+	.plist .n {
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		color: var(--accent-text);
+		letter-spacing: 0.1em;
+	}
+
+	.plist .t {
+		font-family: var(--font-grotesk);
+		font-weight: 800;
+		font-size: clamp(1.5rem, 7vw, 2.25rem);
+		letter-spacing: -0.02em;
+		display: inline-block;
+		transform: scaleX(0.93);
+		transform-origin: 0 50%;
+	}
+
+	.plist .z {
+		font-family: var(--font-cjk);
+		font-size: 0.8rem;
+		color: color-mix(in oklab, currentColor 60%, transparent);
+	}
+
+	.pinq {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-height: 3.25rem;
+		padding-inline: 1rem;
+		background: var(--accent);
+		color: var(--ink-black);
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		letter-spacing: 0.08em;
+	}
+
+	.pmail {
+		font-family: var(--font-mono);
+		font-size: var(--mono-lg);
+		letter-spacing: 0.08em;
+	}
+
+	.pmail a {
+		border-bottom: 1px solid var(--accent);
+	}
+
+	@media (min-width: 48rem) {
+		.mast .en {
+			display: inline-block;
+		}
+	}
+
+	@media (min-width: 60rem) {
+		.index,
+		.inq {
+			display: flex;
+		}
+
+		.toggle,
+		.panel {
+			display: none;
+		}
+	}
+
+	@media (min-width: 78rem) {
+		.edition {
+			display: block;
+			margin-left: clamp(1rem, 3vw, 3rem);
+		}
+	}
+</style>
+
+<script>
+	const toggle = document.getElementById("d04-toggle");
+	const panel = document.getElementById("d04-contents");
+
+	if (toggle && panel) {
+		const setOpen = (open: boolean) => {
+			toggle.setAttribute("aria-expanded", String(open));
+			panel.hidden = !open;
+			document.body.style.overflow = open ? "hidden" : "";
+			if (open) panel.querySelector<HTMLElement>("a, button")?.focus();
+		};
+
+		toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
+
+		panel.querySelectorAll<HTMLElement>("[data-panel-link]").forEach(el => {
+			el.addEventListener("click", () => setOpen(false));
+		});
+
+		document.addEventListener("keydown", event => {
+			if (event.key !== "Escape" || panel.hidden) return;
+			setOpen(false);
+			toggle.focus();
+		});
+
+		/* simple wrap-around trap while the sheet is open */
+		panel.addEventListener("keydown", event => {
+			if (event.key !== "Tab") return;
+			const items = Array.from(panel.querySelectorAll<HTMLElement>("a[href], button"));
+			if (!items.length) return;
+			const first = items[0];
+			const last = items[items.length - 1];
+			if (event.shiftKey && document.activeElement === first) {
+				event.preventDefault();
+				last.focus();
+			} else if (!event.shiftKey && document.activeElement === last) {
+				event.preventDefault();
+				toggle.focus();
+			}
+		});
+
+		const wide = window.matchMedia("(min-width: 60rem)");
+		wide.addEventListener("change", () => {
+			if (wide.matches && !panel.hidden) setOpen(false);
+		});
+	}
+</script>

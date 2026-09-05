@@ -1,0 +1,213 @@
+---
+import { brand, hero, nav } from "../../lib/copy";
+import ColumnRules from "./ColumnRules.astro";
+---
+
+<footer class="foot" id="colophon">
+	<ColumnRules tone="rev" class="foot-cols" />
+
+	<div class="d01-shell foot-grid">
+		<div class="foot-mark">
+			<span class="foot-disc" aria-hidden="true"></span>
+			<p class="foot-zh">{brand.nameZh}</p>
+			<p class="foot-en">{brand.nameEn}</p>
+			<p class="foot-tag">{hero.headline}</p>
+		</div>
+
+		<dl class="foot-col">
+			<dt class="d01-label">EQUATION</dt>
+			<dd class="foot-eq">{brand.equation}</dd>
+			<dt class="d01-label">DISCIPLINES</dt>
+			<dd class="foot-disciplines">{brand.disciplines}</dd>
+		</dl>
+
+		<nav class="foot-col foot-nav" aria-label="頁尾導覽">
+			<p class="d01-label">INDEX</p>
+			<ul>
+				{
+					nav.map(item => (
+						<li>
+							<a href={item.href}>
+								{item.label} <span>{item.zh}</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<div class="foot-col foot-contact">
+			<p class="d01-label">CONTACT</p>
+			<a class="foot-mail" href={`mailto:${brand.email}`}>{brand.email}</a>
+			<p class="foot-copy d01-label">{brand.copyright}</p>
+		</div>
+
+		<span class="d01-rule d01-rule--hair foot-rule" aria-hidden="true"></span>
+
+		<p class="foot-wordmark" aria-hidden="true">LINYAO</p>
+	</div>
+</footer>
+
+<style>
+	.foot {
+		position: relative;
+		background: var(--graphite);
+		color: var(--warm-gray);
+		overflow: clip;
+		border-top: 1rem solid var(--orange);
+	}
+	.foot-cols {
+		z-index: 0;
+	}
+	.foot-grid {
+		position: relative;
+		z-index: 1;
+		padding-block: clamp(3rem, 8vh, 5rem) 0;
+		row-gap: 2.5rem;
+		align-items: start;
+	}
+
+	.foot-mark {
+		grid-column: 1 / 5;
+		display: grid;
+		gap: 0.375rem;
+		justify-items: start;
+	}
+	.foot-disc {
+		width: 1.75rem;
+		height: 1.75rem;
+		border-radius: 50%;
+		background: var(--orange);
+		margin-bottom: 0.75rem;
+	}
+	.foot-zh {
+		font-size: clamp(1.125rem, 1.8vw, 1.5rem);
+		font-weight: 700;
+		letter-spacing: 0.01em;
+	}
+	.foot-en {
+		font-size: var(--label);
+		font-weight: 500;
+		letter-spacing: var(--tr-label);
+		text-transform: uppercase;
+		color: var(--warm-gray);
+	}
+
+	.foot-tag {
+		margin-top: 0.75rem;
+		font-size: var(--small);
+		font-weight: 500;
+		letter-spacing: 0.14em;
+		color: var(--warm-gray);
+	}
+
+	.foot-col {
+		display: grid;
+		gap: 0.5rem;
+		align-content: start;
+	}
+	.foot-col .d01-label {
+		color: var(--warm-gray);
+		margin-bottom: 0.25rem;
+	}
+	.foot-col dt:not(:first-of-type) {
+		margin-top: 1rem;
+	}
+	.foot-grid > dl {
+		grid-column: 5 / 8;
+	}
+	.foot-eq {
+		font-size: clamp(0.9375rem, 1.2vw, 1.125rem);
+		font-weight: 700;
+	}
+	.foot-disciplines {
+		font-size: var(--small);
+		font-weight: 500;
+	}
+
+	.foot-nav {
+		grid-column: 8 / 10;
+	}
+	.foot-nav ul {
+		display: grid;
+		gap: 0.5rem;
+	}
+	.foot-nav a {
+		font-size: var(--small);
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		display: inline-flex;
+		gap: 0.5rem;
+		align-items: baseline;
+	}
+	.foot-nav a span {
+		font-weight: 400;
+		color: var(--warm-gray);
+	}
+	.foot-nav a:hover {
+		color: var(--paper-hi);
+	}
+
+	.foot-contact {
+		grid-column: 10 / 13;
+		justify-items: start;
+	}
+	.foot-mail {
+		font-size: clamp(1rem, 1.5vw, 1.25rem);
+		font-weight: 700;
+		letter-spacing: -0.01em;
+		border-bottom: 1px solid var(--rule-hair-rev);
+	}
+	.foot-mail:hover {
+		border-bottom-color: var(--warm-gray);
+	}
+	.foot-copy {
+		margin-top: 1.25rem;
+		color: var(--warm-gray);
+	}
+
+	.foot-rule {
+		grid-column: 1 / -1;
+		--rule-c: var(--rule-hair-rev);
+		margin-top: 1rem;
+	}
+
+	/* oversized wordmark, cropped hard by the bottom edge */
+	.foot-wordmark {
+		grid-column: 1 / -1;
+		font-size: clamp(4.5rem, 21vw, 20rem);
+		font-weight: 700;
+		line-height: 0.72;
+		letter-spacing: -0.055em;
+		color: color-mix(in oklab, var(--warm-gray) 30%, transparent);
+		margin-bottom: -0.16em;
+		user-select: none;
+	}
+
+	@media (max-width: 64rem) {
+		.foot-mark {
+			grid-column: 1 / 7;
+		}
+		.foot-grid > dl {
+			grid-column: 7 / 13;
+		}
+		.foot-nav {
+			grid-column: 1 / 7;
+		}
+		.foot-contact {
+			grid-column: 7 / 13;
+		}
+	}
+
+	@media (max-width: 40rem) {
+		.foot-mark,
+		.foot-grid > dl,
+		.foot-nav,
+		.foot-contact {
+			grid-column: 1 / -1;
+		}
+		.foot-grid {
+			row-gap: 2rem;
+		}
+	}
+</style>

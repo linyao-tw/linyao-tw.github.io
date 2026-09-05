@@ -1,0 +1,41 @@
+---
+/** Real, visible hairline column rules aligned to the 12-column shell. */
+interface Props {
+	tone?: "ink" | "rev";
+	class?: string;
+}
+const { tone = "ink", class: className } = Astro.props;
+---
+
+<div class:list={["colrules", tone === "rev" && "is-rev", className]} aria-hidden="true">
+	{Array.from({ length: 12 }, (_, i) => <span data-col={i + 1} />)}
+</div>
+
+<style>
+	.colrules {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		column-gap: var(--col-gap);
+		padding-inline: var(--margin);
+		pointer-events: none;
+		z-index: 0;
+	}
+	.colrules > span {
+		border-left: 1px solid var(--rule-hair-faint);
+	}
+	.colrules.is-rev > span {
+		border-left: 1px solid color-mix(in oklab, var(--warm-gray) 18%, transparent);
+	}
+	@media (max-width: 64rem) {
+		.colrules > span:nth-child(2n) {
+			border-left: 0;
+		}
+	}
+	@media (max-width: 40rem) {
+		.colrules {
+			display: none;
+		}
+	}
+</style>

@@ -1,0 +1,152 @@
+---
+/**
+ * 05 — GEOMETRIC ARCHITECTURE
+ * The only permitted global block for this version. Every selector is prefixed
+ * with `body.d-05` so nothing can leak into the other nine directions.
+ *
+ * The whole site is built from exactly two angles:
+ *   A =  8°  (tan 0.1405)   shallow — horizons, ground planes, friezes
+ *   B = 22°  (tan 0.4040)   steep   — vertical cuts, wedges, bay walls
+ * Every clip-path in this version derives its slope from --tan-a / --tan-b,
+ * expressed in absolute lengths so the angle stays exact at every breakpoint.
+ */
+---
+
+<style is:global>
+	body.d-05 {
+		--bg: var(--warm-gray);
+		--fg: var(--graphite);
+
+		/* the two angles of the structure — nothing else is allowed */
+		--tan-a: 0.1405; /* 8°  */
+		--tan-b: 0.404; /* 22° */
+
+		/* plane overshoot: planes are taller than their scene so scrub
+		   parallax can never expose a scene edge */
+		--ov: 10svh;
+
+		--mass: var(--ink);
+		--mass-deep: var(--ink-deep);
+		--mass-black: var(--ink-black);
+
+		--line: color-mix(in oklab, var(--graphite) 46%, transparent);
+		--line-soft: color-mix(in oklab, var(--graphite) 22%, transparent);
+		--line-paper: color-mix(in oklab, var(--paper) 38%, transparent);
+
+		--anno: var(--graphite);
+		--anno-paper: color-mix(in oklab, var(--paper) 76%, transparent);
+		--anno-size: clamp(0.5625rem, 0.62vw, 0.6875rem);
+		--anno-track: 0.2em;
+
+		/* diagonal hatching, both angles, 1px hairlines only */
+		--hatch-a: repeating-linear-gradient(98deg, var(--line) 0 1px, transparent 1px 0.5rem);
+		--hatch-b: repeating-linear-gradient(112deg, var(--line) 0 1px, transparent 1px 0.5rem);
+		--hatch-paper: repeating-linear-gradient(112deg, var(--line-paper) 0 1px, transparent 1px 0.6875rem);
+
+		background: var(--bg);
+		color: var(--fg);
+		font-family: var(--font-grotesk);
+	}
+
+	/* --- architectural annotation: elevation marks, section calls, figures --- */
+	body.d-05 .d05-anno {
+		font-family: var(--font-mono);
+		font-size: var(--anno-size);
+		letter-spacing: var(--anno-track);
+		line-height: 1.5;
+		text-transform: uppercase;
+		color: var(--anno);
+		white-space: nowrap;
+	}
+
+	body.d-05 .d05-anno--paper {
+		color: var(--anno-paper);
+	}
+
+	body.d-05 .d05-anno--wrap {
+		white-space: normal;
+	}
+
+	/* opt back out of the uppercase transform (email addresses, mixed-case) */
+	body.d-05 .d05-anno--plain {
+		text-transform: none;
+	}
+
+	/* --- latin display: uppercase, wide, deliberately small --- */
+	body.d-05 .d05-latin {
+		font-family: var(--font-grotesk);
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.16em;
+		line-height: 1.2;
+	}
+
+	/* --- chinese: generous leading, hand-broken lines --- */
+	body.d-05 .d05-zh {
+		font-family: var(--font-grotesk);
+		letter-spacing: 0.06em;
+		line-height: 1.85;
+		font-weight: 400;
+	}
+
+	body.d-05 .d05-zh > span {
+		display: block;
+	}
+
+	/* --- dimension line with tick ends (pure CSS, 1px hairlines) --- */
+	body.d-05 .d05-dim {
+		position: relative;
+		height: 1px;
+		background: var(--line);
+	}
+
+	body.d-05 .d05-dim::before,
+	body.d-05 .d05-dim::after {
+		content: "";
+		position: absolute;
+		top: -0.3125rem;
+		width: 1px;
+		height: 0.6875rem;
+		background: var(--line);
+	}
+
+	body.d-05 .d05-dim::before {
+		left: 0;
+	}
+
+	body.d-05 .d05-dim::after {
+		right: 0;
+	}
+
+	body.d-05 .d05-dim--paper,
+	body.d-05 .d05-dim--paper::before,
+	body.d-05 .d05-dim--paper::after {
+		background: var(--line-paper);
+	}
+
+	/* --- ground / datum rule --- */
+	body.d-05 .d05-datum {
+		height: 1px;
+		background: var(--line);
+		border: 0;
+	}
+
+	/* anchors clear the fixed datum bar when JS is off */
+	body.d-05 [id] {
+		scroll-margin-top: 4.5rem;
+	}
+
+	/* --- scroll lock while the full-screen plan menu is open --- */
+	body.d-05.d05-locked {
+		overflow: hidden;
+	}
+
+	/* --- progressive enhancement: the dialog trigger only exists with JS --- */
+	body.d-05:not(.d05-js) [data-inquiry-open] {
+		display: none;
+	}
+
+	body.d-05.d05-js .d05-mailto-fallback {
+		display: none;
+	}
+</style>

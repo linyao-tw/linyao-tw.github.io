@@ -1,0 +1,186 @@
+---
+import { brand, hero } from "../../lib/copy";
+import Beam from "./Beam.astro";
+---
+
+<section class="hero" aria-labelledby="d07-hero-h">
+	<div class="scene" aria-hidden="true">
+		<span class="rule r-left"></span>
+		<span class="rule r-mid"></span>
+		<span class="beam-box">
+			<Beam
+				shape="polygon(0% 0%, 100% 30%, 100% 40%, 0% 10%)"
+				seed="polygon(0% 0%, 0% 0%, 0% 10%, 0% 10%)"
+				shapeSm="polygon(0% 3%, 100% 21%, 100% 30%, 0% 12%)"
+				seedSm="polygon(0% 3%, 0% 3%, 0% 12%, 0% 12%)"
+				drift={5}
+				speed={1.8}
+			/>
+		</span>
+		<span class="slit d07-slit"></span>
+	</div>
+
+	<div class="hero-in d07-shell">
+		<h1 id="d07-hero-h" class="hl" lang="zh-Hant">
+			<span class="d07-hero-line l1">{hero.headlineParts[0]}</span>
+			<span class="d07-hero-line l2">{hero.headlineParts[1]}</span>
+			<span class="d07-hero-line l3">{hero.headlineParts[2]}</span>
+		</h1>
+		<p class="eq d07-hero-meta">{brand.equation}</p>
+	</div>
+
+	<div class="hero-foot d07-shell">
+		<p class="disc d07-hero-meta">{brand.disciplines}</p>
+		<a class="cue d07-hero-meta" href="#intro">{hero.scrollCue}</a>
+	</div>
+</section>
+
+<style>
+	.hero {
+		position: relative;
+		display: grid;
+		grid-template-rows: 1fr auto;
+		min-height: 100svh;
+		background: var(--d07-void);
+		overflow: clip;
+		isolation: isolate;
+	}
+
+	.scene {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		overflow: clip;
+	}
+
+	/* the light lives below the header register, cut flat at its baseline */
+	.beam-box {
+		position: absolute;
+		inset: 4rem 0 0;
+		display: block;
+		overflow: clip;
+	}
+
+	.rule {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: var(--hairline);
+		background: var(--d07-line-soft);
+	}
+
+	.r-left {
+		left: var(--d07-gutter);
+	}
+
+	.r-mid {
+		left: 64%;
+	}
+
+	.slit {
+		position: absolute;
+		top: 0;
+		left: var(--d07-gutter);
+		height: clamp(5rem, 15vh, 11rem);
+	}
+
+	.hero-in {
+		position: relative;
+		z-index: 1;
+		align-self: end;
+		padding-top: clamp(7rem, 20vh, 13rem);
+		padding-bottom: clamp(2.5rem, 6vh, 5rem);
+	}
+
+	.hl {
+		font-family: var(--font-cjk);
+		font-size: clamp(2.625rem, 8.6vw, 6.75rem);
+		font-weight: 400;
+		line-height: 1.55;
+		letter-spacing: 0.14em;
+		color: var(--d07-text);
+		text-wrap: balance;
+	}
+
+	.hl span {
+		display: block;
+		margin-right: -0.14em;
+	}
+
+	.l2 {
+		margin-left: clamp(0rem, 5.5vw, 6rem);
+	}
+
+	.l3 {
+		margin-left: clamp(0rem, 11vw, 12rem);
+	}
+
+	.eq {
+		margin-top: clamp(1.75rem, 5vh, 3.5rem);
+		margin-left: clamp(0rem, 11vw, 12rem);
+		font-family: var(--font-mono);
+		font-size: clamp(0.625rem, 0.9vw, 0.8125rem);
+		letter-spacing: 0.44em;
+		color: var(--d07-dim);
+	}
+
+	.hero-foot {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--s-4);
+		flex-wrap: wrap;
+		padding-block: clamp(1rem, 2.4vh, 1.75rem) clamp(1.25rem, 3vh, 2.25rem);
+		border-top: var(--hairline) solid var(--d07-line-soft);
+	}
+
+	.disc {
+		font-family: var(--font-cjk);
+		font-size: 0.75rem;
+		font-weight: 300;
+		letter-spacing: 0.28em;
+		color: var(--d07-mute);
+	}
+
+	.cue {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.32em;
+		color: var(--d07-dim);
+		transition: color 0.35s ease;
+	}
+
+	.cue:hover {
+		color: var(--orange);
+	}
+
+	@media (max-width: 40rem) {
+		.r-mid {
+			left: 78%;
+		}
+
+		.hl {
+			line-height: 1.5;
+		}
+
+		.hero-foot {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.25rem;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		gsap.fromTo(".d07-hero-line", { letterSpacing: "0.42em", opacity: 0 }, { letterSpacing: "0.14em", opacity: 1, duration: 1.5, stagger: 0.14, ease: "power3.out", delay: 0.12 });
+		gsap.from(".d07-hero-meta", { opacity: 0, y: 12, duration: 1, stagger: 0.1, delay: 0.85, ease: "power2.out" });
+	});
+</script>

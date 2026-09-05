@@ -1,0 +1,161 @@
+---
+/**
+ * design-04 · sheet 07b — record
+ *
+ * The award record printed as a ledger: three ruled entries, oversized figures
+ * optically condensed, mono annotation in the outer column. No badges, no logos.
+ */
+import { manifesto } from "../../lib/copy";
+import Plate from "./Plate.astro";
+import PlateBar from "./PlateBar.astro";
+
+const size = (s: string) => (s.length <= 3 ? "xl" : s.length <= 6 ? "lg" : "md");
+---
+
+<Plate as="section" id="record" labelledby="record-h" plate="PL. 07b — RECORD" sheet="07/09" pad="md">
+	<div class="wrap">
+		<div class="head">
+			<h2 id="record-h">STUDIO RECORD</h2>
+			<p class="meta" aria-hidden="true">3 ENTRIES — VERIFIED / NO LOGOS PRINTED</p>
+		</div>
+
+		<ol class="recs">
+			{
+				manifesto.credibility.map((rec, i) => (
+					<li class="rec">
+						<span class="n">REC. {String(i + 1).padStart(2, "0")}</span>
+						<span class:list={["fig", size(rec.figure)]} data-reg={i === 1 ? "flip" : ""}>
+							{rec.figure}
+						</span>
+						<span class="zh">{rec.label}</span>
+						<span class="en">{rec.en}</span>
+					</li>
+				))
+			}
+		</ol>
+
+		<PlateBar compact />
+	</div>
+</Plate>
+
+<style>
+	.wrap {
+		display: grid;
+		gap: clamp(1.5rem, 3.5vw, 2.5rem);
+	}
+
+	.head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 0.5rem 1.5rem;
+		padding-bottom: 0.6rem;
+		border-bottom: 1px solid var(--rule);
+	}
+
+	h2 {
+		display: inline-block;
+		transform: scaleX(0.92);
+		transform-origin: 0 50%;
+		font-family: var(--font-grotesk);
+		font-weight: 800;
+		font-size: clamp(1.35rem, 1rem + 1.7vw, 2.5rem);
+		letter-spacing: -0.02em;
+		color: var(--ink-black);
+	}
+
+	.meta {
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: color-mix(in oklab, currentColor 55%, transparent);
+	}
+
+	.rec {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: baseline;
+		gap: 0.2rem 1rem;
+		padding-block: clamp(0.9rem, 2.2vw, 1.5rem);
+		border-bottom: 1px solid var(--rule-soft);
+	}
+
+	.n {
+		grid-column: 1;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.1em;
+		color: var(--accent-text);
+	}
+
+	.fig {
+		grid-column: 1;
+		display: inline-block;
+		transform: scaleX(0.9);
+		transform-origin: 0 50%;
+		font-family: var(--font-grotesk);
+		font-weight: 800;
+		line-height: 0.86;
+		letter-spacing: -0.04em;
+		color: var(--ink-black);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.xl {
+		font-size: clamp(3.25rem, 2rem + 6vw, 7.5rem);
+	}
+
+	.lg {
+		font-size: clamp(2.25rem, 1.4rem + 3.4vw, 4.4rem);
+	}
+
+	.md {
+		font-size: clamp(1.6rem, 1rem + 2.2vw, 3rem);
+	}
+
+	.zh {
+		grid-column: 1;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(0.9rem, 0.85rem + 0.4vw, 1.1rem);
+		line-height: 1.7;
+		letter-spacing: 0.06em;
+		color: var(--ink);
+	}
+
+	.en {
+		grid-column: 1;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: color-mix(in oklab, currentColor 50%, transparent);
+	}
+
+	@media (min-width: 60rem) {
+		.rec {
+			grid-template-columns: 6rem minmax(0, 22rem) minmax(0, 1fr) minmax(0, 14rem);
+			align-items: center;
+			gap: 0 clamp(1rem, 3vw, 3rem);
+		}
+
+		.n {
+			grid-column: 1;
+			align-self: start;
+			padding-top: 0.4rem;
+		}
+
+		.fig {
+			grid-column: 2;
+		}
+
+		.zh {
+			grid-column: 3;
+		}
+
+		.en {
+			grid-column: 4;
+			text-align: right;
+		}
+	}
+</style>

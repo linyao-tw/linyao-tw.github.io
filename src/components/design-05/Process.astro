@@ -1,0 +1,258 @@
+---
+import { process } from "../../lib/copy";
+
+const factors = [0.42, 0.56, 0.7, 0.85, 1];
+---
+
+<section class="process" id="process" aria-labelledby="d05-process-title">
+	<div class="head" data-reveal>
+		<p class="idx d05-anno" aria-hidden="true">0.05<br />PROCESS</p>
+		<h2 class="d05-zh" id="d05-process-title">
+			{process.headlineParts.map(part => <span>{part}</span>)}
+		</h2>
+		<p class="how d05-anno">{process.kicker.toUpperCase()} &nbsp;/&nbsp; 05 BAYS</p>
+	</div>
+
+	<div class="plan">
+		<p class="d05-anno tag tag-l" aria-hidden="true">PLAN &mdash; LEVEL 00</p>
+		<p class="d05-anno tag tag-r" aria-hidden="true">01 &rarr; 05</p>
+
+		<ol class="bays">
+			{
+				process.steps.map((step, i) => (
+					<li class="bay" style={`--f:${factors[i]}`}>
+						<div class="vol" data-bay aria-hidden="true" />
+						<div class="note">
+							<span class="n d05-anno">{step.index}</span>
+							<span class="en d05-latin">{step.en}</span>
+							<span class="zh d05-zh">{step.zh}</span>
+						</div>
+					</li>
+				))
+			}
+		</ol>
+
+		<div class="ground" aria-hidden="true"></div>
+	</div>
+</section>
+
+<style>
+	.process {
+		position: relative;
+		padding: clamp(4rem, 12svh, 8rem) var(--gutter) clamp(4rem, 11svh, 7rem);
+		border-top: 1px solid var(--line);
+		overflow: clip;
+	}
+
+	.head {
+		display: grid;
+		grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+		gap: clamp(1.25rem, 3vw, 3rem);
+		align-items: start;
+		margin-bottom: clamp(3.5rem, 10svh, 6rem);
+	}
+
+	.idx {
+		color: color-mix(in oklab, var(--graphite) 58%, transparent);
+		line-height: 1.7;
+	}
+
+	.head h2 {
+		font-size: clamp(1.375rem, 2.4vw, 2rem);
+		line-height: 1.72;
+		letter-spacing: 0.16em;
+		font-weight: 500;
+	}
+
+	.head h2 span:last-child {
+		padding-left: 2em;
+	}
+
+	.how {
+		align-self: end;
+		color: var(--graphite);
+	}
+
+	.plan {
+		--sh: clamp(9rem, 26svh, 15rem);
+		position: relative;
+		padding-top: 2rem;
+	}
+
+	.tag {
+		position: absolute;
+		top: 0;
+		color: color-mix(in oklab, var(--graphite) 52%, transparent);
+	}
+
+	.tag-l {
+		left: 0;
+	}
+
+	.tag-r {
+		right: 0;
+	}
+
+	.bays {
+		display: grid;
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+		gap: 0 1px;
+	}
+
+	.bay {
+		--h: calc(var(--sh) * var(--f));
+		display: grid;
+		grid-template-rows: var(--sh) auto;
+	}
+
+	/* each bay's leading edge is cut at 22° — the run is derived from the
+	   bay's own height so all five leading edges stay parallel */
+	.vol {
+		align-self: end;
+		height: var(--h);
+		background: var(--mass);
+		clip-path: polygon(calc(var(--h) * var(--tan-b)) 0, 100% 0, 100% 100%, 0 100%);
+		will-change: transform;
+	}
+
+	.bay:nth-child(1) .vol {
+		background: var(--hatch-b);
+		border-bottom: 1px solid var(--line);
+	}
+
+	.bay:nth-child(2) .vol {
+		background: var(--paper-deep);
+	}
+
+	.bay:nth-child(3) .vol {
+		background: var(--mass);
+	}
+
+	.bay:nth-child(4) .vol {
+		background: var(--mass-deep);
+	}
+
+	.bay:nth-child(5) .vol {
+		background: var(--orange);
+	}
+
+	.note {
+		display: grid;
+		gap: 0.5rem;
+		padding: 1.125rem 0.875rem 0 0;
+	}
+
+	.n {
+		letter-spacing: 0.2em;
+	}
+
+	.n::after {
+		content: "";
+		display: inline-block;
+		width: 0.3125rem;
+		height: 0.3125rem;
+		background: var(--orange);
+		margin-left: 0.625rem;
+		vertical-align: 0.0625rem;
+	}
+
+	.en {
+		font-size: clamp(0.625rem, 0.85vw, 0.75rem);
+		letter-spacing: 0.2em;
+	}
+
+	.zh {
+		font-size: clamp(0.6875rem, 0.85vw, 0.8125rem);
+		line-height: 1.85;
+		letter-spacing: 0.08em;
+		color: var(--graphite);
+	}
+
+	.ground {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: calc(2rem + var(--sh));
+		height: 1px;
+		background: var(--graphite);
+	}
+
+	@media (max-width: 64rem) {
+		.plan {
+			--sh: clamp(7rem, 20svh, 10.5rem);
+		}
+
+		.head {
+			grid-template-columns: 3.5rem minmax(0, 1fr);
+		}
+
+		.how {
+			grid-column: 2;
+			align-self: start;
+		}
+	}
+
+	@media (max-width: 48rem) {
+		.plan {
+			--sh: clamp(5.5rem, 16svh, 8rem);
+		}
+
+		.note {
+			padding-right: 0.5rem;
+		}
+
+		.zh {
+			font-size: 0.625rem;
+			letter-spacing: 0.04em;
+		}
+	}
+
+	/* 390 — the plan rotates: five bays run down a vertical ground line */
+	@media (max-width: 30rem) {
+		.plan {
+			--sh: auto;
+			padding-top: 2.5rem;
+			padding-left: 1px;
+		}
+
+		.tag-r {
+			display: none;
+		}
+
+		.bays {
+			grid-template-columns: 1fr;
+			gap: 1px 0;
+			border-left: 1px solid var(--graphite);
+		}
+
+		.bay {
+			--h: 2.75rem;
+			display: grid;
+			grid-template-columns: minmax(0, calc(34% + var(--f) * 42%)) minmax(0, 1fr);
+			grid-template-rows: auto;
+			align-items: center;
+			gap: 0.875rem;
+		}
+
+		.vol {
+			height: var(--h);
+			align-self: stretch;
+			clip-path: polygon(0 0, 100% 0, calc(100% - var(--h) * var(--tan-b)) 100%, 0 100%);
+		}
+
+		.note {
+			padding: 0.25rem 0 0.25rem 0;
+			grid-template-columns: auto 1fr;
+			gap: 0.25rem 0.625rem;
+			align-items: baseline;
+		}
+
+		.zh {
+			grid-column: 1 / -1;
+		}
+
+		.ground {
+			display: none;
+		}
+	}
+</style>

@@ -1,0 +1,371 @@
+---
+import { brand, cta, nav } from "../../lib/copy";
+import { polyD, waveRule, type Pt } from "./geo";
+
+/* the bar's clip is ellipse(78% 100% at 50% 0%) — this samples the same
+   ellipse so the drawn edge sits exactly on the cut */
+const rx = 78;
+const edge: Pt[] = Array.from({ length: 121 }, (_, i) => {
+	const x = i * (100 / 120);
+	const k = (x - 50) / rx;
+	return [x, 100 * Math.sqrt(Math.max(0, 1 - k * k))] as Pt;
+});
+const edgeD = polyD(edge);
+
+const burger = [
+	waveRule({ width: 100, base: 9, layers: [{ amp: 6, freq: 1, phase: 0 }], samples: 30 }),
+	waveRule({ width: 100, base: 35, layers: [{ amp: 6, freq: 1, phase: 1.05 }], samples: 30 }),
+	waveRule({ width: 100, base: 61, layers: [{ amp: 6, freq: 1, phase: 2.1 }], samples: 30 })
+];
+---
+
+<header class="hd">
+	<div class="bar" aria-hidden="true"></div>
+	<svg class="baredge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+		<path d={edgeD} vector-effect="non-scaling-stroke"></path>
+	</svg>
+
+	<div class="row">
+		<a class="mark" href="#main">
+			<span class="zh">{brand.nameZh}</span>
+			<span class="en">{brand.nameEn}</span>
+		</a>
+
+		<nav class="desk" aria-label="主要導覽">
+			<ul>
+				{
+					nav.map(n => (
+						<li>
+							<a href={n.href}>{n.label}</a>
+						</li>
+					))
+				}
+			</ul>
+			<a class="ask" href={`mailto:${brand.email}?subject=${encodeURIComponent("詢案 — LINYAO DIGITAL STUDIO")}`} data-d09-inquiry>{cta.button}</a>
+		</nav>
+
+		<button class="toggle" type="button" aria-expanded="false" aria-controls="d09-menu">
+			<span class="visually-hidden">開啟選單</span>
+			<svg class="i-open" viewBox="0 0 100 70" aria-hidden="true" focusable="false">
+				{burger.map(d => <path d={d} vector-effect="non-scaling-stroke" />)}
+			</svg>
+			<svg class="i-close" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+				<path d="M4 4 L20 20 M20 4 L4 20"></path>
+			</svg>
+		</button>
+	</div>
+
+	<div class="panel" id="d09-menu" hidden>
+		<svg class="pdeco" viewBox="-320 -260 640 520" aria-hidden="true" focusable="false"><use href="#d09-peak-a"></use></svg>
+		<nav aria-label="行動裝置導覽">
+			<ul>
+				{
+					nav.map((n, i) => (
+						<li>
+							<a href={n.href}>
+								<span class="i">{String(i + 1).padStart(2, "0")}</span>
+								<span class="t">{n.zh}</span>
+								<span class="e">{n.label}</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+		<a class="pask" href={`mailto:${brand.email}?subject=${encodeURIComponent("詢案 — LINYAO DIGITAL STUDIO")}`} data-d09-inquiry>{cta.button}</a>
+	</div>
+</header>
+
+<style>
+	.hd {
+		--hh: clamp(4.25rem, 4.4vw, 5.5rem);
+		position: fixed;
+		inset: 0 0 auto;
+		z-index: 40;
+	}
+
+	.bar {
+		position: absolute;
+		inset: 0 0 auto;
+		height: calc(var(--hh) + 2rem);
+		clip-path: ellipse(78% 100% at 50% 0%);
+		background: var(--wg);
+	}
+
+	.baredge {
+		position: absolute;
+		inset: 0 0 auto;
+		width: 100%;
+		height: calc(var(--hh) + 2rem);
+		fill: none;
+		stroke: var(--line-soft);
+		stroke-width: 1;
+	}
+
+	.row {
+		position: relative;
+		z-index: 2;
+		height: var(--hh);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding-inline: var(--pad);
+	}
+
+	.mark {
+		display: grid;
+		gap: 0.1rem;
+		min-height: 2.75rem;
+		align-content: center;
+	}
+
+	.mark .zh {
+		font-family: var(--font-serif);
+		font-size: clamp(1.05rem, 1.3vw, 1.35rem);
+		letter-spacing: 0.16em;
+		line-height: 1;
+		color: var(--fg);
+	}
+
+	.mark .en {
+		font-size: 0.6rem;
+		letter-spacing: 0.3em;
+		line-height: 1;
+		color: var(--ink-2);
+	}
+
+	.desk {
+		display: none;
+		align-items: center;
+		gap: clamp(1.25rem, 2.2vw, 2.4rem);
+	}
+
+	.desk ul {
+		display: flex;
+		gap: clamp(1rem, 1.8vw, 2rem);
+	}
+
+	.desk a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
+		font-size: var(--meta);
+		letter-spacing: 0.22em;
+		color: var(--ink-2);
+		position: relative;
+	}
+
+	.desk ul a::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0.65rem;
+		height: 1px;
+		background: var(--orange);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1);
+	}
+
+	.desk ul a:hover::after,
+	.desk ul a:focus-visible::after {
+		transform: scaleX(1);
+	}
+
+	.desk .ask {
+		color: var(--fg);
+		font-family: var(--font-serif);
+		font-size: clamp(0.9rem, 1vw, 1.05rem);
+		letter-spacing: 0.08em;
+		gap: 0.55rem;
+	}
+
+	.desk .ask::before {
+		content: "";
+		width: 0.65rem;
+		height: 0.65rem;
+		border-radius: 50%;
+		background: var(--orange);
+		transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+	}
+
+	.desk .ask:hover::before,
+	.desk .ask:focus-visible::before {
+		transform: scale(2.1);
+	}
+
+	.toggle {
+		width: 2.9rem;
+		height: 2.9rem;
+		display: grid;
+		place-items: center;
+		margin-inline-end: -0.5rem;
+	}
+
+	.toggle svg {
+		grid-area: 1 / 1;
+		width: 1.65rem;
+		height: auto;
+		fill: none;
+		stroke: var(--fg);
+		stroke-width: 1.5;
+	}
+
+	.toggle .i-close {
+		width: 1.35rem;
+	}
+
+	.toggle[aria-expanded="false"] .i-close,
+	.toggle[aria-expanded="true"] .i-open {
+		display: none;
+	}
+
+	.panel {
+		position: fixed;
+		z-index: 1;
+		inset: 0;
+		background: var(--wg);
+		display: grid;
+		align-content: center;
+		gap: 2rem;
+		padding: 5rem var(--pad) 3rem;
+		overflow: hidden auto;
+	}
+
+	.panel[hidden] {
+		display: none;
+	}
+
+	.pdeco {
+		position: absolute;
+		width: 120%;
+		aspect-ratio: 640 / 520;
+		right: -40%;
+		bottom: -18%;
+		stroke: var(--line-soft);
+		fill: none;
+		pointer-events: none;
+	}
+
+	.panel nav,
+	.pask {
+		position: relative;
+	}
+
+	.panel ul {
+		display: grid;
+		border-top: 1px solid var(--line-soft);
+	}
+
+	.panel li {
+		border-bottom: 1px solid var(--line-soft);
+	}
+
+	.panel a {
+		display: grid;
+		grid-template-columns: 2.75rem 1fr auto;
+		align-items: baseline;
+		gap: 0.75rem;
+		min-height: 3.6rem;
+		padding-block: 0.9rem;
+	}
+
+	.panel .i {
+		font-size: 0.7rem;
+		letter-spacing: 0.14em;
+		color: var(--orange);
+	}
+
+	.panel .t {
+		font-family: var(--font-serif);
+		font-size: 1.9rem;
+		letter-spacing: 0.14em;
+		line-height: 1;
+	}
+
+	.panel .e {
+		font-size: 0.65rem;
+		letter-spacing: 0.24em;
+		color: var(--ink-2);
+	}
+
+	.pask {
+		justify-self: start;
+		font-family: var(--font-serif);
+		font-size: 1.4rem;
+		letter-spacing: 0.08em;
+		min-height: 2.75rem;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.9rem;
+	}
+
+	.pask::before {
+		content: "";
+		width: 2.6rem;
+		height: 2.6rem;
+		border-radius: 50%;
+		background: var(--orange);
+	}
+
+	@media (min-width: 60rem) {
+		.desk {
+			display: flex;
+		}
+
+		.toggle,
+		.panel {
+			display: none;
+		}
+	}
+</style>
+
+<script>
+	const header = document.querySelector<HTMLElement>(".hd");
+	const toggle = header?.querySelector<HTMLButtonElement>(".toggle");
+	const panel = header?.querySelector<HTMLElement>("#d09-menu");
+
+	if (header && toggle && panel) {
+		const label = toggle.querySelector(".visually-hidden");
+
+		const setOpen = (open: boolean) => {
+			panel.hidden = !open;
+			toggle.setAttribute("aria-expanded", String(open));
+			if (label) label.textContent = open ? "關閉選單" : "開啟選單";
+			document.body.setAttribute("data-nav", open ? "open" : "closed");
+			if (open) panel.querySelector<HTMLAnchorElement>("a")?.focus();
+			else toggle.focus();
+		};
+
+		toggle.addEventListener("click", () => setOpen(Boolean(panel.hidden)));
+
+		panel.addEventListener("click", event => {
+			if ((event.target as HTMLElement).closest("a")) setOpen(false);
+		});
+
+		document.addEventListener("keydown", event => {
+			if (event.key === "Escape" && !panel.hidden) {
+				event.preventDefault();
+				setOpen(false);
+			}
+			if (event.key !== "Tab" || panel.hidden) return;
+			const items = [toggle, ...Array.from(panel.querySelectorAll<HTMLElement>("a"))];
+			const first = items[0];
+			const last = items[items.length - 1];
+			if (event.shiftKey && document.activeElement === first) {
+				event.preventDefault();
+				last.focus();
+			} else if (!event.shiftKey && document.activeElement === last) {
+				event.preventDefault();
+				first.focus();
+			}
+		});
+
+		const mq = window.matchMedia("(min-width: 60rem)");
+		mq.addEventListener("change", e => {
+			if (e.matches && !panel.hidden) setOpen(false);
+		});
+	}
+</script>

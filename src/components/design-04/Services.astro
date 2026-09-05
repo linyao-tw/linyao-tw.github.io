@@ -1,0 +1,172 @@
+---
+/**
+ * design-04 · sheet 03 — index of plates
+ *
+ * A catalogue contents page: the service lead set once, then three ruled rows
+ * that name each plate and point at its sheet. Compact band — it exists to set
+ * up the three plates that follow, not to compete with them.
+ */
+import { services } from "../../lib/copy";
+import Plate from "./Plate.astro";
+import PlateBar from "./PlateBar.astro";
+
+const sheets = ["04/09", "05/09", "06/09"];
+const anchors = ["#plate-web", "#plate-system", "#plate-creative"];
+---
+
+<Plate as="section" id="services" labelledby="services-h" plate="PL. 03 — INDEX" sheet="03/09" tone="paper" pad="md">
+	<div class="wrap">
+		<h2 class="lead" id="services-h">{services.lead}</h2>
+
+		<ol class="rows">
+			{
+				services.items.map((item, i) => (
+					<li class="row">
+						<a href={anchors[i]}>
+							<span class="n">{item.index}</span>
+							<span class="en">{item.en}</span>
+							<span class="meta">
+								<span class="zh">{item.zh}</span>
+								<span class="pos">{item.position}</span>
+							</span>
+							<span class="sh" aria-hidden="true">
+								SHEET {sheets[i]}
+							</span>
+							<span class="go" aria-hidden="true">
+								↗
+							</span>
+						</a>
+					</li>
+				))
+			}
+		</ol>
+
+		<PlateBar note="COLOUR PLATE / 3 SEPARATIONS — TRAP 0.05MM" />
+	</div>
+</Plate>
+
+<style>
+	.wrap {
+		display: grid;
+		gap: clamp(1.75rem, 4vw, 3rem);
+	}
+
+	.lead {
+		max-width: 46rem;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(1.1rem, 0.95rem + 1.1vw, 1.85rem);
+		line-height: 1.6;
+		letter-spacing: 0.02em;
+		color: var(--ink-black);
+	}
+
+	.rows {
+		border-top: 1px solid var(--rule);
+	}
+
+	.row {
+		border-bottom: 1px solid var(--rule-soft);
+	}
+
+	.row a {
+		display: grid;
+		grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+		align-items: baseline;
+		gap: 0.35rem 0.9rem;
+		padding-block: clamp(0.9rem, 2vw, 1.35rem);
+		min-height: 2.75rem;
+	}
+
+	.n {
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.1em;
+		color: var(--accent-text);
+	}
+
+	.en {
+		display: inline-block;
+		transform: scaleX(0.93);
+		transform-origin: 0 50%;
+		font-family: var(--font-grotesk);
+		font-weight: 800;
+		font-size: clamp(1.35rem, 1rem + 2.4vw, 2.5rem);
+		line-height: 1;
+		letter-spacing: -0.025em;
+		color: var(--ink-black);
+	}
+
+	.go {
+		grid-column: 3;
+		grid-row: 1;
+		font-family: var(--font-mono);
+		font-size: var(--mono-lg);
+		color: color-mix(in oklab, currentColor 45%, transparent);
+	}
+
+	.meta {
+		grid-column: 2;
+		display: grid;
+		gap: 0.2rem;
+	}
+
+	.zh {
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: 0.95rem;
+		letter-spacing: 0.16em;
+	}
+
+	.pos {
+		font-family: var(--font-cjk);
+		font-size: 0.85rem;
+		letter-spacing: 0.04em;
+		color: color-mix(in oklab, currentColor 62%, transparent);
+	}
+
+	.sh {
+		grid-column: 2;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.1em;
+		color: color-mix(in oklab, currentColor 45%, transparent);
+	}
+
+	.row a:hover .en {
+		color: var(--accent);
+	}
+
+	.row a:hover .go {
+		color: var(--accent);
+	}
+
+	@media (min-width: 60rem) {
+		.row a {
+			grid-template-columns: 3.5rem minmax(0, 24rem) minmax(0, 1fr) 7.5rem 1.5rem;
+			align-items: center;
+			gap: 0 clamp(1rem, 2.5vw, 2.5rem);
+		}
+
+		.en {
+			grid-column: 2;
+		}
+
+		.meta {
+			grid-column: 3;
+			grid-row: 1;
+		}
+
+		.sh {
+			grid-column: 4;
+			grid-row: 1;
+			text-align: right;
+		}
+
+		.go {
+			grid-column: 5;
+			grid-row: 1;
+			text-align: right;
+		}
+	}
+</style>

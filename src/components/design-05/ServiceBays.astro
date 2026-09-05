@@ -1,0 +1,456 @@
+---
+import { services } from "../../lib/copy";
+
+const [web, system, creative] = services.items;
+---
+
+<div class="bays">
+	<!-- ============ BAY 01 — a solid ground mass you stand on ============ -->
+	<article class="bay bay-1" data-scene aria-labelledby="d05-svc-1">
+		<div class="plane" data-plane data-par="2.2" aria-hidden="true"></div>
+
+		<ul class="stack stack-shallow" role="list" aria-label={`${web.en} 技術範疇`}>
+			{web.stack.map(s => <li class="d05-anno">{s}</li>)}
+		</ul>
+
+		<div class="txt txt-paper" data-reveal>
+			<p class="num d05-anno d05-anno--paper" aria-hidden="true">{web.index}</p>
+			<h3 id="d05-svc-1">
+				<span class="en d05-latin">{web.en}</span>
+				<span class="zh d05-zh">{web.zh}</span>
+			</h3>
+			<p class="pos d05-anno d05-anno--paper d05-anno--wrap">{web.position}</p>
+			<p class="body d05-zh">{web.body.map(line => <span>{line}</span>)}</p>
+		</div>
+
+		<p class="mark d05-anno d05-anno--paper" aria-hidden="true">EL. &plusmn;0.000 &nbsp;/&nbsp; BAY 01</p>
+	</article>
+
+	<!-- ====== BAY 02 — an unbuilt volume: hatched, held at the right ====== -->
+	<article class="bay bay-2" data-scene aria-labelledby="d05-svc-2">
+		<div class="plane hatched" data-plane data-par="-2.8" aria-hidden="true"></div>
+		<div class="wall" data-plane data-par="-2.8" aria-hidden="true"></div>
+
+		<ul class="stack stack-steep" role="list" aria-label={`${system.en} 技術範疇`}>
+			{system.stack.map(s => <li class="d05-anno">{s}</li>)}
+		</ul>
+
+		<div class="txt" data-reveal>
+			<p class="num d05-anno" aria-hidden="true">{system.index}</p>
+			<h3 id="d05-svc-2">
+				<span class="en d05-latin">{system.en}</span>
+				<span class="zh d05-zh">{system.zh}</span>
+			</h3>
+			<p class="pos d05-anno d05-anno--wrap">{system.position}</p>
+			<p class="body d05-zh">{system.body.map(line => <span>{line}</span>)}</p>
+			<div class="dim">
+				<span class="d05-dim"></span>
+				<span class="d05-anno">PLAN &mdash; INTERNAL OPERATIONS</span>
+			</div>
+		</div>
+	</article>
+
+	<!-- ========= BAY 03 — the room goes dark, one swing of light ========= -->
+	<article class="bay bay-3" data-scene aria-labelledby="d05-svc-3">
+		<div class="plane" data-plane data-par="2.6" aria-hidden="true"></div>
+
+		<svg class="swing" viewBox="0 0 200 200" fill="none" focusable="false" aria-hidden="true">
+			<path d="M4 4 V196" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"></path>
+			<path d="M4 196 H196" stroke="currentColor" stroke-width="1" stroke-dasharray="5 6" vector-effect="non-scaling-stroke"></path>
+			<path d="M196 196 A192 192 0 0 0 4 4" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"></path>
+		</svg>
+
+		<ul class="stack stack-shallow" role="list" aria-label={`${creative.en} 技術範疇`}>
+			{creative.stack.map(s => <li class="d05-anno d05-anno--paper">{s}</li>)}
+		</ul>
+
+		<div class="txt txt-paper" data-reveal>
+			<p class="num d05-anno d05-anno--paper" aria-hidden="true">{creative.index}</p>
+			<h3 id="d05-svc-3">
+				<span class="en d05-latin">{creative.en}</span>
+				<span class="zh d05-zh">{creative.zh}</span>
+			</h3>
+			<p class="pos d05-anno d05-anno--paper d05-anno--wrap">{creative.position}</p>
+			<p class="body d05-zh">{creative.body.map(line => <span>{line}</span>)}</p>
+		</div>
+
+		<p class="mark d05-anno d05-anno--paper" aria-hidden="true">SWING R. 1&nbsp;:&nbsp;1 &nbsp;/&nbsp; BAY 03</p>
+	</article>
+</div>
+
+<style>
+	.bays {
+		position: relative;
+	}
+
+	.bay {
+		position: relative;
+		overflow: clip;
+		isolation: isolate;
+	}
+
+	.plane,
+	.wall {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: calc(-1 * var(--ov));
+		bottom: calc(-1 * var(--ov));
+		will-change: transform;
+	}
+
+	.txt {
+		position: absolute;
+		z-index: 5;
+		max-width: 27rem;
+	}
+
+	.txt-paper {
+		color: var(--paper-hi);
+	}
+
+	.num {
+		font-size: clamp(0.75rem, 1.1vw, 0.9375rem);
+		letter-spacing: 0.2em;
+	}
+
+	/* the index is marked by a square of light, not by orange text */
+	.num::after {
+		content: "";
+		display: inline-block;
+		width: 0.3125rem;
+		height: 0.3125rem;
+		background: var(--orange);
+		margin-left: 0.75rem;
+		vertical-align: 0.0625rem;
+	}
+
+	.txt h3 {
+		margin-top: 0.75rem;
+		display: grid;
+		gap: 0.625rem;
+	}
+
+	.en {
+		font-size: clamp(0.6875rem, 0.9vw, 0.8125rem);
+		letter-spacing: 0.2em;
+	}
+
+	.zh {
+		font-size: clamp(1.5rem, 2.5vw, 2.125rem);
+		letter-spacing: 0.16em;
+		line-height: 1.5;
+		font-weight: 500;
+	}
+
+	.pos {
+		margin-top: 0.875rem;
+		letter-spacing: 0.12em;
+	}
+
+	.body {
+		margin-top: clamp(1.25rem, 3svh, 2rem);
+		font-size: clamp(0.8125rem, 1vw, 0.9375rem);
+		line-height: 1.95;
+		letter-spacing: 0.05em;
+	}
+
+	.txt-paper .body {
+		color: color-mix(in oklab, var(--paper) 88%, transparent);
+	}
+
+	.mark {
+		position: absolute;
+		z-index: 5;
+		right: var(--gutter);
+		bottom: clamp(1.5rem, 4svh, 2.5rem);
+	}
+
+	/* --- stack annotation, running along a plane edge --- */
+	.stack {
+		position: absolute;
+		z-index: 6;
+		display: flex;
+		gap: 0.75rem;
+		white-space: nowrap;
+	}
+
+	.stack li {
+		letter-spacing: 0.18em;
+	}
+
+	.stack li + li::before {
+		content: "/";
+		margin-right: 0.75rem;
+		color: color-mix(in oklab, currentcolor 55%, transparent);
+	}
+
+	.stack-shallow {
+		transform-origin: 0 50%;
+		transform: rotate(-8deg);
+	}
+
+	/* ---------------- BAY 01 ---------------- */
+	.bay-1 {
+		--sh: 66svh;
+		--mh: 46svh;
+		--dya: calc(100vw * var(--tan-a));
+		min-height: var(--sh);
+		height: var(--sh);
+	}
+
+	.bay-1 .plane {
+		z-index: 1;
+		background: var(--mass-deep);
+		clip-path: polygon(0 calc(100% - var(--ov) - var(--mh)), 100% calc(100% - var(--ov) - var(--mh) - var(--dya)), 100% 100%, 0 100%);
+	}
+
+	.bay-1 .stack {
+		left: var(--gutter);
+		top: calc(var(--sh) - var(--mh) - 2.25rem);
+		color: var(--graphite);
+	}
+
+	.bay-1 .txt {
+		left: var(--gutter);
+		bottom: clamp(2.5rem, 7svh, 4.5rem);
+	}
+
+	/* ---------------- BAY 02 ---------------- */
+	.bay-2 {
+		--sh: 64svh;
+		--ph: calc(var(--sh) + 2 * var(--ov));
+		--px: 56vw;
+		--dxb: calc(var(--ph) * var(--tan-b));
+		--dya: calc(100vw * var(--tan-a));
+		min-height: var(--sh);
+		height: var(--sh);
+		border-top: 1px solid var(--line);
+	}
+
+	.bay-2 .hatched {
+		z-index: 1;
+		background: var(--hatch-b);
+		clip-path: polygon(var(--px) 0, 100% 0, 100% 100%, calc(var(--px) - var(--dxb)) 100%, calc(var(--px) - var(--dxb)) var(--ph));
+	}
+
+	/* the wall face — a 0.4vw thick leaning slab at 22° */
+	.bay-2 .wall {
+		z-index: 2;
+		background: var(--mass);
+		clip-path: polygon(var(--px) 0, calc(var(--px) + 0.4vw) 0, calc(var(--px) + 0.4vw - var(--dxb)) 100%, calc(var(--px) - var(--dxb)) 100%);
+	}
+
+	.bay-2 .stack-steep {
+		/* pinned 2.75rem clear of the wall face at the bay's top edge,
+		   so the annotation runs parallel to it at every breakpoint */
+		left: calc(var(--px) - var(--ov) * var(--tan-b) - 2.75rem);
+		top: 1.5rem;
+		writing-mode: vertical-rl;
+		font-size: 0.5625rem;
+		letter-spacing: 0.12em;
+		gap: 0.5rem;
+		transform-origin: 0 0;
+		transform: rotate(22deg);
+		color: var(--graphite);
+	}
+
+	.bay-2 .stack-steep li + li::before {
+		margin: 0 0 0.75rem;
+	}
+
+	.bay-2 .txt {
+		left: var(--gutter);
+		top: clamp(2.5rem, 8svh, 5rem);
+	}
+
+	.bay-2 .dim {
+		margin-top: clamp(1.75rem, 5svh, 3rem);
+		display: grid;
+		gap: 0.5625rem;
+		max-width: 19rem;
+	}
+
+	.bay-2 .dim .d05-anno {
+		color: var(--graphite);
+	}
+
+	/* ---------------- BAY 03 ---------------- */
+	.bay-3 {
+		--sh: 72svh;
+		--rh: 16svh;
+		--dya: calc(100vw * var(--tan-a));
+		min-height: var(--sh);
+		height: var(--sh);
+	}
+
+	.bay-3 .plane {
+		z-index: 1;
+		background: var(--mass-black);
+		clip-path: polygon(0 calc(var(--ov) + var(--rh)), 100% calc(var(--ov) + var(--rh) - var(--dya)), 100% 100%, 0 100%);
+	}
+
+	.bay-3 .swing {
+		position: absolute;
+		z-index: 3;
+		right: -6vw;
+		bottom: -8svh;
+		width: clamp(17rem, 38vw, 32rem);
+		height: auto;
+		color: var(--orange);
+	}
+
+	.bay-3 .stack {
+		left: var(--gutter);
+		top: calc(var(--rh) + 1.5rem);
+	}
+
+	.bay-3 .txt {
+		left: var(--gutter);
+		bottom: clamp(3rem, 9svh, 6rem);
+	}
+
+	/* ---------- 1024 ---------- */
+	@media (max-width: 64rem) {
+		.bay-1 {
+			--mh: 50svh;
+		}
+
+		.bay-2 {
+			--px: 68vw;
+		}
+
+		.bay-3 .swing {
+			right: -10vw;
+			width: clamp(15rem, 46vw, 26rem);
+		}
+	}
+
+	/* ---------- 768 ---------- */
+	@media (max-width: 48rem) {
+		.bay-1 {
+			--sh: 62svh;
+			--mh: 44svh;
+		}
+
+		.bay-2 {
+			--sh: 66svh;
+			--px: 96vw;
+		}
+
+		.bay-2 .txt {
+			max-width: none;
+			right: 34vw;
+		}
+
+		.bay-3 {
+			--sh: 66svh;
+			--rh: 18svh;
+		}
+
+		.bay-3 .swing {
+			right: -18vw;
+			bottom: -12svh;
+			width: 56vw;
+		}
+
+		.stack {
+			font-size: 0.5625rem;
+		}
+	}
+
+	/* ---------- 390 ---------- */
+	@media (max-width: 30rem) {
+		.bay {
+			height: auto;
+		}
+
+		.bay-1 {
+			--sh: auto;
+			--mh: 52svh;
+			min-height: 74svh;
+		}
+
+		.bay-1 .plane {
+			clip-path: polygon(0 calc(100% - var(--ov) - var(--mh)), 100% calc(100% - var(--ov) - var(--mh) - var(--dya)), 100% 100%, 0 100%);
+		}
+
+		.bay-1 .stack {
+			top: auto;
+			bottom: calc(52svh + 1.25rem);
+		}
+
+		/* the held volume lies down: a hatched ground band under the text,
+		   and the stack runs along its 8° edge instead of the 22° wall */
+		.bay-2 {
+			--sh: auto;
+			min-height: 72svh;
+			--ph: 84svh;
+		}
+
+		.bay-2 .hatched {
+			clip-path: polygon(0 calc(100% - var(--ov) - 22svh), 100% calc(100% - var(--ov) - 22svh - var(--dya)), 100% 100%, 0 100%);
+		}
+
+		.bay-2 .wall {
+			clip-path: polygon(
+				0 calc(100% - var(--ov) - 22svh),
+				100% calc(100% - var(--ov) - 22svh - var(--dya)),
+				100% calc(100% - var(--ov) - 22svh - var(--dya) + 0.4rem),
+				0 calc(100% - var(--ov) - 22svh + 0.4rem)
+			);
+		}
+
+		.bay-2 .stack-steep {
+			left: var(--gutter);
+			right: auto;
+			top: auto;
+			bottom: calc(22svh + 1.25rem);
+			writing-mode: horizontal-tb;
+			font-size: 0.5rem;
+			transform-origin: 0 50%;
+			transform: rotate(-8deg);
+		}
+
+		.bay-2 .stack-steep li + li::before {
+			margin: 0 0.5rem 0 0;
+		}
+
+		.bay-2 .txt {
+			right: var(--gutter);
+		}
+
+		.bay-3 {
+			--sh: auto;
+			--rh: 13svh;
+			min-height: 74svh;
+		}
+
+		.bay-3 .swing {
+			right: -26vw;
+			bottom: -8svh;
+			width: 78vw;
+		}
+
+		.txt {
+			max-width: none;
+			right: var(--gutter);
+		}
+
+		.stack {
+			font-size: 0.5rem;
+			gap: 0.25rem 0.5rem;
+			flex-wrap: wrap;
+			white-space: normal;
+			width: 74vw;
+		}
+
+		.stack li + li::before {
+			margin-right: 0.5rem;
+		}
+
+		.mark {
+			font-size: 0.5rem;
+		}
+	}
+</style>

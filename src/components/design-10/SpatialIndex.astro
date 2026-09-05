@@ -1,0 +1,279 @@
+---
+import { brand } from "../../lib/copy";
+import { sections, total } from "./sections";
+
+const first = sections[0];
+---
+
+{
+	/* The real navigation: a fixed spatial index down the right edge.
+    Plain anchors to real ids — works with JS disabled, keyboard operable,
+    aria-current maintained by the page script, announced via the live region. */
+}
+<nav class="rail" aria-label="章節索引 SPATIAL INDEX">
+	<a class="rail__mark" href="#hero">
+		<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+			<path d="M2 2 H22 V22 H2 Z" fill="none" stroke="currentColor" stroke-width="1.4"></path>
+			<path d="M2 22 L22 2" stroke="currentColor" stroke-width="1.4"></path>
+			<rect x="14" y="14" width="8" height="8" fill="#fe3300"></rect>
+		</svg>
+		<span class="visually-hidden">回到頁首 — {brand.nameZh} {brand.nameEn}</span>
+	</a>
+
+	<ol class="rail__list">
+		{
+			sections.map(s => (
+				<li class="rail__li">
+					<a class="rail__item" href={`#${s.id}`} data-idx-item={s.id} aria-current={s.id === "hero" ? "true" : undefined}>
+						<span class="rail__tick" aria-hidden="true" />
+						<span class="rail__n" aria-hidden="true">
+							{s.n}
+						</span>
+						<span class="rail__flag">
+							{s.n} {s.en} {s.zh}
+						</span>
+					</a>
+				</li>
+			))
+		}
+	</ol>
+
+	<a class="rail__cta" href={`mailto:${brand.email}?subject=${encodeURIComponent("詢案 — LINYAO DIGITAL STUDIO")}`} data-inquiry-open>
+		<span class="rail__arrow" aria-hidden="true">↗</span>
+		<span class="rail__ctaT" aria-hidden="true">詢案</span>
+		<span class="visually-hidden">我要詢案</span>
+	</a>
+</nav>
+
+{/* HUD — current movement index + title. Decorative mirror of the live region. */}
+<div class="hud" aria-hidden="true">
+	<span class="hud__n" data-hud-n>{first.n}</span>
+	<span class="hud__rule"></span>
+	<span class="hud__tot">{total}</span>
+	<span class="hud__t"><span data-hud-en>{first.en}</span> <i data-hud-zh>{first.zh}</i></span>
+	<span class="hud__sub" data-hud-sub></span>
+</div>
+
+<p class="visually-hidden" role="status" aria-live="polite" data-live>目前章節 {first.n} {first.en} {first.zh}</p>
+
+<style>
+	/* ------------------------------------------------------------------ *
+	 * The rail is a permanent instrument: always graphite, so it stays
+	 * legible over both the paper movements and the inverted ones without
+	 * needing a single line of JavaScript.
+	 * ------------------------------------------------------------------ */
+	.rail {
+		display: none;
+	}
+
+	@media (min-width: 64em) {
+		.rail {
+			position: fixed;
+			inset: 0 0 0 auto;
+			z-index: 120;
+			width: var(--d10-rail);
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0.75rem;
+			padding-block: 1rem;
+			background: var(--d10-void);
+			color: var(--d10-paper);
+			border-left: var(--hairline) solid color-mix(in oklab, var(--d10-paper) 22%, transparent);
+			overflow-y: auto;
+			overscroll-behavior: contain;
+			scrollbar-width: none;
+		}
+	}
+
+	.rail::-webkit-scrollbar {
+		display: none;
+	}
+
+	.rail__mark {
+		display: grid;
+		place-items: center;
+		min-height: 2.75rem;
+		color: var(--d10-paper);
+	}
+
+	.rail__list {
+		flex: 1 1 auto;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 0.125rem;
+		border-block: var(--hairline) solid color-mix(in oklab, var(--d10-paper) 18%, transparent);
+		padding-block: 0.75rem;
+	}
+
+	.rail__li {
+		position: relative;
+	}
+
+	.rail__item {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 0.4375rem;
+		min-height: 2.75rem;
+		padding-left: 0.625rem;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.1em;
+		color: color-mix(in oklab, var(--d10-paper) 70%, transparent);
+		transition:
+			color 0.24s ease,
+			letter-spacing 0.24s ease;
+	}
+
+	.rail__tick {
+		width: 0.5rem;
+		height: var(--hairline);
+		background: currentColor;
+		flex: none;
+		transition: width 0.24s ease;
+	}
+
+	.rail__item:hover,
+	.rail__item:focus-visible {
+		color: var(--d10-paper-hi);
+	}
+
+	.rail__item[aria-current="true"] {
+		color: var(--d10-accent);
+		letter-spacing: 0.02em;
+	}
+
+	.rail__item[aria-current="true"] .rail__tick {
+		width: 1.375rem;
+		background: var(--d10-accent);
+	}
+
+	/* flyout title — an enhancement only. The current title is permanently
+	   readable in the HUD, and every item carries its full accessible name. */
+	.rail__flag {
+		position: absolute;
+		right: calc(100% + 0.5rem);
+		top: 50%;
+		transform: translate(0.5rem, -50%);
+		white-space: nowrap;
+		background: var(--d10-accent);
+		color: var(--d10-void);
+		font-family: var(--font-mono);
+		font-weight: 700;
+		font-size: 0.6875rem;
+		letter-spacing: 0.12em;
+		padding: 0.375rem 0.625rem;
+		opacity: 0;
+		pointer-events: none;
+		transition:
+			opacity 0.2s ease,
+			transform 0.2s ease;
+	}
+
+	.rail__item:hover .rail__flag,
+	.rail__item:focus-visible .rail__flag {
+		opacity: 1;
+		transform: translate(0, -50%);
+	}
+
+	.rail__cta {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		min-height: 6rem;
+		color: var(--d10-void);
+		background: var(--d10-accent);
+		padding-block: 1rem;
+		transition: background 0.2s ease;
+	}
+
+	.rail__cta:hover,
+	.rail__cta:focus-visible {
+		background: var(--orange-deep);
+	}
+
+	.rail__ctaT {
+		writing-mode: vertical-rl;
+		text-orientation: upright;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: 0.8125rem;
+		letter-spacing: 0.28em;
+	}
+
+	.rail__arrow {
+		font-size: 0.875rem;
+		line-height: 1;
+	}
+
+	/* ------------------------------------------------------------------ */
+
+	.hud {
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		z-index: 120;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 0.875rem 0.5rem clamp(0.625rem, 2.4vw, 1.25rem);
+		background: var(--d10-void);
+		color: var(--d10-paper);
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		max-width: min(88vw, 32rem);
+		border-top: var(--hairline) solid color-mix(in oklab, var(--d10-paper) 22%, transparent);
+		border-right: var(--hairline) solid color-mix(in oklab, var(--d10-paper) 22%, transparent);
+	}
+
+	.hud__n {
+		font-size: 0.9375rem;
+		letter-spacing: 0.02em;
+		color: var(--d10-accent);
+		font-weight: 700;
+	}
+
+	.hud__rule {
+		width: 0.875rem;
+		height: var(--hairline);
+		background: color-mix(in oklab, var(--d10-paper) 46%, transparent);
+	}
+
+	.hud__tot {
+		color: color-mix(in oklab, var(--d10-paper) 70%, transparent);
+	}
+
+	.hud__t {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+
+	.hud__t i {
+		font-style: normal;
+		color: color-mix(in oklab, var(--d10-paper) 70%, transparent);
+		letter-spacing: 0.06em;
+	}
+
+	.hud__sub {
+		color: var(--d10-accent);
+	}
+
+	.hud__sub:empty {
+		display: none;
+	}
+
+	@media (max-width: 47.99em) {
+		.hud {
+			font-size: 0.5625rem;
+			gap: 0.375rem;
+			max-width: 68vw;
+		}
+	}
+</style>

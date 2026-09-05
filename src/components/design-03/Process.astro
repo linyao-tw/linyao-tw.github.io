@@ -1,0 +1,267 @@
+---
+import { process } from "../../lib/copy";
+
+/* plan-view stations: x position + depth of each tick in the SVG */
+const stations = [
+	{ x: 70, h: 26 },
+	{ x: 285, h: 40 },
+	{ x: 500, h: 54 },
+	{ x: 715, h: 68 },
+	{ x: 930, h: 82 }
+];
+---
+
+<section class="proc" id="process" aria-labelledby="d03-proc-h">
+	<div class="head">
+		<p class="run" aria-hidden="true">HOW WE WORK <span>/ § 05</span></p>
+		<h2 id="d03-proc-h" aria-label={`${process.headlineParts[0]}${process.headlineParts[1]}`}>
+			<span aria-hidden="true">{process.headlineParts[0]}</span>
+			<span class="dash" aria-hidden="true"></span>
+			<span aria-hidden="true">{process.headlineParts[1]}</span>
+		</h2>
+	</div>
+
+	<figure class="plan">
+		<div class="planwrap">
+			<svg viewBox="0 0 1000 140" aria-hidden="true" focusable="false">
+				<g fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
+					<line x1="20" y1="110" x2="980" y2="110"></line>
+					<line x1="20" y1="136" x2="980" y2="110"></line>
+					<line x1="20" y1="20" x2="980" y2="110"></line>
+					{stations.map(s => <line x1={s.x} y1="110" x2={s.x} y2={110 - s.h} />)}
+				</g>
+				<g fill="currentColor">
+					{stations.map(s => <rect x={s.x - 3} y={110 - s.h - 3} width="6" height="6" />)}
+				</g>
+				<g class="hot">
+					<rect x={stations[4].x - 4} y={110 - stations[4].h - 4} width="8" height="8"></rect>
+				</g>
+			</svg>
+			<span class="prog" aria-hidden="true"></span>
+		</div>
+		<figcaption class="d03-mono">PLAN VIEW — 05 STATIONS ALONG THE Z AXIS</figcaption>
+	</figure>
+
+	<ol class="steps">
+		{
+			process.steps.map(step => (
+				<li data-step>
+					<h3 aria-label={`${step.index} ${step.en}`}>
+						<span class="i" aria-hidden="true">
+							{step.index}
+						</span>
+						<span class="e" aria-hidden="true">
+							{step.en}
+						</span>
+					</h3>
+					<p class="z">{step.zh}</p>
+					<span class="tick" aria-hidden="true" />
+				</li>
+			))
+		}
+	</ol>
+</section>
+
+<style>
+	.proc {
+		background: var(--doc);
+		color: var(--fg);
+		padding: clamp(3.5rem, 10vh, 7rem) var(--gutter) clamp(4rem, 11vh, 7.5rem);
+		border-top: 1px solid var(--doc-rule);
+	}
+
+	.head {
+		display: grid;
+		grid-template-columns: 9rem minmax(0, 1fr);
+		gap: clamp(1.25rem, 3vw, 3rem);
+		align-items: end;
+		padding-bottom: clamp(1.75rem, 5vh, 3rem);
+	}
+
+	.run {
+		font-family: var(--font-mono);
+		font-size: var(--mark);
+		letter-spacing: 0.2em;
+		color: var(--orange-dim);
+		writing-mode: vertical-rl;
+		white-space: nowrap;
+		justify-self: start;
+	}
+
+	.run span {
+		color: color-mix(in oklab, var(--graphite) 62%, transparent);
+	}
+
+	h2 {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: clamp(0.75rem, 2.5vw, 2rem);
+		font-family: var(--font-cjk);
+		font-weight: 500;
+		font-size: clamp(1.9rem, 5.2vw, 3.75rem);
+		line-height: 1.3;
+		letter-spacing: 0.1em;
+		color: var(--graphite);
+	}
+
+	.dash {
+		display: block;
+		width: clamp(2.5rem, 10vw, 9rem);
+		height: 1px;
+		background: var(--orange);
+	}
+
+	.plan {
+		color: var(--doc-rule-hi);
+		border-block: 1px solid var(--doc-rule);
+		padding-block: clamp(1rem, 3vh, 1.75rem);
+	}
+
+	.planwrap {
+		position: relative;
+	}
+
+	.plan svg {
+		width: 100%;
+		height: auto;
+	}
+
+	.plan .hot {
+		fill: var(--orange);
+	}
+
+	.prog {
+		position: absolute;
+		left: 2%;
+		right: 2%;
+		top: 78.57%;
+		height: 1px;
+		background: var(--orange);
+		transform-origin: left center;
+	}
+
+	figcaption {
+		padding-top: 0.85rem;
+		color: color-mix(in oklab, var(--graphite) 58%, transparent);
+	}
+
+	.steps {
+		display: grid;
+		padding-top: clamp(1.5rem, 4vh, 2.5rem);
+	}
+
+	.steps li {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 20rem) minmax(0, 1fr) minmax(0, 9rem);
+		align-items: baseline;
+		gap: clamp(0.5rem, 2vw, 2rem);
+		padding-block: clamp(0.9rem, 2.4vh, 1.6rem);
+		border-bottom: 1px solid var(--doc-rule);
+	}
+
+	.steps li:first-child {
+		border-top: 1px solid var(--graphite);
+	}
+
+	h3 {
+		display: flex;
+		align-items: baseline;
+		gap: clamp(0.75rem, 2vw, 1.75rem);
+	}
+
+	h3 .i {
+		font-family: var(--font-mono);
+		font-size: clamp(0.75rem, 1.1vw, 0.875rem);
+		letter-spacing: 0.18em;
+		color: var(--orange);
+		font-variant-numeric: tabular-nums;
+	}
+
+	h3 .e {
+		font-family: var(--font-grotesk);
+		font-weight: 600;
+		font-size: clamp(1.05rem, 2.4vw, 1.75rem);
+		letter-spacing: 0.06em;
+		color: var(--graphite);
+	}
+
+	.z {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.8125rem, 1.05vw, 0.9375rem);
+		letter-spacing: 0.18em;
+		color: var(--ink);
+	}
+
+	.tick {
+		justify-self: end;
+		width: 100%;
+		height: 1px;
+		background: var(--doc-rule-hi);
+		align-self: center;
+	}
+
+	.steps li:nth-child(1) .tick {
+		width: 20%;
+	}
+	.steps li:nth-child(2) .tick {
+		width: 40%;
+	}
+	.steps li:nth-child(3) .tick {
+		width: 60%;
+	}
+	.steps li:nth-child(4) .tick {
+		width: 80%;
+	}
+	.steps li:nth-child(5) .tick {
+		background: var(--orange);
+	}
+
+	@media (max-width: 64rem) {
+		.head {
+			grid-template-columns: 2.5rem minmax(0, 1fr);
+		}
+		.steps li {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		}
+		.tick {
+			display: none;
+		}
+	}
+
+	@media (max-width: 48rem) {
+		.steps li {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.3rem;
+		}
+		h2 {
+			font-size: clamp(1.75rem, 9vw, 2.4rem);
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		gsap.fromTo(
+			".proc .prog",
+			{ scaleX: 0 },
+			{
+				scaleX: 1,
+				ease: "none",
+				scrollTrigger: { trigger: ".proc .plan", start: "top 88%", end: "bottom 45%", scrub: true }
+			}
+		);
+
+		gsap.from("[data-step]", {
+			opacity: 0,
+			y: 14,
+			duration: 0.55,
+			ease: "power2.out",
+			stagger: 0.07,
+			scrollTrigger: { trigger: ".proc .steps", start: "top 84%" }
+		});
+	});
+</script>

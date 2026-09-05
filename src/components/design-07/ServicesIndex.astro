@@ -1,0 +1,128 @@
+---
+import { services } from "../../lib/copy";
+---
+
+<section class="idx" id="services" aria-labelledby="d07-svc-h">
+	<div class="d07-shell">
+		<p class="d07-run"><span>SERVICES</span></p>
+
+		<div class="head">
+			<h2 id="d07-svc-h" class="lead" lang="zh-Hant" data-d07-reveal>{services.lead}</h2>
+		</div>
+
+		<ul class="run">
+			{
+				services.items.map(item => (
+					<li data-d07-reveal>
+						<a href={`#service-${item.index}`}>
+							<span class="n">{item.index}</span>
+							<span class="en">{item.en}</span>
+							<span class="pos" lang="zh-Hant">
+								{item.position}
+							</span>
+							<span class="go" aria-hidden="true">
+								↓
+							</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.idx {
+		background: var(--d07-void);
+		padding-block: clamp(5rem, 14vh, 10rem) clamp(6rem, 16vh, 12rem);
+	}
+
+	.head {
+		max-width: 44rem;
+		margin-bottom: clamp(3.5rem, 10vh, 7rem);
+	}
+
+	.lead {
+		font-family: var(--font-cjk);
+		font-size: clamp(1rem, 1.7vw, 1.375rem);
+		font-weight: 300;
+		line-height: 2;
+		letter-spacing: 0.1em;
+		color: var(--d07-text);
+	}
+
+	.run li {
+		border-top: var(--hairline) solid var(--d07-line-soft);
+	}
+
+	.run li:last-child {
+		border-bottom: var(--hairline) solid var(--d07-line-soft);
+	}
+
+	.run a {
+		display: grid;
+		grid-template-columns: 3.5rem minmax(0, 1fr) minmax(0, 1fr) 2rem;
+		align-items: baseline;
+		gap: clamp(0.75rem, 2vw, 2rem);
+		padding-block: clamp(1.25rem, 3.6vh, 2.25rem);
+		transition: color 0.35s ease;
+	}
+
+	.n {
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.2em;
+		color: var(--orange);
+	}
+
+	.en {
+		font-size: clamp(1rem, 2.4vw, 1.875rem);
+		font-weight: 300;
+		letter-spacing: 0.16em;
+		color: var(--d07-text);
+		transition: letter-spacing 0.5s ease;
+	}
+
+	.pos {
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		font-weight: 300;
+		letter-spacing: 0.1em;
+		color: var(--d07-mute);
+	}
+
+	.go {
+		justify-self: end;
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+		color: var(--d07-ghost);
+		transition:
+			color 0.35s ease,
+			transform 0.35s ease;
+	}
+
+	.run a:hover .en {
+		letter-spacing: 0.22em;
+	}
+
+	.run a:hover .go {
+		color: var(--orange);
+		transform: translateY(0.25rem);
+	}
+
+	@media (max-width: 52rem) {
+		.run a {
+			grid-template-columns: 2.75rem minmax(0, 1fr) 1.5rem;
+			row-gap: 0.5rem;
+		}
+
+		.pos {
+			grid-column: 2 / 3;
+		}
+
+		.go {
+			grid-row: 1;
+			grid-column: 3;
+		}
+	}
+</style>

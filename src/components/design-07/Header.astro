@@ -1,0 +1,361 @@
+---
+import { brand, nav } from "../../lib/copy";
+---
+
+<header class="hd" id="d07-header" data-stuck="false">
+	<div class="bar d07-shell">
+		<a class="mark" href="#main">
+			<span class="mk-zh">{brand.nameZh}</span>
+			<span class="mk-en">{brand.nameEn}</span>
+		</a>
+
+		<button class="tog" type="button" aria-expanded="false" aria-controls="d07-nav">
+			<span class="tog-label">MENU</span>
+			<span class="tog-bars" aria-hidden="true"><i></i><i></i></span>
+		</button>
+
+		<nav class="nav" id="d07-nav" aria-label="主要導覽">
+			<span class="nav-slit d07-slit" aria-hidden="true"></span>
+			<ul class="nav-list">
+				{
+					nav.map(item => (
+						<li>
+							<a href={item.href} data-d07-navlink>
+								<span class="n-en">{item.label}</span>
+								<span class="n-zh" aria-hidden="true">
+									{item.zh}
+								</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+			<a class="nav-mail" href={`mailto:${brand.email}`}>{brand.email}</a>
+		</nav>
+	</div>
+</header>
+
+<style>
+	.hd {
+		position: fixed;
+		inset: 0 0 auto;
+		z-index: 60;
+		border-bottom: var(--hairline) solid transparent;
+		transition:
+			background-color 0.4s ease,
+			border-color 0.4s ease;
+	}
+
+	.hd[data-stuck="true"] {
+		background: var(--d07-void);
+		border-bottom-color: var(--d07-line-soft);
+	}
+
+	.bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--s-6);
+		min-height: 4rem;
+	}
+
+	.mark {
+		display: flex;
+		align-items: baseline;
+		gap: clamp(0.6rem, 1.6vw, 1.25rem);
+		padding-block: 0.75rem;
+	}
+
+	.mk-zh {
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		font-weight: 400;
+		letter-spacing: 0.22em;
+		color: var(--d07-text);
+	}
+
+	.mk-en {
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.32em;
+		color: var(--d07-dim);
+	}
+
+	/* --- toggle: hidden until JS confirms the overlay can work -------- */
+	.tog {
+		display: none;
+		align-items: center;
+		gap: 0.625rem;
+		min-height: 2.75rem;
+		min-width: 2.75rem;
+		padding-inline: 0.25rem;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.3em;
+		color: var(--d07-mute);
+	}
+
+	.tog-bars {
+		display: grid;
+		gap: 0.3125rem;
+		width: 1.25rem;
+	}
+
+	.tog-bars i {
+		display: block;
+		height: var(--hairline);
+		background: currentColor;
+		transition: transform 0.35s ease;
+	}
+
+	.nav {
+		display: flex;
+		align-items: center;
+		gap: clamp(1rem, 2.6vw, 2.25rem);
+	}
+
+	.nav-slit {
+		display: none;
+	}
+
+	.nav-list {
+		display: flex;
+		align-items: center;
+		gap: clamp(1rem, 2.4vw, 2.25rem);
+		flex-wrap: wrap;
+	}
+
+	.nav-list a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.3em;
+		color: var(--d07-mute);
+		transition: color 0.3s ease;
+	}
+
+	.nav-list a:hover {
+		color: var(--d07-text);
+	}
+
+	.n-zh {
+		display: none;
+	}
+
+	.nav-mail {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.16em;
+		color: var(--d07-dim);
+		border-bottom: var(--hairline) solid var(--d07-line);
+		transition:
+			color 0.3s ease,
+			border-color 0.3s ease;
+	}
+
+	.nav-mail:hover {
+		color: var(--orange);
+		border-bottom-color: var(--orange);
+	}
+
+	@media (max-width: 64rem) {
+		.nav-mail {
+			display: none;
+		}
+	}
+
+	/* --- mobile overlay, only once JS is ready ----------------------- */
+	@media (max-width: 52rem) {
+		.hd.js-ready .tog {
+			display: inline-flex;
+		}
+
+		/* mark and toggle stay above the full-screen panel */
+		.hd.js-ready .mark,
+		.hd.js-ready .tog {
+			position: relative;
+			z-index: 2;
+		}
+
+		.hd.js-ready .nav {
+			position: fixed;
+			inset: 0;
+			z-index: 1;
+			display: grid;
+			grid-template-columns: auto 1fr;
+			align-content: center;
+			gap: clamp(1.5rem, 6vw, 3rem);
+			padding: 6rem var(--d07-gutter) 4rem;
+			background: var(--d07-void);
+			opacity: 0;
+			visibility: hidden;
+			transform: translate3d(0, -1.5rem, 0);
+			transition:
+				opacity 0.42s ease,
+				transform 0.42s ease,
+				visibility 0s linear 0.42s;
+		}
+
+		.hd.js-ready[data-open="true"] .nav {
+			opacity: 1;
+			visibility: visible;
+			transform: none;
+			transition:
+				opacity 0.42s ease,
+				transform 0.42s ease,
+				visibility 0s linear 0s;
+		}
+
+		.hd.js-ready[data-open="true"] .tog-bars i:first-child {
+			transform: translateY(0.15625rem) rotate(20deg);
+		}
+
+		.hd.js-ready[data-open="true"] .tog-bars i:last-child {
+			transform: translateY(-0.15625rem) rotate(-20deg);
+		}
+
+		.hd.js-ready .nav-slit {
+			display: block;
+			grid-row: 1 / -1;
+			align-self: stretch;
+			height: 100%;
+		}
+
+		.hd.js-ready .nav-list {
+			display: grid;
+			gap: 0;
+			align-content: center;
+		}
+
+		.hd.js-ready .nav-list li + li {
+			border-top: var(--hairline) solid var(--d07-line-soft);
+		}
+
+		.hd.js-ready .nav-list a {
+			display: grid;
+			grid-template-columns: 1fr auto;
+			align-items: baseline;
+			gap: 1rem;
+			width: 100%;
+			padding-block: clamp(0.9rem, 2.4vh, 1.4rem);
+			font-size: 0.9375rem;
+			letter-spacing: 0.26em;
+			color: var(--d07-text);
+		}
+
+		.hd.js-ready .n-zh {
+			display: block;
+			font-family: var(--font-cjk);
+			font-size: 0.75rem;
+			letter-spacing: 0.2em;
+			color: var(--d07-dim);
+		}
+
+		.hd.js-ready .nav-mail {
+			display: block;
+			grid-column: 2;
+			justify-self: start;
+			font-size: 0.6875rem;
+		}
+	}
+
+	@media (max-width: 40rem) {
+		.mark {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.1875rem;
+		}
+
+		.mk-zh {
+			font-size: 0.75rem;
+			letter-spacing: 0.18em;
+		}
+
+		.mk-en {
+			font-size: 0.5625rem;
+			letter-spacing: 0.24em;
+		}
+	}
+
+	/* no-JS mobile fallback: the nav simply wraps under the mark */
+	@media (max-width: 40rem) {
+		.hd:not(.js-ready) .bar {
+			flex-wrap: wrap;
+			padding-block: 0.5rem;
+		}
+	}
+</style>
+
+<script>
+	import { initSmoothScroll } from "../../lib/motion";
+
+	const header = document.getElementById("d07-header");
+	const toggle = header?.querySelector<HTMLButtonElement>(".tog");
+	const navEl = document.getElementById("d07-nav");
+	const label = toggle?.querySelector<HTMLElement>(".tog-label");
+
+	if (header) {
+		const onScroll = () => {
+			header.dataset.stuck = window.scrollY > 24 ? "true" : "false";
+		};
+		onScroll();
+		window.addEventListener("scroll", onScroll, { passive: true });
+	}
+
+	if (header && toggle && navEl) {
+		const desktop = window.matchMedia("(min-width: 52.0625rem)");
+		let open = false;
+
+		const setOpen = (next: boolean) => {
+			open = next;
+			header.dataset.open = String(next);
+			toggle.setAttribute("aria-expanded", String(next));
+			if (label) label.textContent = next ? "CLOSE" : "MENU";
+			document.documentElement.style.overflow = next ? "hidden" : "";
+
+			const lenis = initSmoothScroll();
+			if (next) lenis?.stop();
+			else lenis?.start();
+
+			if (next) {
+				navEl.removeAttribute("inert");
+				/* force a style flush so the panel is visible (focusable) before we move focus */
+				void navEl.offsetWidth;
+				navEl.querySelector<HTMLAnchorElement>("a")?.focus();
+			} else {
+				if (!desktop.matches) navEl.setAttribute("inert", "");
+				toggle.focus();
+			}
+		};
+
+		const sync = () => {
+			if (desktop.matches) {
+				navEl.removeAttribute("inert");
+				if (open) setOpen(false);
+			} else if (!open) {
+				navEl.setAttribute("inert", "");
+			}
+		};
+
+		header.classList.add("js-ready");
+		sync();
+		desktop.addEventListener("change", sync);
+
+		toggle.addEventListener("click", () => setOpen(!open));
+
+		navEl.querySelectorAll("[data-d07-navlink]").forEach(a =>
+			a.addEventListener("click", () => {
+				if (open) setOpen(false);
+			})
+		);
+
+		document.addEventListener("keydown", event => {
+			if (event.key === "Escape" && open) setOpen(false);
+		});
+	}
+</script>

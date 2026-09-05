@@ -1,0 +1,124 @@
+---
+import Credibility from "../components/design-09/Credibility.astro";
+import Cta from "../components/design-09/Cta.astro";
+import Footer from "../components/design-09/Footer.astro";
+import Header from "../components/design-09/Header.astro";
+import Hero from "../components/design-09/Hero.astro";
+import InquiryDialog from "../components/design-09/InquiryDialog.astro";
+import Intro from "../components/design-09/Intro.astro";
+import Manifesto from "../components/design-09/Manifesto.astro";
+import Marquee from "../components/design-09/Marquee.astro";
+import Process from "../components/design-09/Process.astro";
+import Services from "../components/design-09/Services.astro";
+import Terrain from "../components/design-09/Terrain.astro";
+import Tokens from "../components/design-09/Tokens.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout title="麟曜數位工作室 LINYAO DIGITAL STUDIO — 009 ORGANIC GEOMETRY" bodyClass="d-09" themeColor="#d3ccc1">
+	<a class="skip-link" href="#main">跳至主要內容</a>
+	<Tokens />
+	<Header />
+	<main id="main">
+		<Terrain />
+		<Hero />
+		<Intro />
+		<Services />
+		<Manifesto />
+		<Credibility />
+		<Process />
+		<Marquee />
+		<Cta />
+	</main>
+	<Footer />
+	<InquiryDialog />
+</SiteLayout>
+
+<script>
+	import { bindAnchorScroll, motion } from "../lib/motion";
+
+	bindAnchorScroll();
+
+	motion(
+		({ gsap, ScrollTrigger }) => {
+			const main = document.querySelector("#main");
+			if (!main) return;
+
+			/* the ribbon drifts against the scroll — slow, linear, transform only */
+			gsap.fromTo(
+				".d09-ribbon",
+				{ yPercent: 1.4 },
+				{
+					yPercent: -1.4,
+					ease: "none",
+					scrollTrigger: { trigger: main, start: "top top", end: "bottom bottom", scrub: true }
+				}
+			);
+
+			gsap.fromTo(
+				".d09-pass",
+				{ xPercent: -2.6 },
+				{
+					xPercent: 2.6,
+					ease: "none",
+					scrollTrigger: { trigger: ".d09-pass", start: "top bottom", end: "bottom top", scrub: 1 }
+				}
+			);
+
+			/* contour groups drift at different rates — a terrain seen from a moving eye */
+			gsap.utils.toArray<HTMLElement>(".terrain .zone").forEach((zone, i) => {
+				const dir = i % 2 === 0 ? 1 : -1;
+				gsap.fromTo(
+					zone,
+					{ yPercent: 4 * dir, xPercent: -1.6 * dir },
+					{
+						yPercent: -4 * dir,
+						xPercent: 1.6 * dir,
+						ease: "none",
+						scrollTrigger: { trigger: zone, start: "top bottom", end: "bottom top", scrub: 1.2 }
+					}
+				);
+			});
+
+			/* the hero disc grows as the headline leaves */
+			gsap.fromTo(
+				".d09-disc",
+				{ scale: 1 },
+				{
+					scale: 1.42,
+					ease: "none",
+					scrollTrigger: { trigger: ".d09-disc", start: "top 80%", end: "bottom top", scrub: 1 }
+				}
+			);
+
+			/* marquee: two curved bands, opposite directions, constant speed */
+			gsap.to(".d09-mq-a", { xPercent: -50, duration: 52, ease: "none", repeat: -1 });
+			gsap.fromTo(".d09-mq-b", { xPercent: -50 }, { xPercent: 0, duration: 64, ease: "none", repeat: -1 });
+
+			/* restrained editorial reveals — from-states are set here, never in CSS */
+			const rise = (selector: string, stagger = 0) => {
+				gsap.utils.toArray<HTMLElement>(selector).forEach(el => {
+					gsap.from(el.children.length && stagger ? Array.from(el.children) : el, {
+						y: 22,
+						opacity: 0,
+						duration: 1.05,
+						ease: "power2.out",
+						stagger,
+						scrollTrigger: { trigger: el, start: "top 86%" }
+					});
+				});
+			};
+
+			rise(".intro .col");
+			rise(".svc .pos", 0.09);
+			rise(".band .wrap", 0.07);
+			rise(".man .col");
+			rise(".cred .figs", 0.12);
+			rise(".proc .steps", 0.09);
+			rise(".cta .wrap", 0.08);
+
+			ScrollTrigger.refresh();
+		},
+		{ smooth: true }
+	);
+</script>

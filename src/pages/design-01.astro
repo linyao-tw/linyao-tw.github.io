@@ -1,0 +1,35 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import Credibility from "../components/design-01/Credibility.astro";
+import Cta from "../components/design-01/Cta.astro";
+import Footer from "../components/design-01/Footer.astro";
+import Header from "../components/design-01/Header.astro";
+import Hero from "../components/design-01/Hero.astro";
+import InquiryDialog from "../components/design-01/InquiryDialog.astro";
+import Intro from "../components/design-01/Intro.astro";
+import Manifesto from "../components/design-01/Manifesto.astro";
+import Marquee from "../components/design-01/Marquee.astro";
+import Motion from "../components/design-01/Motion.astro";
+import Process from "../components/design-01/Process.astro";
+import ServiceIndex from "../components/design-01/ServiceIndex.astro";
+import Tokens from "../components/design-01/Tokens.astro";
+---
+
+<SiteLayout title="麟曜數位工作室 LINYAO DIGITAL STUDIO — 01 Editorial / Swiss" bodyClass="d-01" themeColor="#d3ccc1">
+	<Tokens />
+	<a class="skip-link" href="#main">跳至主要內容</a>
+	<Header />
+	<main id="main">
+		<Hero />
+		<Intro />
+		<ServiceIndex />
+		<Manifesto />
+		<Credibility />
+		<Process />
+		<Marquee />
+		<Cta />
+	</main>
+	<Footer />
+	<InquiryDialog />
+	<Motion />
+</SiteLayout>

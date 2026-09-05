@@ -1,0 +1,337 @@
+---
+import { brand, cta, inquiryFields } from "../../lib/copy";
+---
+
+<dialog class="d06-dialog" id="d06-inquiry" aria-labelledby="inq-h">
+	<div class="dg__panel">
+		<header class="dg__head">
+			<div class="d06-run">
+				<span class="d06-run__i">FORM 01 / 01</span>
+				<span class="d06-run__l"></span>
+				<span class="d06-run__t">INQUIRY</span>
+			</div>
+			<div class="dg__title">
+				<h2 id="inq-h">{cta.buttonLabel}</h2>
+				<form method="dialog" class="dg__closer">
+					<button class="dg__x" type="submit" value="cancel">
+						<span>CLOSE</span>
+						<span aria-hidden="true">✕</span>
+					</button>
+				</form>
+			</div>
+			<p class="dg__note">{cta.body[0]}{cta.body[1]}</p>
+		</header>
+
+		<form class="dg__form" id="d06-inquiry-form">
+			<div class="dg__fields">
+				{
+					inquiryFields.map((f, i) => (
+						<p class="dg__field">
+							<label for={`d06-${f.name}`}>
+								<span class="dg__fi">{String(i + 1).padStart(2, "0")}</span>
+								<span class="dg__fl">{f.label}</span>
+								{f.required && (
+									<span class="dg__req" aria-hidden="true">
+										必填
+									</span>
+								)}
+							</label>
+							<input id={`d06-${f.name}`} name={f.name} type={f.type} required={f.required} autocomplete={f.autocomplete} data-label={f.label} />
+						</p>
+					))
+				}
+
+				<p class="dg__field dg__field--wide">
+					<label for="d06-message">
+						<span class="dg__fi">{String(inquiryFields.length + 1).padStart(2, "0")}</span>
+						<span class="dg__fl">專案內容 / MESSAGE</span>
+						<span class="dg__req" aria-hidden="true">必填</span>
+					</label>
+					<textarea id="d06-message" name="message" rows="4" required data-label="專案內容 / MESSAGE"></textarea>
+				</p>
+			</div>
+
+			<div class="dg__actions">
+				<p class="dg__hint">
+					送出後會以你的郵件程式寄至 <a href={`mailto:${brand.email}`}>{brand.email}</a>。
+				</p>
+				<button class="dg__submit" type="submit">
+					<span>送出詢問</span>
+					<span aria-hidden="true">↗</span>
+				</button>
+			</div>
+
+			<p class="dg__status" role="status" aria-live="polite"></p>
+		</form>
+	</div>
+</dialog>
+
+<style>
+	.d06-dialog {
+		width: min(58rem, 100%);
+		max-width: 100%;
+		max-height: 100dvh;
+		margin: auto;
+		padding: 0;
+		border: 0;
+		background: var(--ink-deep);
+		color: var(--paper-hi);
+		overflow: visible;
+		--fg: var(--paper-hi);
+		--fg-dim: color-mix(in oklab, var(--paper) 76%, transparent);
+		--fg-faint: color-mix(in oklab, var(--paper) 60%, transparent);
+		--rule: color-mix(in oklab, var(--paper) 24%, transparent);
+		--rule-hi: color-mix(in oklab, var(--paper) 52%, transparent);
+	}
+
+	.d06-dialog::backdrop {
+		background: color-mix(in srgb, #0e0e0d 78%, transparent);
+	}
+
+	.dg__panel {
+		display: grid;
+		gap: clamp(1.5rem, 4vh, 2.5rem);
+		padding: clamp(1.5rem, 4vw, 3rem);
+		max-height: 100dvh;
+		overflow-y: auto;
+		border-top: 0.25rem solid var(--orange);
+	}
+
+	.dg__head {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.dg__title {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1.5rem;
+	}
+
+	.dg__title h2 {
+		font-size: clamp(1.75rem, 4.5vw, 3rem);
+		line-height: 1.05;
+		letter-spacing: -0.01em;
+		font-weight: 600;
+	}
+
+	.dg__x {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		min-height: 2.75rem;
+		padding-inline: 0.9rem;
+		border: var(--hairline) solid var(--rule-hi);
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.16em;
+	}
+
+	.dg__x:hover,
+	.dg__x:focus-visible {
+		border-color: var(--orange);
+		border-width: 0.125rem;
+	}
+
+	.dg__note {
+		font-size: 0.875rem;
+		line-height: 1.8;
+		color: var(--fg-dim);
+		max-width: 30em;
+	}
+
+	.dg__fields {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.25rem clamp(1rem, 3vw, 2.5rem);
+	}
+
+	.dg__field {
+		display: grid;
+		gap: 0.4rem;
+	}
+
+	.dg__field--wide {
+		grid-column: 1 / -1;
+	}
+
+	.dg__field label {
+		display: flex;
+		align-items: baseline;
+		gap: 0.6rem;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.16em;
+		color: var(--fg-dim);
+	}
+
+	.dg__fi {
+		color: var(--fg-faint);
+	}
+
+	.dg__fl {
+		flex: 1 1 auto;
+	}
+
+	.dg__req {
+		font-size: 0.5625rem;
+		letter-spacing: 0.1em;
+		color: var(--orange);
+	}
+
+	.dg__field input,
+	.dg__field textarea {
+		width: 100%;
+		min-height: 2.75rem;
+		background: transparent;
+		color: var(--paper-hi);
+		border: 0;
+		border-bottom: var(--hairline) solid var(--rule-hi);
+		padding: 0.5rem 0;
+		font-size: 1rem;
+		letter-spacing: 0.02em;
+		border-radius: 0;
+		resize: vertical;
+	}
+
+	.dg__field textarea {
+		min-height: 6rem;
+		line-height: 1.7;
+	}
+
+	.dg__field input:focus,
+	.dg__field textarea:focus {
+		border-bottom-color: var(--orange);
+	}
+
+	.dg__actions {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+		flex-wrap: wrap;
+		border-top: var(--hairline) solid var(--rule);
+		padding-top: 1.25rem;
+		margin-top: 1.25rem;
+	}
+
+	.dg__hint {
+		font-size: 0.75rem;
+		line-height: 1.7;
+		color: var(--fg-dim);
+	}
+
+	.dg__hint a {
+		color: var(--fg);
+		border-bottom: 0.125rem solid var(--orange);
+	}
+
+	.dg__submit {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75rem;
+		min-height: 3rem;
+		padding: 0.75rem 1.75rem;
+		background: var(--orange);
+		color: var(--on-accent);
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+		letter-spacing: 0.16em;
+		transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.dg__submit:hover,
+	.dg__submit:focus-visible {
+		transform: translateX(0.25rem);
+	}
+
+	.dg__status:empty {
+		display: none;
+	}
+
+	.dg__status {
+		margin-top: 1rem;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		line-height: 1.7;
+		letter-spacing: 0.06em;
+		color: var(--fg);
+		border-left: 0.25rem solid var(--orange);
+		padding-left: 0.75rem;
+	}
+
+	@media (max-width: 47.99rem) {
+		.dg__fields {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.dg__actions {
+			justify-content: stretch;
+		}
+		.dg__submit {
+			width: 100%;
+			justify-content: center;
+		}
+	}
+</style>
+
+<script>
+	const dialog = document.querySelector<HTMLDialogElement>("#d06-inquiry");
+	const form = document.querySelector<HTMLFormElement>("#d06-inquiry-form");
+
+	if (dialog && form) {
+		const status = form.querySelector<HTMLElement>(".dg__status");
+		let opener: HTMLElement | null = null;
+
+		const lock = (locked: boolean) => {
+			document.body.classList.toggle("d06-locked", locked);
+			window.dispatchEvent(new CustomEvent("d06:lock", { detail: { locked } }));
+		};
+
+		document.querySelectorAll<HTMLElement>("[data-inquiry-open]").forEach(btn => {
+			btn.addEventListener("click", () => {
+				opener = btn;
+				if (status) status.textContent = "";
+				if (typeof dialog.showModal === "function") dialog.showModal();
+				else dialog.setAttribute("open", "");
+				lock(true);
+				const first = form.querySelector<HTMLElement>("input, textarea");
+				first?.focus();
+			});
+		});
+
+		/* backdrop click — the dialog element itself is the backdrop area */
+		dialog.addEventListener("click", event => {
+			if (event.target === dialog) dialog.close("dismiss");
+		});
+
+		/* Esc is native; this fires for every close path */
+		dialog.addEventListener("close", () => {
+			lock(false);
+			opener?.focus();
+			opener = null;
+		});
+
+		form.addEventListener("submit", event => {
+			event.preventDefault();
+			const data = new FormData(form);
+			const lines: string[] = [];
+
+			form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("[data-label]").forEach(el => {
+				const value = String(data.get(el.name) ?? "").trim();
+				if (value) lines.push(el.dataset.label + "\n" + value + "\n");
+			});
+
+			const who = String(data.get("name") ?? "").trim();
+			const subject = "詢案 INQUIRY" + (who ? " — " + who : "");
+			const body = ["麟曜數位工作室 LINYAO DIGITAL STUDIO", "DESIGN × CODE × MOTION", "", ...lines].join("\n");
+
+			window.location.href = "mailto:contact@linyao.tw?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+
+			if (status) {
+				status.textContent = "已開啟你的郵件程式。若沒有自動開啟，請直接寄到 contact@linyao.tw。";
+			}
+		});
+	}
+</script>

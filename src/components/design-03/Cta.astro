@@ -1,0 +1,196 @@
+---
+import { brand, cta } from "../../lib/copy";
+
+const inquiryHref = `mailto:${brand.email}?subject=${encodeURIComponent("詢案 / INQUIRY")}`;
+import Corridor from "./Corridor.astro";
+---
+
+<section class="cta" id="contact" aria-labelledby="d03-cta-h">
+	<Corridor variant="cta" planes={6} vpx={62} vpy={48}>
+		<div class="mouth">
+			<p class="coord" aria-hidden="true">§ 06 / CONTACT · z −000</p>
+
+			<h2 id="d03-cta-h" aria-label={cta.headline}>
+				{cta.headlineParts.map(part => <span aria-hidden="true">{part}</span>)}
+			</h2>
+
+			<div class="say">
+				{cta.body.map(line => <p>{line}</p>)}
+			</div>
+
+			<div class="act">
+				<a class="btn" href={inquiryHref} data-inquiry-open>
+					<span>{cta.button}</span>
+					<span class="rule" aria-hidden="true"></span>
+				</a>
+				<a class="mail" href={`mailto:${brand.email}`}>{brand.email}</a>
+			</div>
+		</div>
+	</Corridor>
+</section>
+
+<style>
+	.cta {
+		position: relative;
+		background: var(--stage-near);
+		color: var(--on-stage);
+		overflow: clip;
+		--scene-min: clamp(34rem, 82vh, 48rem);
+		--mouth-min: clamp(34rem, 82vh, 48rem);
+	}
+
+	.mouth {
+		min-height: clamp(34rem, 82vh, 48rem);
+		display: grid;
+		align-content: center;
+		justify-items: start;
+		gap: clamp(1.25rem, 3.5vh, 2.25rem);
+		padding: clamp(4rem, 12vh, 8rem) var(--gutter);
+		max-width: 64rem;
+	}
+
+	.coord {
+		font-family: var(--font-mono);
+		font-size: var(--mark);
+		letter-spacing: 0.18em;
+		color: var(--orange);
+	}
+
+	h2 {
+		display: grid;
+		font-family: var(--font-cjk);
+		font-weight: 500;
+		font-size: clamp(1.85rem, 5vw, 3.85rem);
+		line-height: 1.45;
+		letter-spacing: 0.1em;
+		color: var(--on-stage-hi);
+		border-left: 1px solid var(--orange);
+		padding-left: clamp(0.9rem, 2.4vw, 2.25rem);
+	}
+
+	h2 span:nth-child(2) {
+		padding-left: clamp(1rem, 4vw, 4rem);
+	}
+
+	.say {
+		max-width: 44ch;
+	}
+
+	.say p {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.875rem, 1.15vw, 1rem);
+		line-height: 2.15;
+		letter-spacing: 0.08em;
+		color: var(--on-stage-dim);
+	}
+
+	.act {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: clamp(1rem, 3vw, 2.5rem);
+		padding-top: clamp(0.5rem, 2vh, 1.25rem);
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 1rem;
+		min-height: 2.75rem;
+		padding: 0.95rem 1.5rem;
+		background: var(--orange-deep);
+		border: 1px solid var(--orange);
+		color: var(--paper-hi);
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9375rem, 1.3vw, 1.0625rem);
+		letter-spacing: 0.2em;
+	}
+
+	.btn .rule {
+		width: 2.5rem;
+		height: 1px;
+		background: var(--paper-hi);
+		transition: transform 0.35s ease;
+		transform-origin: left center;
+	}
+
+	.btn:hover,
+	.btn:focus-visible {
+		background: var(--orange);
+	}
+
+	.btn:hover .rule,
+	.btn:focus-visible .rule {
+		transform: scaleX(1.4);
+	}
+
+	.mail {
+		font-family: var(--font-mono);
+		font-size: 0.8125rem;
+		letter-spacing: 0.12em;
+		color: var(--on-stage-dim);
+		border-bottom: 1px solid var(--edge);
+		padding-bottom: 0.2rem;
+		min-height: 2.75rem;
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.mail:hover,
+	.mail:focus-visible {
+		color: var(--on-stage-hi);
+		border-bottom-color: var(--orange);
+	}
+
+	@media (max-width: 48rem) {
+		.cta {
+			--scene-min: auto;
+			--mouth-min: auto;
+		}
+		.mouth {
+			min-height: 0;
+			padding-block: clamp(3.5rem, 10vh, 5.5rem);
+		}
+		h2 {
+			font-size: clamp(1.6rem, 8vw, 2.25rem);
+			letter-spacing: 0.06em;
+		}
+		.act {
+			gap: 1rem;
+		}
+		.btn {
+			width: 100%;
+			justify-content: space-between;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap, ScrollTrigger }) => {
+		const section = document.querySelector<HTMLElement>(".cta");
+		const corridor = section?.querySelector<HTMLElement>("[data-corridor]");
+		if (!section) return;
+
+		if (corridor) {
+			ScrollTrigger.create({
+				trigger: section,
+				start: "top bottom",
+				end: "bottom bottom",
+				onUpdate: self => {
+					corridor.style.setProperty("--scrub", (self.progress * 9).toFixed(2) + "rem");
+				}
+			});
+		}
+
+		gsap.from(section.querySelectorAll(".coord, h2 span, .say p, .act > *"), {
+			opacity: 0,
+			y: 16,
+			duration: 0.7,
+			ease: "power2.out",
+			stagger: 0.06,
+			scrollTrigger: { trigger: section, start: "top 72%" }
+		});
+	});
+</script>

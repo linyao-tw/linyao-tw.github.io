@@ -1,0 +1,117 @@
+---
+import { capabilities } from "../../lib/copy";
+
+const rowA = [...capabilities];
+const rowB = [...capabilities].reverse();
+---
+
+<section class="marq" aria-label="能力範圍 CAPABILITIES">
+	<div class="line" data-dir="left">
+		<div class="track" data-track>
+			{
+				[0, 1].map(dup => (
+					<ul aria-hidden={dup === 1 ? "true" : undefined}>
+						{rowA.map(c => (
+							<li>{c}</li>
+						))}
+					</ul>
+				))
+			}
+		</div>
+	</div>
+
+	<div class="line alt" data-dir="right">
+		<div class="track" data-track>
+			{
+				[0, 1].map(dup => (
+					<ul aria-hidden={dup === 1 ? "true" : undefined}>
+						{rowB.map(c => (
+							<li>{c}</li>
+						))}
+					</ul>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.marq {
+		background: var(--graphite);
+		color: var(--paper);
+		border-block: 1px solid var(--ink-black);
+		padding-block: clamp(1rem, 3vh, 1.75rem);
+		overflow: clip;
+	}
+
+	.line {
+		overflow: clip;
+	}
+
+	.line + .line {
+		margin-top: 0.85rem;
+		padding-top: 0.85rem;
+		border-top: 1px solid color-mix(in oklab, var(--paper) 18%, transparent);
+	}
+
+	.track {
+		display: flex;
+		width: max-content;
+	}
+
+	.track ul {
+		display: flex;
+		align-items: center;
+	}
+
+	.track li {
+		display: flex;
+		align-items: center;
+		gap: clamp(1rem, 2.5vw, 2.25rem);
+		padding-right: clamp(1rem, 2.5vw, 2.25rem);
+		font-family: var(--font-grotesk);
+		font-weight: 500;
+		font-size: clamp(0.9375rem, 1.6vw, 1.375rem);
+		letter-spacing: 0.12em;
+		white-space: nowrap;
+		color: var(--paper);
+	}
+
+	.track li::after {
+		content: "";
+		width: 0.4rem;
+		height: 0.4rem;
+		background: var(--orange);
+	}
+
+	.alt .track li {
+		font-family: var(--font-mono);
+		font-weight: 400;
+		font-size: clamp(0.6875rem, 1vw, 0.8125rem);
+		letter-spacing: 0.26em;
+		color: color-mix(in oklab, var(--paper) 72%, transparent);
+	}
+
+	.alt .track li::after {
+		width: 1px;
+		height: 0.75rem;
+		background: color-mix(in oklab, var(--paper) 34%, transparent);
+	}
+
+	.alt .track {
+		transform: translate3d(-25%, 0, 0);
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		document.querySelectorAll<HTMLElement>(".marq [data-track]").forEach(track => {
+			const dir = track.parentElement?.dataset.dir === "right" ? 1 : -1;
+			const from = dir === -1 ? 0 : -50;
+			const to = dir === -1 ? -50 : 0;
+			gsap.fromTo(track, { xPercent: from }, { xPercent: to, duration: 46, ease: "none", repeat: -1 });
+		});
+	});
+</script>

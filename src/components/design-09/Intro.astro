@@ -1,0 +1,181 @@
+---
+import { intro } from "../../lib/copy";
+import { waveRule } from "./geo";
+
+const rule = waveRule({
+	width: 1000,
+	base: 16,
+	layers: [
+		{ amp: 7, freq: 2.4, phase: 2.1 },
+		{ amp: 3, freq: 5.1, phase: 0.3 }
+	],
+	samples: 72
+});
+---
+
+<section class="intro" id="intro" aria-labelledby="d09-intro-h">
+	<div class="ground" aria-hidden="true"></div>
+
+	<div class="wrap">
+		<p class="side" aria-hidden="true"><span>C</span><span>INTRO</span><span>關於麟曜</span></p>
+
+		<div class="col">
+			<h2 class="hl" id="d09-intro-h" data-headline={intro.headline}>
+				<span>{intro.headlineParts[0]}</span>
+				<span>{intro.headlineParts[1]}</span>
+			</h2>
+
+			<div class="copy">
+				<span class="shaper" aria-hidden="true">
+					<svg class="s-rings" viewBox="-110 -100 220 200" focusable="false"><use href="#d09-peak-c"></use></svg>
+					<span class="s-disc"></span>
+					<span class="s-ring"></span>
+				</span>
+				<p class="body">{intro.body.join("")}</p>
+			</div>
+
+			<svg class="rule" viewBox="0 0 1000 32" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+				<path d={rule} vector-effect="non-scaling-stroke"></path>
+			</svg>
+		</div>
+	</div>
+</section>
+
+<style>
+	.intro {
+		padding: clamp(7rem, 16vh, 13rem) 0 clamp(8rem, 18vh, 15rem);
+	}
+
+	.ground {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: var(--band-a);
+		clip-path: var(--arc-both);
+	}
+
+	.wrap {
+		position: relative;
+		z-index: 2;
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: clamp(1.5rem, 4vw, 4.5rem);
+		padding-inline: var(--pad);
+	}
+
+	.side {
+		writing-mode: vertical-rl;
+		display: flex;
+		gap: 1.4rem;
+		align-items: center;
+		font-size: var(--meta);
+		letter-spacing: 0.32em;
+		color: var(--ink-2);
+		height: 100%;
+	}
+
+	.side span:first-child {
+		color: var(--orange);
+	}
+
+	.col {
+		display: grid;
+		gap: clamp(3rem, 8vh, 6rem);
+		max-width: 62rem;
+	}
+
+	.hl {
+		font-family: var(--font-serif);
+		font-size: var(--dsp-2);
+		line-height: 1.42;
+		letter-spacing: 0.06em;
+	}
+
+	.hl span {
+		display: block;
+	}
+
+	.hl span:last-child {
+		margin-inline-start: clamp(1rem, 8vw, 9rem);
+	}
+
+	.copy {
+		max-width: 54rem;
+	}
+
+	.shaper {
+		float: right;
+		position: relative;
+		width: clamp(11rem, 22vw, 19rem);
+		aspect-ratio: 1;
+		shape-outside: circle(50%);
+		shape-margin: 1.6rem;
+		margin: 0 0 1rem 2rem;
+	}
+
+	.s-rings {
+		position: absolute;
+		inset: -12%;
+		width: 124%;
+		height: 124%;
+		fill: none;
+		stroke: var(--line-soft);
+	}
+
+	.s-disc,
+	.s-ring {
+		position: absolute;
+		border-radius: 50%;
+	}
+
+	.s-disc {
+		inset: 34%;
+		background: var(--orange);
+	}
+
+	.s-ring {
+		inset: 0;
+		border: 1px solid var(--line);
+	}
+
+	.body {
+		font-size: clamp(1.05rem, 1.55vw, 1.6rem);
+		line-height: 2.35;
+		letter-spacing: 0.09em;
+		color: var(--fg);
+		text-align: justify;
+		font-family: var(--font-serif);
+	}
+
+	.rule {
+		width: 100%;
+		height: 2rem;
+		fill: none;
+		stroke: var(--line-soft);
+		stroke-width: 1;
+	}
+
+	@media (max-width: 48rem) {
+		.wrap {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.side {
+			writing-mode: horizontal-tb;
+			height: auto;
+			gap: 1rem;
+		}
+
+		.shaper {
+			float: none;
+			width: 9.5rem;
+			margin: 0 0 2rem;
+			shape-outside: none;
+		}
+
+		.body {
+			line-height: 2.1;
+			text-align: start;
+		}
+	}
+</style>

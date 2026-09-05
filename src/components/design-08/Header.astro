@@ -1,0 +1,375 @@
+---
+import { brand, cta, nav } from "../../lib/copy";
+---
+
+<header class="mast">
+	<div class="bar d08-shell">
+		<a class="mark" href="#main">
+			<span class="mark-id">⟦08⟧</span>
+			<span class="mark-zh">{brand.nameZh}</span>
+			<span class="mark-en">{brand.nameEn}</span>
+		</a>
+
+		<nav class="rail" aria-label="主要導覽">
+			<ul>
+				{
+					nav.map((item, i) => (
+						<li>
+							<a href={item.href}>
+								<span class="n">{String(i + 1).padStart(2, "0")}</span>
+								<span class="l">{item.label}</span>
+								<span class="z">{item.zh}</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<button class="ask" type="button" data-d08-open-inquiry>
+			<span class="ask-sq" aria-hidden="true"></span>
+			{cta.button}
+		</button>
+
+		<button class="toggle" type="button" aria-expanded="false" aria-controls="d08-menu" data-d08-toggle>
+			<span class="visually-hidden">開啟選單</span>
+			<span class="toggle-glyph" aria-hidden="true">
+				<i></i><i></i><i></i>
+			</span>
+			<span class="toggle-txt" aria-hidden="true">MENU</span>
+		</button>
+	</div>
+
+	<div class="panel" id="d08-menu" data-d08-panel hidden>
+		<div class="panel-in d08-shell">
+			<p class="panel-head"><span class="d08-coord">[00.01]</span> NAVIGATION MODULE</p>
+			<ul>
+				{
+					nav.map((item, i) => (
+						<li>
+							<a href={item.href} data-d08-menu-link>
+								<span class="n">{String(i + 1).padStart(2, "0")}</span>
+								<span class="l">{item.label}</span>
+								<span class="z">{item.zh}</span>
+								<span class="arrow" aria-hidden="true">
+									↗
+								</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+			<button class="panel-ask" type="button" data-d08-open-inquiry>{cta.button}</button>
+			<p class="panel-foot">{brand.equation}</p>
+		</div>
+	</div>
+</header>
+
+<style>
+	.mast {
+		position: sticky;
+		top: 0;
+		z-index: 40;
+		background: var(--paper-hi);
+		background-image: var(--grid-image);
+		border-bottom: 1px solid var(--rule);
+	}
+
+	.bar {
+		display: grid;
+		grid-template-columns: max-content 1fr max-content;
+		align-items: stretch;
+		gap: var(--s-6);
+		min-height: calc(var(--mod) * 1.5);
+	}
+
+	.mark {
+		display: flex;
+		align-items: center;
+		gap: 0.85ch;
+		font-size: 0.75rem;
+		letter-spacing: 0.06em;
+		white-space: nowrap;
+	}
+
+	.mark-id {
+		color: var(--accent-ink);
+		letter-spacing: 0;
+	}
+
+	.mark-zh {
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		letter-spacing: 0.1em;
+	}
+
+	.mark-en {
+		color: var(--dim);
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+	}
+
+	.rail {
+		display: flex;
+		align-items: stretch;
+		justify-content: flex-end;
+	}
+
+	.rail ul {
+		display: flex;
+		align-items: stretch;
+	}
+
+	.rail li {
+		display: flex;
+	}
+
+	.rail a {
+		display: flex;
+		align-items: center;
+		gap: 0.75ch;
+		padding-inline: 1.1ch;
+		border-left: 1px solid var(--rule-soft);
+		font-size: 0.6875rem;
+		letter-spacing: 0.14em;
+		color: var(--dim);
+		transition:
+			color 0.14s linear,
+			background-color 0.14s linear;
+	}
+
+	.rail li:last-child a {
+		border-right: 1px solid var(--rule-soft);
+	}
+
+	.rail a:hover,
+	.rail a:focus-visible {
+		color: var(--fg);
+		background: color-mix(in oklab, var(--graphite) 7%, transparent);
+	}
+
+	.rail .n {
+		color: var(--accent-ink);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.rail .z {
+		font-family: var(--font-cjk);
+		letter-spacing: 0.06em;
+		color: var(--dim);
+	}
+
+	.ask {
+		display: flex;
+		align-items: center;
+		gap: 1ch;
+		padding-inline: 1.4ch;
+		margin-block: 0.5rem;
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		letter-spacing: 0.08em;
+		color: var(--paper-hi);
+		background: var(--ink-deep);
+		white-space: nowrap;
+		transition: background-color 0.14s linear;
+	}
+
+	.ask:hover,
+	.ask:focus-visible {
+		background: var(--accent);
+	}
+
+	.ask-sq {
+		width: 0.4375rem;
+		height: 0.4375rem;
+		background: var(--accent);
+		transition: background-color 0.14s linear;
+	}
+
+	.ask:hover .ask-sq,
+	.ask:focus-visible .ask-sq {
+		background: var(--paper-hi);
+	}
+
+	.toggle {
+		display: none;
+		align-items: center;
+		gap: 0.9ch;
+		min-height: 2.75rem;
+		min-width: 2.75rem;
+		padding-inline: 0.5ch;
+		font-size: 0.6875rem;
+		letter-spacing: 0.16em;
+	}
+
+	.toggle-glyph {
+		display: grid;
+		gap: 0.1875rem;
+		width: 1.125rem;
+	}
+
+	.toggle-glyph i {
+		display: block;
+		height: 1px;
+		background: var(--fg);
+		transition:
+			transform 0.18s linear,
+			opacity 0.12s linear;
+	}
+
+	.toggle[aria-expanded="true"] .toggle-glyph i:nth-child(1) {
+		transform: translateY(0.25rem) rotate(45deg);
+	}
+
+	.toggle[aria-expanded="true"] .toggle-glyph i:nth-child(2) {
+		opacity: 0;
+	}
+
+	.toggle[aria-expanded="true"] .toggle-glyph i:nth-child(3) {
+		transform: translateY(-0.25rem) rotate(-45deg);
+	}
+
+	.panel {
+		position: fixed;
+		inset: calc(var(--mod) * 1.5) 0 0 0;
+		background: var(--paper-hi);
+		background-image: var(--grid-image);
+		overflow-y: auto;
+		z-index: 39;
+	}
+
+	.panel[hidden] {
+		display: none;
+	}
+
+	.panel-in {
+		padding-block: var(--s-6) var(--s-12);
+	}
+
+	.panel-head {
+		font-size: 0.6875rem;
+		letter-spacing: 0.16em;
+		color: var(--dim);
+		border-bottom: 1px solid var(--rule);
+		padding-bottom: 0.5rem;
+	}
+
+	.panel ul {
+		margin-top: var(--s-2);
+	}
+
+	.panel li + li {
+		border-top: 1px solid var(--rule-soft);
+	}
+
+	.panel li a {
+		display: grid;
+		grid-template-columns: 4ch 1fr max-content;
+		align-items: baseline;
+		gap: 1ch;
+		padding-block: 1rem;
+		min-height: 2.75rem;
+	}
+
+	.panel .n {
+		color: var(--accent-ink);
+		font-size: 0.75rem;
+	}
+
+	.panel .l {
+		font-size: 1.375rem;
+		letter-spacing: 0.02em;
+	}
+
+	.panel .z {
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		color: var(--dim);
+		grid-column: 2;
+	}
+
+	.panel .arrow {
+		grid-row: 1 / 3;
+		grid-column: 3;
+		color: var(--dim);
+	}
+
+	.panel-ask {
+		margin-top: var(--s-8);
+		width: 100%;
+		min-height: 3.25rem;
+		font-family: var(--font-cjk);
+		font-size: 1rem;
+		letter-spacing: 0.1em;
+		color: var(--paper-hi);
+		background: var(--ink-deep);
+	}
+
+	.panel-foot {
+		margin-top: var(--s-6);
+		font-size: 0.6875rem;
+		letter-spacing: 0.2em;
+		color: var(--dim);
+	}
+
+	@media (max-width: 68rem) {
+		.rail .z {
+			display: none;
+		}
+	}
+
+	@media (max-width: 56rem) {
+		.rail,
+		.ask {
+			display: none;
+		}
+
+		.toggle {
+			display: flex;
+		}
+
+		.bar {
+			grid-template-columns: 1fr max-content;
+		}
+	}
+
+	@media (max-width: 30rem) {
+		.mark-en {
+			display: none;
+		}
+	}
+</style>
+
+<script>
+	const toggle = document.querySelector<HTMLButtonElement>("[data-d08-toggle]");
+	const panel = document.querySelector<HTMLElement>("[data-d08-panel]");
+
+	if (toggle && panel) {
+		const setOpen = (open: boolean) => {
+			toggle.setAttribute("aria-expanded", String(open));
+			panel.hidden = !open;
+			document.documentElement.style.overflow = open ? "hidden" : "";
+			toggle.querySelector(".visually-hidden")!.textContent = open ? "關閉選單" : "開啟選單";
+			if (open) panel.querySelector<HTMLAnchorElement>("[data-d08-menu-link]")?.focus();
+		};
+
+		toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
+
+		panel.querySelectorAll<HTMLAnchorElement>("[data-d08-menu-link]").forEach(a => {
+			a.addEventListener("click", () => setOpen(false));
+		});
+
+		panel.querySelector<HTMLButtonElement>("[data-d08-open-inquiry]")?.addEventListener("click", () => setOpen(false));
+
+		document.addEventListener("keydown", e => {
+			if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+				setOpen(false);
+				toggle.focus();
+			}
+		});
+
+		window.matchMedia("(min-width: 56.01rem)").addEventListener("change", e => {
+			if (e.matches && toggle.getAttribute("aria-expanded") === "true") setOpen(false);
+		});
+	}
+</script>

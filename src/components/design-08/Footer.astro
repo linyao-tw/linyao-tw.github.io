@@ -1,0 +1,184 @@
+---
+import { brand } from "../../lib/copy";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="ft d08-band">
+	<div class="in d08-shell">
+		<p class="d08-head">
+			<span class="d08-coord">[08.00]</span>
+			<b>END OF DOCUMENT</b>
+			<i aria-hidden="true"></i>
+			<span>REV. 08 / {year}</span>
+		</p>
+
+		<div class="blocks">
+			<div class="b b-mark">
+				<p class="zh">{brand.nameZh}</p>
+				<p class="en">{brand.nameEn}</p>
+				<p class="eq">{brand.equation}</p>
+			</div>
+
+			<div class="b b-route">
+				<span class="rt" aria-hidden="true"></span>
+				<span class="nd" aria-hidden="true"></span>
+			</div>
+
+			<div class="b b-contact">
+				<p class="k">EMAIL</p>
+				<a class="mail" href={`mailto:${brand.email}`}>{brand.email}</a>
+				<p class="disc">{brand.disciplines}</p>
+			</div>
+		</div>
+
+		<div class="strip">
+			<p>{brand.copyright}</p>
+			<p class="mid" aria-hidden="true">⟦ 08 — SYSTEM · CODE · GRID ⟧</p>
+			<p class="top"><a href="#main">↑ TOP</a></p>
+		</div>
+	</div>
+</footer>
+
+<style>
+	.ft {
+		border-top: 1px solid var(--fg);
+		padding-block: clamp(2rem, 5vw, 4rem) clamp(1.5rem, 3vw, 2.5rem);
+		overflow: clip;
+	}
+
+	.blocks {
+		display: grid;
+		grid-template-columns: minmax(0, max-content) minmax(3rem, 1fr) minmax(0, max-content);
+		align-items: center;
+		gap: var(--s-6);
+		padding-block: clamp(2rem, 5vw, 4.5rem);
+	}
+
+	.zh {
+		font-family: var(--font-cjk);
+		font-weight: 600;
+		font-size: clamp(1.125rem, 2.2vw, 1.75rem);
+		letter-spacing: 0.24em;
+	}
+
+	.en {
+		font-size: clamp(1.25rem, 3vw, 2.5rem);
+		letter-spacing: 0.02em;
+		line-height: 1.1;
+		margin-top: 0.35rem;
+	}
+
+	.eq {
+		margin-top: 0.7rem;
+		font-size: 0.6875rem;
+		letter-spacing: 0.24em;
+		color: var(--accent-ink);
+	}
+
+	.b-route {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+	}
+
+	.rt {
+		flex: 1;
+		height: 1px;
+		background-image: repeating-linear-gradient(to right, var(--rule) 0 0.3rem, transparent 0.3rem 0.6rem);
+	}
+
+	.nd {
+		flex: none;
+		width: 0.625rem;
+		height: 0.625rem;
+		background: var(--accent);
+	}
+
+	.b-contact {
+		text-align: right;
+	}
+
+	.k {
+		font-size: 0.625rem;
+		letter-spacing: 0.2em;
+		color: var(--dim);
+	}
+
+	.mail {
+		display: inline-block;
+		margin-top: 0.3rem;
+		font-size: clamp(0.9375rem, 1.6vw, 1.25rem);
+		letter-spacing: 0.04em;
+		border-bottom: 1px solid var(--rule);
+		transition:
+			color 0.14s linear,
+			border-color 0.14s linear;
+	}
+
+	.mail:hover,
+	.mail:focus-visible {
+		color: var(--accent-ink);
+		border-color: var(--accent-ink);
+	}
+
+	.disc {
+		margin-top: 0.7rem;
+		font-family: var(--font-cjk);
+		font-size: 0.75rem;
+		letter-spacing: 0.14em;
+		color: var(--dim);
+	}
+
+	.strip {
+		display: grid;
+		grid-template-columns: max-content 1fr max-content;
+		align-items: center;
+		gap: var(--s-4);
+		border-top: 1px solid var(--rule);
+		padding-top: 0.7rem;
+		font-size: 0.6875rem;
+		letter-spacing: 0.16em;
+		color: var(--dim);
+	}
+
+	.mid {
+		text-align: center;
+	}
+
+	.top a {
+		display: inline-block;
+		min-height: 2.75rem;
+		line-height: 2.75rem;
+		padding-inline: 0.5ch;
+		transition: color 0.14s linear;
+	}
+
+	.top a:hover,
+	.top a:focus-visible {
+		color: var(--accent-ink);
+	}
+
+	@media (max-width: 56rem) {
+		.blocks {
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--s-6);
+		}
+
+		.b-route {
+			order: 3;
+		}
+
+		.b-contact {
+			text-align: left;
+		}
+
+		.strip {
+			grid-template-columns: 1fr max-content;
+		}
+
+		.mid {
+			display: none;
+		}
+	}
+</style>

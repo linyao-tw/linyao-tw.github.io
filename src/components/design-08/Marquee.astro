@@ -1,0 +1,160 @@
+---
+import { capabilities } from "../../lib/copy";
+
+const idxRow = capabilities.map(
+	(c, i) =>
+		`${String(i + 1).padStart(2, "0")}·${c
+			.split(/[^A-Za-z]+/)
+			.filter(Boolean)
+			.map(w => w[0])
+			.join("")}`
+);
+---
+
+<section class="mq d08-band" aria-labelledby="d08-mq-h">
+	<h2 id="d08-mq-h" class="visually-hidden">能力範圍 CAPABILITY STREAM</h2>
+
+	<p class="d08-head d08-shell">
+		<span class="d08-coord">[06.00]</span>
+		<b>TOKEN STREAM</b>
+		<i aria-hidden="true"></i>
+		<span>{capabilities.length} TOKENS</span>
+	</p>
+
+	<div class="strip strip-a">
+		<div class="track">
+			<ul class="run">
+				{
+					capabilities.map(c => (
+						<li>
+							<span class="sep" aria-hidden="true">
+								⟩
+							</span>
+							{c}
+						</li>
+					))
+				}
+			</ul>
+			<ul class="run" aria-hidden="true">
+				{
+					capabilities.map(c => (
+						<li>
+							<span class="sep">⟩</span>
+							{c}
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+
+	<div class="strip strip-b" aria-hidden="true">
+		<div class="track">
+			<ul class="run">
+				{
+					idxRow.map(c => (
+						<li>
+							<span class="sep">/</span>
+							{c}
+						</li>
+					))
+				}
+			</ul>
+			<ul class="run">
+				{
+					idxRow.map(c => (
+						<li>
+							<span class="sep">/</span>
+							{c}
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+</section>
+
+<style>
+	.mq {
+		padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(1.75rem, 3.5vw, 3rem);
+		border-block: 1px solid var(--rule);
+		overflow: clip;
+	}
+
+	.strip {
+		overflow: clip;
+		margin-top: clamp(1.25rem, 2.5vw, 2rem);
+		border-block: 1px solid var(--rule-soft);
+		padding-block: 0.55rem;
+	}
+
+	.strip-b {
+		margin-top: 0;
+		border-top: 0;
+	}
+
+	.track {
+		display: flex;
+		width: max-content;
+	}
+
+	.run {
+		display: flex;
+		align-items: center;
+		flex: none;
+	}
+
+	.run li {
+		display: flex;
+		align-items: center;
+		gap: 1.5ch;
+		padding-right: 1.5ch;
+		white-space: nowrap;
+	}
+
+	.strip-a .run li {
+		font-size: clamp(1rem, 2.4vw, 2rem);
+		letter-spacing: 0.06em;
+		color: var(--fg);
+	}
+
+	.strip-a .sep {
+		color: var(--accent);
+	}
+
+	.strip-a .run li:nth-child(3n) {
+		color: var(--dim);
+	}
+
+	.strip-b .run li {
+		font-size: 0.6875rem;
+		letter-spacing: 0.22em;
+		color: var(--dim);
+		gap: 1ch;
+		padding-right: 1ch;
+	}
+
+	.strip-b .sep {
+		color: var(--dimmer);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.strip-a .track {
+			animation: d08-run 46s linear infinite;
+		}
+
+		.strip-b .track {
+			animation: d08-run 34s linear infinite reverse;
+		}
+	}
+
+	@keyframes d08-run {
+		from {
+			transform: translate3d(0, 0, 0);
+		}
+
+		to {
+			transform: translate3d(-50%, 0, 0);
+		}
+	}
+</style>

@@ -1,0 +1,174 @@
+---
+import { intro } from "../../lib/copy";
+---
+
+<section id="intro" class="in crop" aria-labelledby="intro-h" data-d10-section>
+	<div class="in__g g12">
+		<p class="in__run note" aria-hidden="true">02 / INTRO</p>
+
+		<h2 id="intro-h" class="in__h" aria-label={intro.headline} data-reveal>
+			<span class="in__l1" aria-hidden="true">{intro.headlineParts[0]}</span>
+			<span class="in__l2" aria-hidden="true">
+				<span class="col">
+					<span class="col__base">{intro.headlineParts[1]}</span>
+					<span class="col__plane" aria-hidden="true"></span>
+					<span class="col__cut" aria-hidden="true">{intro.headlineParts[1]}</span>
+				</span>
+			</span>
+		</h2>
+
+		<div class="in__body">
+			<p class="in__num note" aria-hidden="true">— 麟曜 / LINYAO</p>
+			<p>
+				{intro.body.map(line => <span class="in__line">{line}</span>)}
+			</p>
+		</div>
+
+		<p class="in__edge note" aria-hidden="true">ROW 04 — 12 COLUMN SUBSTRATE / OFF-GRID BY DESIGN</p>
+	</div>
+</section>
+
+<style>
+	.in {
+		position: relative;
+		padding-block: clamp(6rem, 17vw, 15rem) clamp(6rem, 16vw, 14rem);
+	}
+
+	.in__g {
+		position: relative;
+		row-gap: clamp(2.5rem, 6vw, 6rem);
+	}
+
+	.in__run {
+		grid-column: 1 / 3;
+		align-self: start;
+		color: var(--d10-mark);
+		border-top: 0.1875rem solid var(--d10-accent);
+		padding-top: 0.5rem;
+	}
+
+	.in__h {
+		grid-column: 1 / 13;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		line-height: 0.98;
+		letter-spacing: -0.03em;
+		font-size: clamp(2.125rem, 10.5vw, 8.5rem);
+	}
+
+	.in__l1 {
+		display: block;
+	}
+
+	.in__l2 {
+		display: block;
+		/* off-grid: derived from the substrate, then deliberately pushed */
+		margin-left: 8.333%;
+		transform: translateX(-1.75rem);
+	}
+
+	/* --- the collision: type crossing a plane, both sides still readable */
+	.col {
+		--cut: 56%;
+		position: relative;
+		display: inline-block;
+		isolation: isolate;
+	}
+
+	.col__base {
+		position: relative;
+		z-index: 1;
+		color: var(--d10-ink);
+	}
+
+	.col__plane {
+		position: absolute;
+		z-index: 2;
+		left: var(--cut);
+		right: -26vw;
+		top: -0.14em;
+		bottom: -0.1em;
+		background: var(--d10-void);
+	}
+
+	.col__cut {
+		position: absolute;
+		z-index: 3;
+		inset: 0;
+		color: var(--d10-paper-hi);
+		clip-path: inset(-0.5em -30vw -0.5em var(--cut));
+	}
+
+	.in__body {
+		grid-column: 7 / 13;
+		display: grid;
+		gap: 0.875rem;
+		align-self: end;
+		transform: translateY(1.5rem);
+	}
+
+	.in__num {
+		color: var(--d10-mark);
+	}
+
+	.in__body p:not(.in__num) {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9375rem, 1.15vw, 1.0625rem);
+		line-height: 2.05;
+		letter-spacing: 0.04em;
+		color: var(--d10-ink);
+		border-left: var(--hairline) solid var(--d10-rule);
+		padding-left: clamp(0.875rem, 1.6vw, 1.5rem);
+	}
+
+	.in__line {
+		display: block;
+	}
+
+	.in__edge {
+		grid-column: 1 / 8;
+		align-self: end;
+		color: var(--d10-quiet);
+		border-bottom: var(--hairline) solid var(--d10-rule);
+		padding-bottom: 0.5rem;
+	}
+
+	@media (max-width: 63.99em) {
+		.in__run {
+			grid-column: 1 / 6;
+		}
+
+		.in__body {
+			grid-column: 1 / 13;
+			transform: none;
+		}
+
+		.in__edge {
+			grid-column: 1 / 13;
+		}
+
+		.in__l2 {
+			margin-left: 16.666%;
+			transform: translateX(-0.75rem);
+		}
+
+		.col {
+			--cut: 48%;
+		}
+	}
+
+	@media (max-width: 47.99em) {
+		.in__l2 {
+			margin-left: 0;
+			transform: none;
+		}
+
+		.col {
+			--cut: 42%;
+		}
+
+		.col__plane {
+			right: -14vw;
+		}
+	}
+</style>

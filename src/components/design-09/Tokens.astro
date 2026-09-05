@@ -1,0 +1,152 @@
+---
+/**
+ * design-09 root tokens + the shared SVG contour library.
+ * The <defs> sprite is referenced by every section through <use href="#...">,
+ * so the whole page shares a handful of drawn path groups.
+ */
+import { peak, ridge } from "./geo";
+
+const ridgeA = ridge({
+	width: 1000,
+	count: 18,
+	top: 24,
+	gap: 14,
+	layers: [
+		{ amp: 27, freq: 1, phase: 0.35 },
+		{ amp: 11, freq: 2.3, phase: 2.2 },
+		{ amp: 4.5, freq: 3.9, phase: 4.1 }
+	],
+	drift: 0.62,
+	falloff: -0.62
+});
+
+const ridgeB = ridge({
+	width: 1000,
+	count: 11,
+	top: 30,
+	gap: 26,
+	layers: [
+		{ amp: 18, freq: 1.6, phase: 2.7 },
+		{ amp: 9, freq: 3.1, phase: 0.4 }
+	],
+	drift: -0.55,
+	falloff: 0.45
+});
+
+const peakA = peak({ r0: 22, count: 16, step: 14, squash: 0.8 });
+
+const peakB = peak({
+	r0: 34,
+	count: 10,
+	step: 25,
+	squash: 1.16,
+	growth: 0.95,
+	spin: -1.2,
+	wob: [
+		{ amp: 0.2, freq: 2, phase: 1.4 },
+		{ amp: 0.09, freq: 4, phase: 3.6 }
+	]
+});
+
+const peakC = peak({ r0: 14, count: 7, step: 11, squash: 0.92, growth: 0.3, spin: 0.4 });
+
+const weight = (i: number) => (i % 5 === 0 ? 1.4 : 1);
+const alpha = (i: number) => (i % 5 === 0 ? 0.95 : 0.5);
+---
+
+<svg class="d09-defs" aria-hidden="true" focusable="false" width="0" height="0" viewBox="0 0 0 0">
+	<defs>
+		<filter id="d09-organic" x="-14%" y="-14%" width="128%" height="128%" color-interpolation-filters="sRGB">
+			<feTurbulence type="fractalNoise" baseFrequency="0.009 0.016" numOctaves="2" seed="17" result="n"></feTurbulence>
+			<feDisplacementMap in="SourceGraphic" in2="n" scale="11" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+		</filter>
+
+		<g id="d09-ridge-a" fill="none">
+			{ridgeA.map((d, i) => <path d={d} vector-effect="non-scaling-stroke" stroke-width={weight(i)} opacity={alpha(i)} />)}
+		</g>
+
+		<g id="d09-ridge-b" fill="none">
+			{ridgeB.map((d, i) => <path d={d} vector-effect="non-scaling-stroke" stroke-width={weight(i)} opacity={alpha(i)} />)}
+		</g>
+
+		<g id="d09-peak-a" fill="none">
+			{peakA.map((d, i) => <path d={d} vector-effect="non-scaling-stroke" stroke-width={weight(i)} opacity={alpha(i)} />)}
+		</g>
+
+		<g id="d09-peak-b" fill="none">
+			{peakB.map((d, i) => <path d={d} vector-effect="non-scaling-stroke" stroke-width={weight(i)} opacity={alpha(i)} />)}
+		</g>
+
+		<g id="d09-peak-c" fill="none">
+			{peakC.map((d, i) => <path d={d} vector-effect="non-scaling-stroke" stroke-width={weight(i)} opacity={alpha(i)} />)}
+		</g>
+	</defs>
+</svg>
+
+<style is:global>
+	body.d-09 {
+		--wg: var(--warm-gray);
+		--bg: var(--warm-gray);
+		/* every body string is near-black so it stays AA-legible even where the
+		   orange ribbon passes underneath it */
+		--fg: var(--ink-black);
+		--ink-2: var(--graphite);
+		--line: color-mix(in oklab, var(--graphite) 62%, transparent);
+		--line-soft: color-mix(in oklab, var(--graphite) 30%, transparent);
+		--line-faint: color-mix(in oklab, var(--graphite) 16%, transparent);
+		--band-a: var(--paper-hi);
+		--band-b: var(--paper);
+		--band-c: var(--paper-lo);
+		--band-d: var(--paper-deep);
+
+		/* curved section boundaries — the sections never meet in a straight line */
+		--arc-top: ellipse(118% 100% at 50% 100%);
+		--arc-bottom: ellipse(118% 100% at 50% 0%);
+		--arc-top-deep: ellipse(76% 100% at 50% 100%);
+		--arc-bottom-deep: ellipse(76% 100% at 50% 0%);
+		--arc-both: ellipse(118% 50% at 50% 50%);
+		--arc-both-deep: ellipse(78% 50% at 50% 50%);
+
+		--dsp-1: clamp(3rem, 9.5vw, 8.5rem);
+		--dsp-2: clamp(2.3rem, 6.6vw, 5.6rem);
+		--dsp-3: clamp(1.7rem, 3.8vw, 3.1rem);
+		--dsp-4: clamp(1.25rem, 2.2vw, 1.85rem);
+		--copy: clamp(0.95rem, 0.55vw + 0.8rem, 1.15rem);
+		--meta: clamp(0.68rem, 0.3vw + 0.6rem, 0.8rem);
+		--pad: clamp(1.25rem, 5vw, 6rem);
+		--measure: 36rem;
+
+		background: var(--warm-gray);
+		color: var(--fg);
+		font-family: var(--font-grotesk);
+	}
+
+	body.d-09[data-nav="open"] {
+		overflow: hidden;
+	}
+
+	body.d-09 #main {
+		position: relative;
+		z-index: 0;
+		isolation: isolate;
+		overflow: clip;
+	}
+
+	/* layer order inside #main:
+	   -1 section grounds · 0 contour terrain · 1 the ribbon · 2 all content */
+	body.d-09 #main > section {
+		position: relative;
+	}
+
+	body.d-09 .d09-defs {
+		position: absolute;
+		width: 0;
+		height: 0;
+		overflow: hidden;
+	}
+
+	body.d-09 ::selection {
+		background: var(--orange);
+		color: var(--paper-hi);
+	}
+</style>

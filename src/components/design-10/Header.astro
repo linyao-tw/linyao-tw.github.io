@@ -1,0 +1,414 @@
+---
+import { brand, cta } from "../../lib/copy";
+import { sections } from "./sections";
+
+const mailto = `mailto:${brand.email}?subject=${encodeURIComponent("詢案 — LINYAO DIGITAL STUDIO")}`;
+---
+
+<header class="hd">
+	<a class="hd__brand" href="#hero">
+		<span class="hd__zh">{brand.nameZh}</span>
+		<span class="hd__en">{brand.nameEn}</span>
+	</a>
+
+	<p class="hd__disc note">{brand.disciplines}</p>
+
+	<a class="hd__cta" href={mailto} data-inquiry-open>
+		{cta.button}
+	</a>
+
+	<button class="hd__toggle d10-toggle" type="button" aria-expanded="false" aria-controls="d10-menu" data-menu-toggle>
+		<span class="hd__toggleLabel">INDEX</span>
+		<span class="hd__bars" aria-hidden="true"><i></i><i></i></span>
+		<span class="visually-hidden">開啟章節索引</span>
+	</button>
+
+	{
+		/* with scripting off the toggle is inert, so it is swapped for a plain
+	    anchor down to the footer's full list of movements */
+	}
+	<noscript>
+		<style is:inline>
+			@media (max-width: 63.99em) {
+				.d10-toggle {
+					display: none !important;
+				}
+				.d10-nojs {
+					display: inline-flex !important;
+				}
+			}
+		</style>
+	</noscript>
+	<a class="hd__toggle d10-nojs" href="#ft-index">
+		<span class="hd__toggleLabel">INDEX</span>
+		<span aria-hidden="true">↓</span>
+	</a>
+</header>
+
+<div class="menu" id="d10-menu" hidden data-menu-panel>
+	<nav class="menu__inner" aria-label="章節索引 — 行動版">
+		<p class="menu__head note">SPATIAL INDEX / 09</p>
+		<ol class="menu__list">
+			{
+				sections.map(s => (
+					<li>
+						<a href={`#${s.id}`} data-idx-item={s.id} data-menu-link>
+							<span class="menu__n">{s.n}</span>
+							<span class="menu__en">{s.en}</span>
+							<span class="menu__zh">{s.zh}</span>
+						</a>
+					</li>
+				))
+			}
+		</ol>
+		<div class="menu__foot">
+			<a class="menu__cta" href={mailto} data-inquiry-open data-menu-link>{cta.button}</a>
+			<a class="menu__mail note" href={`mailto:${brand.email}`} data-menu-link>{brand.email}</a>
+		</div>
+	</nav>
+	<button class="menu__close" type="button" data-menu-close>
+		<span aria-hidden="true">✕</span>
+		<span class="visually-hidden">關閉索引</span>
+	</button>
+</div>
+
+<style>
+	/* Mobile: a fixed graphite instrument bar. Desktop: a static lockup laid
+	   over the hero, because the fixed rail is the navigation up there. */
+	.hd {
+		position: fixed;
+		inset: 0 0 auto 0;
+		z-index: 140;
+		height: var(--d10-bar);
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding-inline: var(--d10-gl) 0;
+		background: var(--d10-ink-deep);
+		color: var(--d10-paper);
+		border-bottom: var(--hairline) solid color-mix(in oklab, var(--d10-paper) 20%, transparent);
+	}
+
+	.hd__brand {
+		display: flex;
+		align-items: baseline;
+		gap: 0.5rem;
+		min-height: 2.75rem;
+		align-content: center;
+		flex-wrap: wrap;
+		align-items: center;
+	}
+
+	.hd__zh {
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		letter-spacing: 0.12em;
+		font-weight: 700;
+	}
+
+	.hd__en {
+		font-family: var(--font-mono);
+		font-size: 0.5625rem;
+		letter-spacing: 0.2em;
+		color: color-mix(in oklab, var(--d10-paper) 72%, transparent);
+	}
+
+	.hd__disc,
+	.hd__cta {
+		display: none;
+	}
+
+	.hd__toggle {
+		margin-left: auto;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		min-height: 2.75rem;
+		min-width: 2.75rem;
+		padding-inline: 0.875rem;
+		background: var(--d10-accent);
+		color: var(--d10-void);
+		font-weight: 700;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.2em;
+		align-self: stretch;
+	}
+
+	.hd__bars {
+		display: grid;
+		gap: 0.25rem;
+		width: 1rem;
+	}
+
+	.d10-nojs {
+		display: none;
+	}
+
+	.hd__bars i {
+		display: block;
+		height: var(--hairline);
+		background: currentColor;
+	}
+
+	@media (min-width: 64em) {
+		.hd {
+			position: absolute;
+			height: auto;
+			background: none;
+			color: var(--d10-ink);
+			border-bottom: 0;
+			padding: 1.5rem var(--d10-gr) 0 var(--d10-gl);
+			align-items: flex-start;
+			gap: clamp(1rem, 4vw, 4rem);
+		}
+
+		.hd__brand {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.1875rem;
+			min-height: 0;
+		}
+
+		.hd__zh {
+			font-size: 0.9375rem;
+			letter-spacing: 0.22em;
+		}
+
+		.hd__en {
+			font-size: 0.625rem;
+			letter-spacing: 0.28em;
+			color: var(--d10-quiet);
+		}
+
+		.hd__disc {
+			display: block;
+			font-family: var(--font-cjk);
+			font-size: 0.6875rem;
+			letter-spacing: 0.22em;
+			color: var(--d10-quiet);
+			padding-top: 0.25rem;
+			border-top: var(--hairline) solid var(--d10-rule);
+		}
+
+		.hd__cta {
+			display: inline-flex;
+			align-items: center;
+			margin-left: auto;
+			min-height: 2.75rem;
+			padding-inline: 1.125rem;
+			background: var(--d10-accent);
+			color: var(--d10-void);
+			font-weight: 700;
+			font-family: var(--font-mono);
+			font-size: 0.75rem;
+			letter-spacing: 0.14em;
+			transition: background 0.2s ease;
+		}
+
+		.hd__cta:hover,
+		.hd__cta:focus-visible {
+			background: var(--orange-deep);
+		}
+
+		.hd__toggle {
+			display: none;
+		}
+	}
+
+	/* ------------------------------ menu ------------------------------ */
+	.menu {
+		position: fixed;
+		inset: 0;
+		z-index: 200;
+		background: var(--d10-void);
+		color: var(--d10-paper);
+		display: grid;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		touch-action: pan-y;
+	}
+
+	.menu[hidden] {
+		display: none;
+	}
+
+	.menu__inner {
+		padding: calc(var(--d10-bar) + 1.5rem) var(--d10-gl) 3rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+		min-height: 100%;
+	}
+
+	.menu__head {
+		color: var(--d10-accent);
+	}
+
+	.menu__list {
+		border-top: var(--hairline) solid color-mix(in oklab, var(--d10-paper) 22%, transparent);
+	}
+
+	.menu__list a {
+		display: grid;
+		grid-template-columns: 2.75rem 1fr;
+		align-items: baseline;
+		gap: 0.25rem 0.75rem;
+		padding-block: 0.75rem;
+		min-height: 2.75rem;
+		border-bottom: var(--hairline) solid color-mix(in oklab, var(--d10-paper) 16%, transparent);
+	}
+
+	.menu__n {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.1em;
+		color: var(--d10-accent);
+	}
+
+	.menu__en {
+		font-family: var(--font-grotesk);
+		font-size: clamp(1.125rem, 5.6vw, 1.625rem);
+		font-weight: 700;
+		letter-spacing: -0.015em;
+		line-height: 1.05;
+	}
+
+	.menu__zh {
+		grid-column: 2;
+		font-family: var(--font-cjk);
+		font-size: 0.75rem;
+		letter-spacing: 0.16em;
+		color: color-mix(in oklab, var(--d10-paper) 72%, transparent);
+	}
+
+	.menu__list a[aria-current="true"] .menu__en {
+		color: var(--d10-accent);
+	}
+
+	.menu__foot {
+		margin-top: auto;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 1rem;
+		padding-top: 1.5rem;
+	}
+
+	.menu__cta {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
+		padding-inline: 1.25rem;
+		background: var(--d10-accent);
+		color: var(--d10-void);
+		font-weight: 700;
+		font-family: var(--font-mono);
+		font-size: 0.8125rem;
+		letter-spacing: 0.12em;
+	}
+
+	.menu__mail {
+		color: color-mix(in oklab, var(--d10-paper) 70%, transparent);
+		letter-spacing: 0.12em;
+		text-transform: none;
+	}
+
+	.menu__close {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 3.25rem;
+		height: 3.25rem;
+		display: grid;
+		place-items: center;
+		color: var(--d10-paper);
+		font-size: 1rem;
+		border-left: var(--hairline) solid color-mix(in oklab, var(--d10-paper) 22%, transparent);
+		border-bottom: var(--hairline) solid color-mix(in oklab, var(--d10-paper) 22%, transparent);
+	}
+
+	@media (min-width: 64em) {
+		.menu {
+			display: none !important;
+		}
+	}
+</style>
+
+<script>
+	const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+	const panel = document.querySelector<HTMLElement>("[data-menu-panel]");
+	const closeBtn = document.querySelector<HTMLButtonElement>("[data-menu-close]");
+
+	if (toggle && panel) {
+		let scrollY = 0;
+
+		const focusables = () => Array.from(panel.querySelectorAll<HTMLElement>("a[href], button:not([disabled])")).filter(el => el.offsetParent !== null || el === closeBtn);
+
+		const open = () => {
+			scrollY = window.scrollY;
+			panel.hidden = false;
+			toggle.setAttribute("aria-expanded", "true");
+			document.body.classList.add("is-locked");
+			document.body.style.top = `-${scrollY}` + "px";
+			document.body.style.position = "fixed";
+			document.body.style.width = "100%";
+			document.dispatchEvent(new CustomEvent("d10:lock"));
+			const f = focusables();
+			(f[0] ?? panel).focus?.();
+			document.addEventListener("keydown", onKey, true);
+		};
+
+		const close = (refocus = true) => {
+			panel.hidden = true;
+			toggle.setAttribute("aria-expanded", "false");
+			// the inquiry dialog keeps its own scroll lock
+			if (!document.querySelector("dialog[open]")) document.body.classList.remove("is-locked");
+			document.body.style.position = "";
+			document.body.style.top = "";
+			document.body.style.width = "";
+			window.scrollTo(0, scrollY);
+			document.dispatchEvent(new CustomEvent("d10:unlock"));
+			document.removeEventListener("keydown", onKey, true);
+			if (refocus) toggle.focus();
+		};
+
+		function onKey(event: KeyboardEvent) {
+			if (event.key === "Escape") {
+				event.preventDefault();
+				close();
+				return;
+			}
+			if (event.key !== "Tab") return;
+			const f = focusables();
+			if (!f.length) return;
+			const first = f[0];
+			const last = f[f.length - 1];
+			const active = document.activeElement as HTMLElement | null;
+			if (event.shiftKey && (active === first || !panel?.contains(active))) {
+				event.preventDefault();
+				last.focus();
+			} else if (!event.shiftKey && active === last) {
+				event.preventDefault();
+				first.focus();
+			}
+		}
+
+		toggle.addEventListener("click", () => (panel.hidden ? open() : close()));
+		closeBtn?.addEventListener("click", () => close());
+
+		// anchor links inside the panel close it, then let the page scroll
+		panel.querySelectorAll<HTMLAnchorElement>("[data-menu-link]").forEach(a => {
+			a.addEventListener("click", () => {
+				// the inquiry trigger hands focus to the dialog itself
+				if (!panel.hidden) close(!a.hasAttribute("data-inquiry-open"));
+			});
+		});
+
+		// leaving the mobile breakpoint must not strand a locked body
+		const mq = window.matchMedia("(min-width: 64em)");
+		mq.addEventListener("change", e => {
+			if (e.matches && !panel.hidden) close();
+		});
+	}
+</script>

@@ -1,0 +1,153 @@
+---
+import { services } from "../../lib/copy";
+import ServiceRow from "./ServiceRow.astro";
+
+const leadParts = ["我們提供涵蓋視覺、品牌、", "網站與技術開發的", "完整數位設計服務。"];
+
+const rows = [
+	{ item: services.items[0], variant: "a" as const, nameLines: ["WEB DEVELOPMENT"] },
+	{ item: services.items[1], variant: "b" as const, nameLines: ["SYSTEM", "DEVELOPMENT"] },
+	{ item: services.items[2], variant: "c" as const, nameLines: ["CREATIVE", "DEVELOPMENT"] }
+];
+---
+
+<section class="svc" id="services" aria-labelledby="d02-svc-h">
+	<div class="lead">
+		<h2 class="lead-h" id="d02-svc-h" aria-label={services.lead} data-d02-lines>
+			<span class="ln l1"><span class="d02-li">{leadParts[0]}</span></span>
+			<span class="ln l2"><span class="d02-li">{leadParts[1]}</span></span>
+			<span class="ln l3"><span class="d02-li">{leadParts[2]}</span></span>
+		</h2>
+	</div>
+
+	<div class="dense">
+		<span class="d-k">SERVICES</span>
+		<span class="d-r" aria-hidden="true"></span>
+		{
+			services.items.map(s => (
+				<span class="d-i">
+					<b>{s.index}</b>
+					<i>{s.position}</i>
+				</span>
+			))
+		}
+		<span class="d-k d-end">03 DISCIPLINES</span>
+	</div>
+
+	<div class="run d02-run">
+		{rows.map((r, i) => <ServiceRow item={r.item} variant={r.variant} nameLines={r.nameLines} i={i} />)}
+	</div>
+</section>
+
+<style>
+	.svc {
+		position: relative;
+	}
+
+	.lead {
+		padding: clamp(4rem, 12vh, 8rem) var(--edge) clamp(2.5rem, 7vh, 4.5rem);
+		overflow: clip;
+	}
+
+	.lead-h {
+		display: grid;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		color: var(--ink);
+	}
+
+	.ln {
+		display: block;
+		overflow: clip;
+		padding-block: 0.1em;
+		margin-block: -0.1em;
+	}
+
+	.ln .d02-li {
+		display: block;
+		line-height: 0.95;
+		white-space: nowrap;
+		will-change: transform;
+	}
+
+	.l1 .d02-li {
+		font-size: clamp(1.15rem, 4vw, 2.9rem);
+		letter-spacing: 0.08em;
+		color: var(--dim);
+	}
+
+	.l2 .d02-li {
+		font-size: clamp(2rem, 8.4vw, 6.5rem);
+		letter-spacing: -0.02em;
+		margin-inline-start: -0.04em;
+	}
+
+	.l3 .d02-li {
+		font-size: clamp(0.9rem, 2.6vw, 1.9rem);
+		letter-spacing: 0.24em;
+		color: var(--dim);
+	}
+
+	.l3 {
+		justify-self: end;
+		margin-block-start: 0.75rem;
+	}
+
+	/* --- dense running band ------------------------------------------- */
+	.dense {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem 1.5rem;
+		padding: 0.7rem var(--edge);
+		border-block: var(--hairline) solid var(--rule);
+		font-family: var(--font-mono);
+		font-size: 0.58rem;
+		letter-spacing: 0.24em;
+		color: var(--dim);
+	}
+
+	.d-r {
+		flex: 1 1 2rem;
+		height: 1px;
+		background: var(--rule);
+	}
+
+	.d-i {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.55rem;
+	}
+
+	.d-i b {
+		font-weight: 400;
+		color: var(--accent-txt);
+	}
+
+	.d-i i {
+		font-family: var(--font-cjk);
+		font-style: normal;
+		font-size: 0.68rem;
+		letter-spacing: 0.14em;
+		color: var(--quiet);
+	}
+
+	.d-end {
+		margin-inline-start: auto;
+	}
+
+	.run {
+		position: relative;
+	}
+
+	@media (max-width: 48rem) {
+		.dense {
+			gap: 0.4rem 1rem;
+		}
+
+		.d-r,
+		.d-end {
+			display: none;
+		}
+	}
+</style>

@@ -1,0 +1,232 @@
+---
+import { brand, hero } from "../../lib/copy";
+
+const roles = ["01 DIAGONAL", "02 MARGIN", "03 TRACK", "04 TIMELINE", "05 UNDERLINE"];
+---
+
+<section id="hero" class="d06-hero" aria-labelledby="hero-h">
+	<div class="hero__in d06-wrap">
+		<div class="hero__top">
+			<p class="hero__eq">
+				<span class="hero__eq-w">DESIGN</span>
+				<span class="hero__eq-x" aria-hidden="true">×</span>
+				<span class="hero__eq-w">CODE</span>
+				<span class="hero__eq-x" aria-hidden="true">×</span>
+				<span class="hero__eq-w">MOTION</span>
+			</p>
+			<ol class="hero__legend" aria-hidden="true">
+				<li class="hero__legend-k">RAIL</li>
+				{roles.map(r => <li>{r}</li>)}
+			</ol>
+		</div>
+
+		<h1 id="hero-h" class="hero__h">
+			<span class="d06-rowclip"><span class="hero__part">{hero.headlineParts[0]}</span></span>
+			<span class="d06-rowclip"><span class="hero__part">{hero.headlineParts[1]}</span></span>
+			<span class="d06-rowclip hero__last">
+				<span class="hero__part">{hero.headlineParts[2]}</span>
+				<span class="hero__sup" aria-hidden="true">EXPERIENCE</span>
+			</span>
+		</h1>
+
+		<div class="hero__foot">
+			<p class="hero__disc">{brand.disciplines}</p>
+			<span class="hero__cue">{hero.scrollCue}</span>
+		</div>
+	</div>
+</section>
+
+<style>
+	.d06-hero {
+		position: relative;
+		min-height: 100svh;
+		display: grid;
+		overflow: clip;
+	}
+
+	/* only reserve room for the bar once it is actually taken out of flow */
+	:global(body.d-06.d06-fixedhead) .d06-hero {
+		padding-top: var(--bar-h);
+	}
+
+	.hero__in {
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		row-gap: clamp(1.25rem, 3.4vh, 2.5rem);
+		padding-block: clamp(1.5rem, 5vh, 3.5rem) clamp(1.25rem, 4vh, 2.5rem);
+		width: 100%;
+	}
+
+	.hero__top {
+		justify-self: end;
+		display: grid;
+		justify-items: end;
+		gap: 0.9rem;
+	}
+
+	.hero__eq {
+		display: flex;
+		align-items: baseline;
+		gap: clamp(0.5rem, 1.4vw, 1.1rem);
+		font-family: var(--font-mono);
+		font-size: clamp(0.75rem, 1.5vw, 1.0625rem);
+		letter-spacing: 0.22em;
+		text-align: right;
+	}
+
+	.hero__eq-x {
+		color: var(--orange);
+		letter-spacing: 0;
+	}
+
+	.hero__h {
+		align-self: end;
+		font-size: clamp(3rem, 12.4vw, 8.75rem);
+		line-height: 1;
+		letter-spacing: -0.012em;
+		font-weight: 600;
+	}
+
+	.hero__part {
+		display: block;
+		will-change: transform;
+	}
+
+	.d06-rowclip.hero__last {
+		display: flex;
+		align-items: baseline;
+		gap: clamp(0.5rem, 1.6vw, 1.5rem);
+	}
+
+	.hero__sup {
+		font-family: var(--font-mono);
+		font-size: clamp(0.5625rem, 1vw, 0.75rem);
+		letter-spacing: 0.24em;
+		color: var(--orange);
+		white-space: nowrap;
+		padding-bottom: 0.15em;
+	}
+
+	.hero__disc {
+		font-size: clamp(0.875rem, 1.6vw, 1.0625rem);
+		letter-spacing: 0.16em;
+		color: var(--fg-dim);
+		border-top: var(--hairline) solid var(--rule);
+		padding-top: 0.75rem;
+		max-width: 20em;
+	}
+
+	.hero__foot {
+		display: grid;
+		justify-items: start;
+		gap: clamp(0.9rem, 2.5vh, 1.5rem);
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.16em;
+	}
+
+	.hero__cue {
+		position: relative;
+		padding-left: 3.25rem;
+		white-space: nowrap;
+	}
+
+	.hero__cue::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 0.52em;
+		width: 2.5rem;
+		height: var(--hairline);
+		background: var(--orange);
+		transform-origin: 0 50%;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.hero__cue::before {
+			animation: d06-cue 2.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+		}
+	}
+
+	@keyframes d06-cue {
+		0%,
+		100% {
+			transform: scaleX(0.2);
+		}
+		45% {
+			transform: scaleX(1);
+		}
+	}
+
+	.hero__legend {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: 0.3rem 0.85rem;
+		font-family: var(--font-mono);
+		color: var(--fg-dim);
+		font-size: 0.5625rem;
+		letter-spacing: 0.18em;
+	}
+
+	.hero__legend-k {
+		color: var(--orange);
+		letter-spacing: 0.24em;
+	}
+
+	.hero__legend li:not(.hero__legend-k) {
+		border-left: var(--hairline) solid var(--rule);
+		padding-left: 0.9rem;
+	}
+
+	@media (max-width: 63.99rem) {
+		.hero__legend {
+			display: none;
+		}
+	}
+
+	@media (max-width: 47.99rem) {
+		.hero__top {
+			justify-self: start;
+			justify-items: start;
+		}
+		.hero__eq {
+			letter-spacing: 0.16em;
+		}
+		.hero__h {
+			max-width: none;
+		}
+		.hero__last {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.35rem;
+		}
+		.hero__sup {
+			padding-top: 0;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		const parts = gsap.utils.toArray<HTMLElement>(".hero__part");
+		if (parts.length === 0) return;
+
+		const tl = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.08 });
+		tl.from(parts, { yPercent: 112, duration: 1.05, stagger: 0.075 })
+			.from(".hero__eq-w, .hero__eq-x", { opacity: 0, y: "-0.5rem", duration: 0.6, stagger: 0.05 }, 0.25)
+			.from(".hero__sup", { opacity: 0, x: "-0.75rem", duration: 0.6 }, 0.75)
+			.from(".hero__legend li", { opacity: 0, duration: 0.5, stagger: 0.04 }, 0.45)
+			.from(".hero__foot > *", { opacity: 0, y: "0.75rem", duration: 0.7, stagger: 0.1 }, 0.65);
+
+		/* the headline leaves before the section does — restrained, no parallax circus */
+		gsap.to(".hero__h", {
+			yPercent: -12,
+			opacity: 0.15,
+			ease: "none",
+			scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: 0.4 }
+		});
+	});
+</script>

@@ -1,0 +1,99 @@
+---
+import { manifesto } from "../../lib/copy";
+import Beam from "./Beam.astro";
+---
+
+<section class="man" id="manifesto" aria-labelledby="d07-man-h">
+	<div class="scene" aria-hidden="true">
+		<Beam shape="polygon(0% 84%, 100% 58%, 100% 62.5%, 0% 88.5%)" seed="polygon(0% 84%, 0% 84%, 0% 88.5%, 0% 88.5%)" drift={-6} speed={2} />
+	</div>
+
+	<div class="inner d07-shell">
+		<p class="d07-run" data-mark><span>MANIFESTO</span></p>
+
+		<h2 id="d07-man-h" class="hl" lang="zh-Hant" data-d07-reveal>
+			<span>{manifesto.headlineParts[0]}</span>
+			<span>{manifesto.headlineParts[1]}</span>
+		</h2>
+
+		<div class="tail">
+			<span class="d07-slit" aria-hidden="true"></span>
+			<div class="prose" lang="zh-Hant" data-d07-reveal>
+				{manifesto.body.map(line => <p>{line}</p>)}
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.man {
+		position: relative;
+		min-height: clamp(44rem, 124svh, 74rem);
+		background: var(--d07-void);
+		overflow: clip;
+		isolation: isolate;
+	}
+
+	.scene {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		overflow: clip;
+	}
+
+	.inner {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		min-height: clamp(44rem, 124svh, 74rem);
+		padding-block: clamp(4.5rem, 12vh, 9rem) clamp(4.5rem, 12vh, 9rem);
+	}
+
+	.hl {
+		align-self: center;
+		font-family: var(--font-cjk);
+		font-size: clamp(2.125rem, 6.4vw, 5rem);
+		font-weight: 400;
+		line-height: 1.72;
+		letter-spacing: 0.16em;
+		color: var(--d07-text);
+	}
+
+	.hl span {
+		display: block;
+		margin-right: -0.16em;
+	}
+
+	.hl span:last-child {
+		margin-left: clamp(0rem, 8vw, 9rem);
+	}
+
+	.tail {
+		display: grid;
+		grid-template-columns: auto minmax(0, 22rem);
+		gap: clamp(1.25rem, 3vw, 2.25rem);
+		justify-content: end;
+	}
+
+	.tail .d07-slit {
+		height: 100%;
+	}
+
+	.prose {
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		font-weight: 300;
+		line-height: 2.15;
+		letter-spacing: 0.09em;
+		color: var(--d07-mute);
+	}
+
+	@media (max-width: 52rem) {
+		.tail {
+			grid-template-columns: auto minmax(0, 1fr);
+			justify-content: start;
+			margin-top: clamp(4rem, 14vh, 8rem);
+		}
+	}
+</style>

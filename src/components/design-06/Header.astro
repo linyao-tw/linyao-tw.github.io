@@ -1,0 +1,458 @@
+---
+import { brand, cta, nav } from "../../lib/copy";
+---
+
+<header class="d06-header">
+	<div class="hd__bar">
+		<a class="hd__mark" href="#hero">
+			<span class="hd__zh">{brand.nameZh}</span>
+			<span class="hd__en">{brand.nameEn}</span>
+		</a>
+
+		<nav class="hd__nav" aria-label="主要導覽">
+			<ul>
+				{
+					nav.map((n, i) => (
+						<li>
+							<a href={n.href}>
+								<span class="hd__i">{String(i + 1).padStart(2, "0")}</span>
+								<span class="hd__l">{n.label}</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<button class="hd__cta" type="button" data-inquiry-open>
+			<span>{cta.buttonLabel}</span>
+			<span class="hd__arrow" aria-hidden="true">↗</span>
+		</button>
+
+		<button class="hd__toggle" type="button" aria-expanded="false" aria-controls="d06-menu">
+			<span class="hd__toggle-l">選單</span>
+			<span class="hd__toggle-g" aria-hidden="true"><i></i><i></i></span>
+		</button>
+	</div>
+
+	<div class="hd__panel" id="d06-menu">
+		<nav aria-label="行動裝置導覽">
+			<ul>
+				{
+					nav.map((n, i) => (
+						<li>
+							<a href={n.href} data-menu-link>
+								<span class="hd__pi">{String(i + 1).padStart(2, "0")}</span>
+								<span class="hd__pl">{n.label}</span>
+								<span class="hd__pz">{n.zh}</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+		<div class="hd__panel-foot">
+			<button class="hd__panel-cta" type="button" data-inquiry-open data-menu-link>
+				{cta.buttonLabel}<span aria-hidden="true">↗</span>
+			</button>
+			<a class="hd__panel-mail" href={`mailto:${brand.email}`} data-menu-link>{brand.email}</a>
+			<p class="hd__panel-eq">{brand.equation}</p>
+		</div>
+	</div>
+</header>
+
+<style>
+	.d06-header {
+		position: relative;
+		top: 0;
+		left: 0;
+		width: 100%;
+		z-index: 30;
+		background: var(--warm-gray);
+		border-bottom: var(--hairline) solid var(--rule);
+		color: var(--ink);
+		--hd-dim: var(--graphite);
+		--hd-scrim: var(--warm-gray);
+	}
+
+	/* A short scrim keeps the running text legible where it passes under the
+	   transparent bar. It flips colour on the same frame as the wipe edge. */
+	.d06-header::before {
+		content: "";
+		position: absolute;
+		inset: 0 0 auto 0;
+		height: calc(var(--bar-h) + 1.25rem);
+		background: linear-gradient(to bottom, var(--hd-scrim) 0%, var(--hd-scrim) 58%, transparent 100%);
+		pointer-events: none;
+	}
+
+	.d06-header.is-enhanced {
+		position: fixed;
+	}
+
+	:global(body.d-06.d06-live) .d06-header {
+		background: transparent;
+		border-bottom-color: transparent;
+	}
+
+	:global(body.d-06.d06-live) .d06-header.is-inverted {
+		--hd-scrim: var(--ink-deep);
+	}
+
+	:global(body.d-06.d06-live) .d06-header.is-inverted,
+	.d06-header.is-menu-open {
+		color: var(--paper-hi);
+		--hd-dim: color-mix(in oklab, var(--paper) 78%, transparent);
+		--hd-scrim: var(--ink-deep);
+	}
+
+	.d06-header.is-menu-open {
+		background: transparent;
+		border-bottom-color: transparent;
+	}
+
+	.hd__bar {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: center;
+		gap: clamp(1rem, 3vw, 2.5rem);
+		height: var(--bar-h);
+		padding-inline: var(--edge);
+	}
+
+	.hd__mark {
+		display: grid;
+		gap: 0.1rem;
+		line-height: 1.1;
+	}
+
+	.hd__zh {
+		font-size: 0.9375rem;
+		letter-spacing: 0.12em;
+		font-weight: 600;
+	}
+
+	.hd__en {
+		font-family: var(--font-mono);
+		font-size: 0.5625rem;
+		letter-spacing: 0.2em;
+		color: var(--hd-dim);
+	}
+
+	.hd__nav ul {
+		display: flex;
+		justify-content: flex-end;
+		gap: clamp(1rem, 2.4vw, 2.25rem);
+	}
+
+	.hd__nav a {
+		display: flex;
+		align-items: baseline;
+		gap: 0.4rem;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.16em;
+		padding-block: 0.5rem;
+	}
+
+	.hd__i {
+		color: var(--hd-dim);
+		font-size: 0.5625rem;
+	}
+
+	.hd__l {
+		position: relative;
+	}
+
+	.hd__l::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: -0.28rem;
+		height: 0.125rem;
+		background: var(--orange);
+		transform: scaleX(0);
+		transform-origin: 0 50%;
+		transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.hd__nav a:hover .hd__l::after,
+	.hd__nav a:focus-visible .hd__l::after {
+		transform: scaleX(1);
+	}
+
+	.hd__cta,
+	.hd__toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		min-height: 2.75rem;
+		padding-inline: 1rem;
+		border: var(--hairline) solid currentColor;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+	}
+
+	.hd__cta {
+		border-color: var(--orange);
+		border-width: 0.125rem;
+		position: relative;
+		overflow: clip;
+	}
+
+	.hd__cta > * {
+		position: relative;
+		z-index: 1;
+	}
+
+	.hd__cta::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: var(--orange);
+		transform: translateY(101%);
+		transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+		z-index: 0;
+	}
+
+	.hd__cta:hover::before,
+	.hd__cta:focus-visible::before {
+		transform: translateY(0);
+	}
+
+	.hd__cta:hover,
+	.hd__cta:focus-visible {
+		color: var(--on-accent);
+	}
+
+	.hd__arrow {
+		font-size: 0.8125rem;
+	}
+
+	.hd__toggle {
+		display: none;
+	}
+
+	.hd__toggle-g {
+		display: grid;
+		gap: 0.28rem;
+		width: 1.1rem;
+	}
+
+	.hd__toggle-g i {
+		display: block;
+		height: 0.125rem;
+		background: currentColor;
+		transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.hd__toggle[aria-expanded="true"] .hd__toggle-g i:first-child {
+		transform: translateY(0.2rem) rotate(45deg);
+	}
+
+	.hd__toggle[aria-expanded="true"] .hd__toggle-g i:last-child {
+		transform: translateY(-0.2rem) rotate(-45deg);
+	}
+
+	/* --- panel: a normal block until JS enhances it, then a full overlay --- */
+	.hd__panel {
+		background: var(--ink-deep);
+		color: var(--paper-hi);
+		--pn-dim: color-mix(in oklab, var(--paper) 76%, transparent);
+		padding: var(--edge);
+	}
+
+	/* [hidden] must beat the overlay's display rule */
+	.d06-header.is-enhanced .hd__panel[hidden] {
+		display: none;
+	}
+
+	.d06-header.is-enhanced .hd__panel {
+		position: fixed;
+		inset: 0;
+		display: grid;
+		grid-template-rows: 1fr auto;
+		gap: 2rem;
+		padding: calc(var(--bar-h) + 2rem) var(--edge) 2rem;
+		overflow-y: auto;
+	}
+
+	.hd__panel ul {
+		display: grid;
+		align-content: center;
+		gap: 0.25rem;
+	}
+
+	.hd__panel a,
+	.hd__panel-cta {
+		display: grid;
+		grid-template-columns: 2.5rem 1fr auto;
+		align-items: baseline;
+		gap: 0.75rem;
+		width: 100%;
+		text-align: left;
+		border-top: var(--hairline) solid color-mix(in oklab, var(--paper) 22%, transparent);
+		padding-block: 0.9rem;
+		min-height: 2.75rem;
+	}
+
+	.hd__pi {
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.16em;
+		color: var(--pn-dim);
+	}
+
+	.hd__pl {
+		font-family: var(--font-mono);
+		font-size: 1.375rem;
+		letter-spacing: 0.02em;
+	}
+
+	.hd__pz {
+		font-size: 0.8125rem;
+		color: var(--pn-dim);
+	}
+
+	.hd__panel-foot {
+		display: grid;
+		gap: 0.75rem;
+		align-content: end;
+	}
+
+	.hd__panel .hd__panel-cta {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		border: 0.125rem solid var(--orange);
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		letter-spacing: 0.14em;
+		padding: 1rem;
+	}
+
+	.hd__panel a.hd__panel-mail {
+		display: block;
+		font-family: var(--font-mono);
+		font-size: 0.8125rem;
+		letter-spacing: 0.08em;
+		border: 0;
+		padding-block: 0.5rem;
+		overflow-wrap: normal;
+		word-break: normal;
+	}
+
+	.hd__panel-eq {
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.22em;
+		color: var(--pn-dim);
+	}
+
+	@media (min-width: 64rem) {
+		.hd__panel {
+			display: none;
+		}
+		.d06-header.is-enhanced .hd__panel {
+			display: none;
+		}
+	}
+
+	@media (max-width: 63.99rem) {
+		.hd__nav,
+		.hd__cta {
+			display: none;
+		}
+		.hd__bar {
+			grid-template-columns: 1fr auto;
+		}
+		.hd__toggle {
+			display: inline-flex;
+		}
+	}
+
+	@media (max-width: 26rem) {
+		.hd__zh {
+			font-size: 0.8125rem;
+			letter-spacing: 0.08em;
+		}
+		.hd__en {
+			font-size: 0.5rem;
+			letter-spacing: 0.16em;
+		}
+	}
+</style>
+
+<script>
+	import { bindAnchorScroll } from "../../lib/motion";
+
+	const header = document.querySelector<HTMLElement>(".d06-header");
+	const toggle = document.querySelector<HTMLButtonElement>(".hd__toggle");
+	const panel = document.querySelector<HTMLElement>("#d06-menu");
+
+	if (header && toggle && panel) {
+		header.classList.add("is-enhanced");
+		document.body.classList.add("d06-fixedhead");
+		panel.hidden = true;
+
+		const focusables = () => Array.from(panel.querySelectorAll<HTMLElement>("a[href], button:not([disabled])")).filter(el => el.offsetParent !== null);
+
+		const lock = (locked: boolean) => {
+			document.body.classList.toggle("d06-locked", locked);
+			window.dispatchEvent(new CustomEvent("d06:lock", { detail: { locked } }));
+		};
+
+		let open = false;
+
+		const setOpen = (next: boolean, restoreFocus = true) => {
+			if (open === next) return;
+			open = next;
+			toggle.setAttribute("aria-expanded", String(next));
+			header.classList.toggle("is-menu-open", next);
+			panel.hidden = !next;
+			lock(next);
+			if (next) focusables()[0]?.focus();
+			else if (restoreFocus) toggle.focus();
+		};
+
+		toggle.addEventListener("click", () => setOpen(!open));
+
+		panel.querySelectorAll<HTMLElement>("[data-menu-link]").forEach(el => {
+			el.addEventListener("click", () => setOpen(false, false));
+		});
+
+		document.addEventListener("keydown", e => {
+			if (!open) return;
+			if (e.key === "Escape") {
+				e.preventDefault();
+				setOpen(false);
+				return;
+			}
+			if (e.key !== "Tab") return;
+			const items = focusables();
+			if (items.length === 0) return;
+			const first = items[0];
+			const last = items[items.length - 1];
+			if (e.shiftKey && document.activeElement === first) {
+				e.preventDefault();
+				last.focus();
+			} else if (!e.shiftKey && document.activeElement === last) {
+				e.preventDefault();
+				first.focus();
+			}
+		});
+
+		const mq = window.matchMedia("(min-width: 64rem)");
+		mq.addEventListener("change", () => {
+			if (mq.matches) setOpen(false, false);
+		});
+	}
+
+	bindAnchorScroll(document);
+</script>

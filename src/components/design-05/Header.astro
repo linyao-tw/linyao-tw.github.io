@@ -1,0 +1,382 @@
+---
+import { brand, nav } from "../../lib/copy";
+---
+
+<header class="bar">
+	<div class="inner">
+		<a class="mark" href="#main">
+			<span class="mark-zh">{brand.nameZh}</span>
+			<span class="mark-en d05-latin">{brand.nameEn}</span>
+		</a>
+
+		<p class="d05-anno el" aria-hidden="true">EL. &plusmn;0.000</p>
+
+		<nav class="rail" aria-label="主要導覽">
+			<ul>
+				{
+					nav.map((item, i) => (
+						<li>
+							<a href={item.href}>
+								<span class="rail-i d05-anno" aria-hidden="true">
+									{String(i + 1).padStart(2, "0")}
+								</span>
+								<span class="rail-en d05-latin">{item.label}</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<button class="inq d05-latin" type="button" data-inquiry-open>詢案 <span aria-hidden="true">↗</span></button>
+		<a class="inq d05-mailto-fallback d05-latin" href={`mailto:${brand.email}?subject=${encodeURIComponent("詢案 / LINYAO DIGITAL STUDIO")}`}>詢案 <span aria-hidden="true">↗</span></a>
+
+		<button class="toggle" type="button" aria-expanded="false" aria-controls="d05-plan-menu" data-menu-toggle>
+			<span class="visually-hidden">開啟導覽選單</span>
+			<span class="toggle-mark" aria-hidden="true"></span>
+		</button>
+	</div>
+
+	<div class="datum" aria-hidden="true"></div>
+</header>
+
+<div class="plan" id="d05-plan-menu" data-menu-panel hidden>
+	<div class="plan-mass" aria-hidden="true"></div>
+	<nav class="plan-nav" aria-label="全螢幕導覽">
+		<ul>
+			{
+				nav.map((item, i) => (
+					<li>
+						<a href={item.href} data-menu-link>
+							<span class="plan-i d05-anno d05-anno--paper" aria-hidden="true">
+								0{i + 1}
+							</span>
+							<span class="plan-en d05-latin">{item.label}</span>
+							<span class="plan-zh">{item.zh}</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+	<p class="plan-foot d05-anno d05-anno--paper">PLAN &mdash; LEVEL 00 / {brand.equation}</p>
+	<button class="plan-close" type="button" data-menu-close>
+		<span class="visually-hidden">關閉導覽選單</span>
+		<span aria-hidden="true">CLOSE &times;</span>
+	</button>
+</div>
+
+<style>
+	.bar {
+		position: fixed;
+		inset: 0 0 auto;
+		z-index: 60;
+		background: color-mix(in oklab, var(--warm-gray) 92%, var(--paper-hi));
+	}
+
+	.inner {
+		display: grid;
+		grid-template-columns: auto 1fr auto auto;
+		align-items: center;
+		gap: clamp(0.75rem, 2vw, 2rem);
+		padding: 0.6875rem var(--gutter);
+		min-height: 3.25rem;
+	}
+
+	.mark {
+		display: flex;
+		align-items: baseline;
+		gap: 0.625rem;
+	}
+
+	.mark-zh {
+		font-size: 0.8125rem;
+		letter-spacing: 0.14em;
+		font-weight: 500;
+	}
+
+	.mark-en {
+		font-size: 0.625rem;
+		letter-spacing: 0.2em;
+		color: color-mix(in oklab, var(--graphite) 70%, transparent);
+	}
+
+	.el {
+		justify-self: start;
+		color: color-mix(in oklab, var(--graphite) 55%, transparent);
+	}
+
+	.rail {
+		justify-self: end;
+	}
+
+	.rail ul {
+		display: flex;
+		gap: clamp(1rem, 2.4vw, 2.25rem);
+	}
+
+	.rail a {
+		display: flex;
+		align-items: baseline;
+		gap: 0.375rem;
+		padding: 0.5rem 0;
+	}
+
+	.rail-i {
+		color: color-mix(in oklab, var(--graphite) 42%, transparent);
+		font-size: 0.5625rem;
+	}
+
+	.rail-en {
+		font-size: 0.625rem;
+		letter-spacing: 0.2em;
+		border-bottom: 1px solid transparent;
+		padding-bottom: 0.125rem;
+		transition: border-color 0.4s ease;
+	}
+
+	.rail a:hover .rail-en,
+	.rail a:focus-visible .rail-en {
+		border-bottom-color: var(--orange);
+	}
+
+	.inq {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		min-height: 2.125rem;
+		padding: 0 0.875rem;
+		font-size: 0.625rem;
+		letter-spacing: 0.2em;
+		background: var(--mass-deep);
+		color: var(--paper-hi);
+		clip-path: polygon(0 0, 100% 0, calc(100% - 0.875rem) 100%, 0 100%);
+		transition: background 0.4s ease;
+	}
+
+	.inq:hover,
+	.inq:focus-visible {
+		background: var(--orange);
+	}
+
+	.toggle {
+		display: none;
+		width: 2.75rem;
+		height: 2.75rem;
+		align-items: center;
+		justify-content: center;
+		margin-right: -0.5rem;
+	}
+
+	/* the toggle mark is a plan symbol: two parallel walls at 8° */
+	.toggle-mark {
+		position: relative;
+		display: block;
+		width: 1.375rem;
+		height: 0.875rem;
+	}
+
+	.toggle-mark::before,
+	.toggle-mark::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		width: 100%;
+		height: 1px;
+		background: var(--graphite);
+		transition:
+			transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+			width 0.45s ease;
+	}
+
+	.toggle-mark::before {
+		top: 0.125rem;
+		transform: rotate(-8deg);
+	}
+
+	.toggle-mark::after {
+		bottom: 0.125rem;
+		width: 68%;
+		transform: rotate(-8deg);
+	}
+
+	.toggle[aria-expanded="true"] .toggle-mark::before {
+		transform: translateY(0.25rem) rotate(22deg);
+	}
+
+	.toggle[aria-expanded="true"] .toggle-mark::after {
+		width: 100%;
+		transform: translateY(-0.25rem) rotate(-22deg);
+	}
+
+	.datum {
+		height: 1px;
+		background: var(--line);
+	}
+
+	/* ---------- full-screen plan menu ---------- */
+	.plan {
+		position: fixed;
+		inset: 0;
+		z-index: 80;
+		background: var(--mass-deep);
+		color: var(--paper-hi);
+		display: grid;
+		grid-template-rows: 1fr auto;
+		align-content: end;
+		padding: 6rem var(--gutter) 2rem;
+		overflow: hidden;
+	}
+
+	.plan[hidden] {
+		display: none;
+	}
+
+	.plan-mass {
+		position: absolute;
+		inset: 0;
+		background: var(--mass-black);
+		clip-path: polygon(0 100%, 100% calc(100% - 14.05vw), 100% 100%);
+	}
+
+	.plan-nav {
+		position: relative;
+		align-self: end;
+	}
+
+	.plan-nav ul {
+		display: grid;
+		gap: 0.25rem;
+	}
+
+	.plan-nav a {
+		display: grid;
+		grid-template-columns: 2.5rem 1fr auto;
+		align-items: baseline;
+		gap: 0.75rem;
+		min-height: 2.75rem;
+		padding: 0.5rem 0;
+		border-top: 1px solid color-mix(in oklab, var(--paper) 20%, transparent);
+	}
+
+	.plan-nav li:last-child a {
+		border-bottom: 1px solid color-mix(in oklab, var(--paper) 20%, transparent);
+	}
+
+	.plan-en {
+		font-size: clamp(1.125rem, 6vw, 1.5rem);
+		letter-spacing: 0.14em;
+	}
+
+	.plan-zh {
+		font-size: 0.75rem;
+		letter-spacing: 0.16em;
+		color: color-mix(in oklab, var(--paper) 62%, transparent);
+	}
+
+	.plan-nav a:hover .plan-en,
+	.plan-nav a:focus-visible .plan-en {
+		color: var(--orange);
+	}
+
+	.plan-foot {
+		position: relative;
+		margin-top: 2.5rem;
+	}
+
+	.plan-close {
+		position: absolute;
+		top: 1.0625rem;
+		right: var(--gutter);
+		min-height: 2.75rem;
+		display: inline-flex;
+		align-items: center;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.2em;
+		color: var(--paper-hi);
+	}
+
+	@media (max-width: 62rem) {
+		.el {
+			display: none;
+		}
+	}
+
+	@media (max-width: 48rem) {
+		.inner {
+			grid-template-columns: 1fr auto auto;
+		}
+
+		.rail {
+			display: none;
+		}
+
+		.toggle {
+			display: inline-flex;
+		}
+
+		.mark-en {
+			display: none;
+		}
+	}
+
+	@media (max-width: 26rem) {
+		.inq {
+			padding: 0 0.6875rem;
+			letter-spacing: 0.14em;
+		}
+	}
+</style>
+
+<script>
+	const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+	const panel = document.querySelector<HTMLElement>("[data-menu-panel]");
+	const closeBtn = document.querySelector<HTMLButtonElement>("[data-menu-close]");
+
+	if (toggle && panel) {
+		const links = Array.from(panel.querySelectorAll<HTMLAnchorElement>("[data-menu-link]"));
+
+		const focusables = () => Array.from(panel.querySelectorAll<HTMLElement>("a[href], button:not([disabled])")).filter(el => el.offsetParent !== null);
+
+		const setOpen = (open: boolean) => {
+			toggle.setAttribute("aria-expanded", String(open));
+			panel.hidden = !open;
+			document.body.classList.toggle("d05-locked", open);
+			document.documentElement.style.overflow = open ? "hidden" : "";
+			window.dispatchEvent(new CustomEvent(open ? "d05:lock" : "d05:unlock"));
+			if (open) focusables()[0]?.focus();
+			else toggle.focus();
+		};
+
+		toggle.addEventListener("click", () => setOpen(Boolean(panel.hidden)));
+		closeBtn?.addEventListener("click", () => setOpen(false));
+		links.forEach(a => a.addEventListener("click", () => setOpen(false)));
+
+		document.addEventListener("keydown", event => {
+			if (panel.hidden) return;
+			if (event.key === "Escape") {
+				event.preventDefault();
+				setOpen(false);
+				return;
+			}
+			if (event.key !== "Tab") return;
+			const items = focusables();
+			if (!items.length) return;
+			const first = items[0];
+			const last = items[items.length - 1];
+			if (event.shiftKey && document.activeElement === first) {
+				event.preventDefault();
+				last.focus();
+			} else if (!event.shiftKey && document.activeElement === last) {
+				event.preventDefault();
+				first.focus();
+			}
+		});
+
+		const mq = window.matchMedia("(min-width: 48.0625rem)");
+		mq.addEventListener("change", e => {
+			if (e.matches && !panel.hidden) setOpen(false);
+		});
+	}
+</script>

@@ -1,0 +1,252 @@
+---
+/**
+ * design-04 · sheet 08 — specification
+ *
+ * The five stages printed as a spec table. Each row is measured by a dimension
+ * gauge in the rail column — vertical rule, tick ends, mono delta — so the
+ * sequence reads as a drawing schedule rather than a list of features.
+ */
+import { process } from "../../lib/copy";
+import Plate from "./Plate.astro";
+---
+
+<Plate as="section" id="process" labelledby="process-h" plate="PL. 08 — HOW WE WORK" sheet="08/09" tone="paper" pad="md">
+	<div class="wrap">
+		<div class="head">
+			<h2 id="process-h">
+				{process.headlineParts.map((part, i) => <span class:list={["ln", { second: i === 1 }]}>{part}</span>)}
+			</h2>
+			<dl class="meta">
+				<div><dt>STAGES</dt><dd>05</dd></div>
+				<div><dt>ORDER</dt><dd>SEQUENTIAL</dd></div>
+				<div><dt>SHEET</dt><dd>08 / 09</dd></div>
+			</dl>
+		</div>
+
+		<ol class="steps">
+			{
+				process.steps.map((step, i) => (
+					<li class="step">
+						<span class="gauge" aria-hidden="true">
+							<span class="tick" />
+							<span class="lbl">Δ {step.index}</span>
+						</span>
+						<span class="num" aria-hidden="true">
+							{step.index}
+						</span>
+						<h3 class="en">
+							<span class="vh">{step.index} </span>
+							{step.en}
+						</h3>
+						<p class="zh">{step.zh}</p>
+						<span class="dim" aria-hidden="true">
+							{i < process.steps.length - 1 ? `NEXT ${process.steps[i + 1].index}` : "END OF RUN"}
+						</span>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</Plate>
+
+<style>
+	.wrap {
+		display: grid;
+		gap: clamp(1.75rem, 4vw, 3rem);
+	}
+
+	.vh {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	.head {
+		display: grid;
+		gap: clamp(1rem, 3vw, 2rem);
+		padding-bottom: clamp(0.75rem, 2vw, 1.25rem);
+		border-bottom: 1px solid var(--rule);
+	}
+
+	h2 {
+		font-family: var(--font-cjk);
+		font-weight: 800;
+		font-size: clamp(2.1rem, 1.2rem + 4.4vw, 5rem);
+		line-height: 1.02;
+		letter-spacing: 0.02em;
+		color: var(--ink-black);
+	}
+
+	.ln {
+		display: block;
+	}
+
+	.second {
+		color: var(--accent);
+	}
+
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem clamp(1rem, 3vw, 2.5rem);
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.1em;
+	}
+
+	.meta div {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.meta dt {
+		color: color-mix(in oklab, currentColor 48%, transparent);
+	}
+
+	.step {
+		display: grid;
+		grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+		align-items: baseline;
+		gap: 0.3rem 0.9rem;
+		padding-block: clamp(1rem, 2.4vw, 1.6rem);
+		border-bottom: 1px solid var(--rule-soft);
+	}
+
+	.step:first-child {
+		border-top: 1px solid var(--rule-soft);
+	}
+
+	/* ---- dimension gauge ---------------------------------------------- */
+	.gauge {
+		position: relative;
+		grid-column: 1;
+		grid-row: 1 / -1;
+		align-self: stretch;
+		width: 100%;
+	}
+
+	.gauge::before {
+		content: "";
+		position: absolute;
+		left: 0.5rem;
+		top: 0.35rem;
+		bottom: 0.35rem;
+		width: 1px;
+		background: var(--rule);
+	}
+
+	.gauge::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 0.35rem;
+		width: 1rem;
+		height: 1px;
+		background: var(--accent);
+	}
+
+	.tick {
+		position: absolute;
+		left: 0;
+		bottom: 0.35rem;
+		width: 1rem;
+		height: 1px;
+		background: var(--rule);
+	}
+
+	.lbl {
+		display: none;
+		position: absolute;
+		left: 0.9rem;
+		top: 50%;
+		transform: translateY(-50%);
+		writing-mode: vertical-rl;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.14em;
+		color: color-mix(in oklab, currentColor 42%, transparent);
+	}
+
+	.num {
+		grid-column: 2;
+		font-family: var(--font-grotesk);
+		font-weight: 800;
+		font-size: clamp(2.5rem, 1.4rem + 5vw, 5.5rem);
+		line-height: 0.82;
+		letter-spacing: -0.05em;
+		color: var(--ink-black);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.en {
+		grid-column: 2;
+		display: inline-block;
+		transform: scaleX(0.93);
+		transform-origin: 0 50%;
+		font-family: var(--font-grotesk);
+		font-weight: 800;
+		font-size: clamp(1.2rem, 0.9rem + 1.3vw, 2rem);
+		letter-spacing: -0.01em;
+		color: var(--accent);
+	}
+
+	.zh {
+		grid-column: 2;
+		font-family: var(--font-cjk);
+		font-size: clamp(0.88rem, 0.85rem + 0.25vw, 1.05rem);
+		letter-spacing: 0.1em;
+		color: var(--ink);
+	}
+
+	.dim {
+		grid-column: 3;
+		grid-row: 1;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.1em;
+		color: color-mix(in oklab, currentColor 45%, transparent);
+		white-space: nowrap;
+	}
+
+	@media (min-width: 60rem) {
+		.head {
+			grid-template-columns: minmax(0, 1fr) auto;
+			align-items: end;
+		}
+
+		.meta {
+			justify-content: flex-end;
+			padding-bottom: 0.5rem;
+		}
+
+		.lbl {
+			display: block;
+		}
+
+		.step {
+			grid-template-columns: 3.5rem 7rem minmax(0, 15rem) minmax(0, 1fr) 8rem;
+			align-items: center;
+			gap: 0 clamp(1rem, 3vw, 3rem);
+		}
+
+		.num {
+			grid-column: 2;
+		}
+
+		.en {
+			grid-column: 3;
+		}
+
+		.zh {
+			grid-column: 4;
+		}
+
+		.dim {
+			grid-column: 5;
+			text-align: right;
+		}
+	}
+</style>

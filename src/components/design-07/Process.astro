@@ -1,0 +1,168 @@
+---
+import { process } from "../../lib/copy";
+---
+
+<section class="proc" id="process" aria-labelledby="d07-proc-h">
+	<div class="d07-shell">
+		<p class="d07-run"><span>HOW WE WORK</span></p>
+
+		<h2 id="d07-proc-h" class="hl" lang="zh-Hant" data-d07-reveal>
+			<span class="p1">{process.headlineParts[0]}</span>
+			<span class="dash" aria-hidden="true"></span>
+			<span class="p2">{process.headlineParts[1]}</span>
+		</h2>
+
+		<div class="wrap" id="d07-proc-wrap">
+			<span class="rail" aria-hidden="true"></span>
+			<ol class="steps">
+				{
+					process.steps.map(step => (
+						<li class="step" data-d07-step>
+							<span class="idx">{step.index}</span>
+							<span class="en">{step.en}</span>
+							<span class="zh" lang="zh-Hant">
+								{step.zh}
+							</span>
+						</li>
+					))
+				}
+			</ol>
+		</div>
+	</div>
+</section>
+
+<style>
+	.proc {
+		background: var(--d07-void);
+		padding-block: clamp(5rem, 15vh, 11rem) clamp(6rem, 18vh, 13rem);
+	}
+
+	.hl {
+		display: flex;
+		align-items: center;
+		gap: clamp(1rem, 3vw, 2.5rem);
+		margin-bottom: clamp(4rem, 12vh, 8rem);
+		font-family: var(--font-cjk);
+		font-size: clamp(1.5rem, 3.6vw, 2.75rem);
+		font-weight: 400;
+		line-height: 1.7;
+		letter-spacing: 0.16em;
+		color: var(--d07-text);
+	}
+
+	.hl span {
+		margin-right: -0.16em;
+	}
+
+	.dash {
+		flex: 0 1 clamp(3rem, 14vw, 14rem);
+		height: var(--hairline);
+		background: var(--d07-line);
+	}
+
+	.wrap {
+		position: relative;
+		padding-left: clamp(1.25rem, 4vw, 3rem);
+	}
+
+	.rail {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		width: var(--d07-slit);
+		background: var(--orange);
+		transform-origin: top center;
+	}
+
+	.step {
+		display: grid;
+		grid-template-columns: clamp(3rem, 6vw, 5rem) minmax(0, 1fr) minmax(0, 15rem);
+		align-items: baseline;
+		gap: clamp(0.75rem, 2vw, 2rem);
+		padding-block: clamp(1.5rem, 4.4vh, 2.75rem);
+		border-top: var(--hairline) solid var(--d07-line-soft);
+	}
+
+	.step:last-child {
+		border-bottom: var(--hairline) solid var(--d07-line-soft);
+	}
+
+	.idx {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.18em;
+		color: var(--orange);
+	}
+
+	.en {
+		font-size: clamp(1.25rem, 3.2vw, 2.5rem);
+		font-weight: 300;
+		line-height: 1.25;
+		letter-spacing: 0.2em;
+		margin-right: -0.2em;
+		color: var(--d07-text);
+	}
+
+	.zh {
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		font-weight: 300;
+		letter-spacing: 0.14em;
+		color: var(--d07-mute);
+	}
+
+	/* lit-one-at-a-time is opt-in: without JS every step is already lit */
+	.wrap.js-ready .step {
+		opacity: 0.42;
+		transition: opacity 0.75s ease;
+	}
+
+	.wrap.js-ready .step.is-lit {
+		opacity: 1;
+	}
+
+	@media (max-width: 52rem) {
+		.step {
+			grid-template-columns: clamp(2.5rem, 9vw, 4rem) minmax(0, 1fr);
+			row-gap: 0.375rem;
+		}
+
+		.zh {
+			grid-column: 2;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap, ScrollTrigger }) => {
+		const wrap = document.getElementById("d07-proc-wrap");
+		if (!wrap) return;
+
+		wrap.classList.add("js-ready");
+
+		wrap.querySelectorAll<HTMLElement>("[data-d07-step]").forEach(step => {
+			ScrollTrigger.create({
+				trigger: step,
+				start: "top 84%",
+				once: true,
+				onEnter: () => step.classList.add("is-lit")
+			});
+		});
+
+		const rail = wrap.querySelector<HTMLElement>(".rail");
+		if (rail) {
+			gsap.fromTo(
+				rail,
+				{ scaleY: 0 },
+				{
+					scaleY: 1,
+					ease: "none",
+					scrollTrigger: { trigger: wrap, start: "top 78%", end: "bottom 62%", scrub: true }
+				}
+			);
+		}
+	});
+</script>

@@ -1,0 +1,329 @@
+---
+import { brand, inquiryFields } from "../../lib/copy";
+---
+
+<dialog class="dlg" id="d02-inquiry" aria-labelledby="d02-dlg-h">
+	<div class="panel">
+		<div class="bar">
+			<p class="bar-l" id="d02-dlg-h">詢案表單 / INQUIRY</p>
+			<button class="x" type="button" data-d02-close>
+				<span class="visually-hidden">關閉表單</span>
+				<span aria-hidden="true">CLOSE ✕</span>
+			</button>
+		</div>
+
+		<div class="big" aria-hidden="true">
+			<span class="big-a">詢案</span>
+			<span class="big-b">{brand.equation}</span>
+		</div>
+
+		<form class="form" id="d02-form" novalidate>
+			<div class="fields">
+				{
+					inquiryFields.map((f, i) => (
+						<p class="f">
+							<label for={`d02-f-${f.name}`}>
+								<span class="f-i">{String(i + 1).padStart(2, "0")}</span>
+								<span class="f-t">{f.label}</span>
+								{f.required && (
+									<span class="f-q" aria-hidden="true">
+										必填
+									</span>
+								)}
+							</label>
+							<input id={`d02-f-${f.name}`} name={f.name} type={f.type} required={f.required} autocomplete={f.autocomplete} />
+						</p>
+					))
+				}
+				<p class="f f-wide">
+					<label for="d02-f-message">
+						<span class="f-i">05</span>
+						<span class="f-t">專案內容 / MESSAGE</span>
+						<span class="f-q" aria-hidden="true">必填</span>
+					</label>
+					<textarea id="d02-f-message" name="message" rows="4" required></textarea>
+				</p>
+			</div>
+
+			<p class="err" id="d02-err" role="status"></p>
+
+			<div class="act">
+				<button class="send" type="submit">送出詢問 ↗</button>
+				<a class="mail" href={`mailto:${brand.email}`}>{brand.email}</a>
+			</div>
+		</form>
+	</div>
+</dialog>
+
+<script>
+	const dlg = document.getElementById("d02-inquiry") as HTMLDialogElement | null;
+	const form = document.getElementById("d02-form") as HTMLFormElement | null;
+	const err = document.getElementById("d02-err");
+
+	if (dlg && form) {
+		let opener: HTMLElement | null = null;
+
+		const open = (trigger: HTMLElement) => {
+			// opened from inside the full-screen menu: close that first so the
+			// scroll lock is released and focus has somewhere sane to return to
+			const menu = document.getElementById("d02-menu");
+			const burger = document.getElementById("d02-burger");
+			if (menu && burger && !menu.hidden && menu.contains(trigger)) {
+				burger.click();
+				opener = burger;
+			} else {
+				opener = trigger;
+			}
+			if (err) err.textContent = "";
+			dlg.showModal();
+			dlg.querySelector<HTMLInputElement>("input, textarea")?.focus();
+		};
+
+		document.querySelectorAll<HTMLElement>("[data-d02-inquiry]").forEach(btn => {
+			btn.addEventListener("click", () => open(btn));
+		});
+
+		dlg.querySelectorAll<HTMLElement>("[data-d02-close]").forEach(btn => {
+			btn.addEventListener("click", () => dlg.close());
+		});
+
+		dlg.addEventListener("click", event => {
+			if (event.target === dlg) dlg.close();
+		});
+
+		dlg.addEventListener("close", () => {
+			opener?.focus();
+			opener = null;
+		});
+
+		form.addEventListener("submit", event => {
+			event.preventDefault();
+			const data = new FormData(form);
+			const get = (k: string) => String(data.get(k) ?? "").trim();
+
+			const name = get("name");
+			const email = get("email");
+			const message = get("message");
+
+			if (!name || !email || !message) {
+				if (err) err.textContent = "請填寫姓名、信箱與專案內容。";
+				const first = !name ? "name" : !email ? "email" : "message";
+				document.getElementById(`d02-f-${first}`)?.focus();
+				return;
+			}
+
+			const lines = [
+				`姓名 / NAME: ${name}`,
+				`信箱 / EMAIL: ${email}`,
+				`公司・單位 / COMPANY: ${get("company") || "—"}`,
+				`預算範圍 / BUDGET: ${get("budget") || "—"}`,
+				"",
+				"專案內容 / MESSAGE:",
+				message,
+				"",
+				"— 麟曜數位工作室 LINYAO DIGITAL STUDIO"
+			].join("\r\n");
+
+			const href = `mailto:contact@linyao.tw?subject=${encodeURIComponent(`詢案 INQUIRY — ${name}`)}&body=${encodeURIComponent(lines)}`;
+
+			if (err) err.textContent = "正在開啟你的郵件軟體…";
+			window.location.href = href;
+			window.setTimeout(() => dlg.close(), 600);
+		});
+	}
+</script>
+
+<style>
+	.dlg {
+		border: 0;
+		padding: 0;
+		max-width: min(56rem, 100vw - 1.5rem);
+		width: 100%;
+		max-height: 92svh;
+		overflow: hidden;
+		background: var(--paper-hi);
+		color: var(--ink);
+		margin: auto;
+	}
+
+	.dlg::backdrop {
+		/* ::backdrop cannot see the page custom properties — the --void tone, literal */
+		background: rgb(14 14 13 / 0.7);
+	}
+
+	.panel {
+		display: grid;
+		grid-template-rows: auto auto minmax(0, 1fr);
+		gap: 0;
+		max-height: 92svh;
+		border: var(--hairline) solid var(--ink);
+	}
+
+	.bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 0.6rem clamp(1rem, 3vw, 2rem);
+		border-bottom: var(--hairline) solid var(--ink);
+		font-family: var(--font-mono);
+		font-size: 0.6rem;
+		letter-spacing: 0.24em;
+	}
+
+	.bar-l {
+		color: var(--ink);
+	}
+
+	.x {
+		min-height: 2.75rem;
+		display: inline-flex;
+		align-items: center;
+		font-family: var(--font-mono);
+		font-size: 0.6rem;
+		letter-spacing: 0.2em;
+		color: var(--accent-txt);
+	}
+
+	.big {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: clamp(1rem, 3vw, 1.75rem) clamp(1rem, 3vw, 2rem) 0;
+		overflow: clip;
+	}
+
+	.big-a {
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(2.75rem, 11vw, 5.5rem);
+		line-height: 0.82;
+		letter-spacing: 0.02em;
+		color: transparent;
+		-webkit-text-stroke: 1px var(--ghost-line);
+	}
+
+	.big-b {
+		font-family: var(--font-mono);
+		font-size: 0.58rem;
+		letter-spacing: 0.24em;
+		color: var(--dim);
+		white-space: nowrap;
+	}
+
+	.form {
+		display: grid;
+		gap: clamp(1.25rem, 3vh, 1.75rem);
+		padding: clamp(1rem, 3vw, 1.75rem) clamp(1rem, 3vw, 2rem) clamp(1.25rem, 3vw, 2rem);
+		overflow-y: auto;
+	}
+
+	.fields {
+		display: grid;
+		gap: 1.1rem;
+	}
+
+	.f {
+		display: grid;
+		gap: 0.4rem;
+	}
+
+	.f label {
+		display: flex;
+		align-items: baseline;
+		gap: 0.6rem;
+		font-family: var(--font-mono);
+		font-size: 0.58rem;
+		letter-spacing: 0.2em;
+		color: var(--quiet);
+	}
+
+	.f-i {
+		color: var(--accent-txt);
+	}
+
+	.f-q {
+		margin-inline-start: auto;
+		font-family: var(--font-cjk);
+		letter-spacing: 0.16em;
+		color: var(--accent-txt);
+	}
+
+	.f input,
+	.f textarea {
+		width: 100%;
+		min-height: 2.75rem;
+		padding: 0.5rem 0.15rem;
+		background: transparent;
+		border: 0;
+		border-bottom: var(--hairline) solid var(--rule);
+		border-radius: 0;
+		font-family: var(--font-cjk);
+		font-size: 1rem;
+		letter-spacing: 0.04em;
+		color: var(--ink);
+	}
+
+	.f textarea {
+		resize: vertical;
+		line-height: 1.7;
+	}
+
+	.f input:focus,
+	.f textarea:focus {
+		outline: 0;
+		border-bottom-color: var(--accent);
+	}
+
+	.err {
+		min-height: 1.2em;
+		font-family: var(--font-cjk);
+		font-size: 0.78rem;
+		letter-spacing: 0.1em;
+		color: var(--orange-dim);
+	}
+
+	.act {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding-block-start: 0.75rem;
+		border-top: var(--hairline) solid var(--rule);
+	}
+
+	.send {
+		min-height: 2.75rem;
+		padding-inline: 0.1rem;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(1.25rem, 4vw, 1.75rem);
+		letter-spacing: 0.04em;
+		color: var(--accent-txt);
+	}
+
+	.send:hover,
+	.send:focus-visible {
+		color: var(--orange-deep);
+	}
+
+	.mail {
+		font-family: var(--font-mono);
+		font-size: 0.62rem;
+		letter-spacing: 0.18em;
+		color: var(--dim);
+	}
+
+	@media (min-width: 42rem) {
+		.fields {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			column-gap: clamp(1.5rem, 4vw, 3rem);
+		}
+
+		.f-wide {
+			grid-column: 1 / -1;
+		}
+	}
+</style>

@@ -1,0 +1,261 @@
+---
+import { brand, cta } from "../../lib/copy";
+import SunDisc from "./SunDisc.astro";
+
+const mailto = `mailto:${brand.email}?subject=${encodeURIComponent("詢案 / LINYAO DIGITAL STUDIO")}`;
+---
+
+<section class="cta" id="contact" data-scene aria-labelledby="d05-cta-title">
+	<div class="scene" aria-hidden="true">
+		<SunDisc drift={20} klass="cta-sun" />
+
+		<div class="discdim">
+			<span class="d05-dim"></span>
+			<span class="d05-anno discdim-tag">&empty; 12 000 &nbsp;/&nbsp; FULL</span>
+		</div>
+
+		<div class="plinth" data-plane data-par="1.4"></div>
+	</div>
+
+	<div class="copy" data-reveal>
+		<p class="idx d05-anno" aria-hidden="true">0.06 &nbsp;/&nbsp; CONTACT</p>
+
+		<h2 class="d05-zh title" id="d05-cta-title">
+			{cta.headlineParts.map(part => <span>{part}</span>)}
+		</h2>
+
+		<p class="body d05-zh">
+			{cta.body.map(line => <span>{line}</span>)}
+		</p>
+
+		<div class="actions">
+			<button class="btn" type="button" data-inquiry-open>
+				<span class="btn-label">{cta.button}</span>
+			</button>
+			<a class="btn d05-mailto-fallback" href={mailto}>
+				<span class="btn-label">{cta.button}</span>
+			</a>
+			<a class="mail d05-anno d05-anno--plain" href={`mailto:${brand.email}`}>{brand.email}</a>
+		</div>
+	</div>
+
+	<p class="el d05-anno d05-anno--paper" aria-hidden="true">EL. &plusmn;0.000 &nbsp;/&nbsp; PLINTH</p>
+</section>
+
+<style>
+	.cta {
+		--sh: 96svh;
+		--ph: calc(var(--sh) + 2 * var(--ov));
+		--plh: 13svh;
+		--dya: calc(100vw * var(--tan-a));
+
+		position: relative;
+		min-height: var(--sh);
+		overflow: clip;
+		isolation: isolate;
+		border-top: 1px solid var(--line);
+	}
+
+	.scene {
+		position: absolute;
+		inset: 0;
+	}
+
+	.cta :global(.cta-sun) {
+		z-index: 1;
+		--sun-size: 52svh;
+		--sun-x: 68vw;
+		--sun-y: 42svh;
+	}
+
+	.plinth {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: calc(-1 * var(--ov));
+		bottom: calc(-1 * var(--ov));
+		z-index: 2;
+		background: var(--mass-deep);
+		clip-path: polygon(0 calc(100% - var(--ov) - var(--plh)), 100% calc(100% - var(--ov) - var(--plh) - var(--dya)), 100% 100%, 0 100%);
+		will-change: transform;
+	}
+
+	.discdim {
+		position: absolute;
+		z-index: 3;
+		left: calc(68vw - 26svh);
+		width: 52svh;
+		top: 11svh;
+		display: grid;
+		gap: 0.4375rem;
+		justify-items: center;
+	}
+
+	.discdim .d05-dim {
+		width: 100%;
+	}
+
+	.discdim-tag {
+		color: color-mix(in oklab, var(--graphite) 62%, transparent);
+	}
+
+	.copy {
+		position: absolute;
+		z-index: 4;
+		left: var(--gutter);
+		top: 22svh;
+		max-width: 32rem;
+	}
+
+	.idx {
+		color: color-mix(in oklab, var(--graphite) 58%, transparent);
+	}
+
+	.title {
+		margin-top: 1.25rem;
+		font-size: clamp(1.5rem, 2.9vw, 2.5rem);
+		line-height: 1.7;
+		letter-spacing: 0.13em;
+		font-weight: 400;
+	}
+
+	.title span:last-child {
+		padding-left: 1.5em;
+	}
+
+	.body {
+		margin-top: clamp(1.75rem, 4svh, 2.75rem);
+		font-size: clamp(0.8125rem, 1vw, 0.9375rem);
+		line-height: 2;
+		letter-spacing: 0.05em;
+		color: var(--graphite);
+	}
+
+	.actions {
+		margin-top: clamp(2.25rem, 6svh, 3.5rem);
+		display: flex;
+		align-items: center;
+		gap: clamp(1rem, 2.5vw, 2rem);
+		flex-wrap: wrap;
+	}
+
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		min-height: 3.25rem;
+		padding: 0 2.75rem 0 1.75rem;
+		background: var(--mass-deep);
+		color: var(--paper-hi);
+		/* the button carries the same 8° cut as every ground plane */
+		/* the same 22° cut as every wall on the page: 3.25rem × tan22 */
+		clip-path: polygon(0 0, 100% 0, calc(100% - 1.3125rem) 100%, 0 100%);
+		transition: background 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+	}
+
+	.btn:hover,
+	.btn:focus-visible {
+		background: var(--orange);
+	}
+
+	.btn-label {
+		font-size: clamp(0.875rem, 1.1vw, 1rem);
+		letter-spacing: 0.2em;
+	}
+
+	.mail.d05-anno {
+		letter-spacing: 0.14em;
+		border-bottom: 1px solid var(--line);
+		padding-bottom: 0.1875rem;
+		transition: border-color 0.4s ease;
+	}
+
+	.mail.d05-anno:hover,
+	.mail.d05-anno:focus-visible {
+		border-bottom-color: var(--orange);
+	}
+
+	.el {
+		position: absolute;
+		z-index: 4;
+		right: var(--gutter);
+		bottom: clamp(1.75rem, 4svh, 2.75rem);
+	}
+
+	@media (max-width: 64rem) {
+		.cta :global(.cta-sun) {
+			--sun-size: 46svh;
+			--sun-x: 70vw;
+		}
+
+		.discdim {
+			left: calc(70vw - 23svh);
+			width: 46svh;
+			top: 13svh;
+		}
+
+		.copy {
+			max-width: 26rem;
+		}
+	}
+
+	@media (max-width: 48rem) {
+		.cta {
+			--sh: 104svh;
+			--plh: 15svh;
+		}
+
+		.cta :global(.cta-sun) {
+			--sun-size: 40svh;
+			--sun-x: 66vw;
+			--sun-y: 26svh;
+		}
+
+		.discdim {
+			left: calc(66vw - 20svh);
+			width: 40svh;
+			top: 48svh;
+		}
+
+		.copy {
+			top: 52svh;
+			right: var(--gutter);
+			max-width: none;
+		}
+	}
+
+	@media (max-width: 30rem) {
+		.cta {
+			--sh: 108svh;
+			--plh: 16svh;
+		}
+
+		.cta :global(.cta-sun) {
+			--sun-size: 38svh;
+			--sun-x: 62vw;
+			--sun-y: 22svh;
+		}
+
+		.discdim {
+			left: var(--gutter);
+			right: var(--gutter);
+			width: auto;
+			top: 45svh;
+		}
+
+		.copy {
+			top: 50svh;
+		}
+
+		.title {
+			font-size: 1.5rem;
+		}
+
+		.title span:last-child {
+			padding-left: 1.25em;
+		}
+
+		.actions {
+			gap: 1.25rem;
+		}
+	}
+</style>

@@ -1,0 +1,215 @@
+---
+import { process } from "../../lib/copy";
+---
+
+<section id="process" class="d06-pr d06-dark" aria-labelledby="pr-h">
+	<div class="d06-pr__stage">
+		<div class="pr__in d06-wrap">
+			<div class="d06-run">
+				<span class="d06-run__i">SECTION 06 / 09</span>
+				<span class="d06-run__l"></span>
+				<span class="d06-run__d">RAIL 04 · TIMELINE</span>
+				<span class="d06-run__t">HOW WE WORK</span>
+			</div>
+
+			<h2 id="pr-h" class="pr__h">
+				<span class="pr__h-a">{process.headlineParts[0]}</span>
+				<span class="pr__h-r" aria-hidden="true"></span>
+				<span class="pr__h-b">{process.headlineParts[1]}</span>
+			</h2>
+
+			<ol class="pr__list">
+				{
+					process.steps.map(s => (
+						<li class="d06-pr__step">
+							<span class="d06-pr__dot" aria-hidden="true" />
+							<span class="pr__idx">{s.index}</span>
+							<h3 class="pr__en">{s.en}</h3>
+							<p class="pr__zh">{s.zh}</p>
+							<span class="pr__meta" aria-hidden="true">
+								STEP {s.index} / {String(process.steps.length).padStart(2, "0")}
+							</span>
+						</li>
+					))
+				}
+			</ol>
+		</div>
+	</div>
+</section>
+
+<style>
+	.d06-pr {
+		position: relative;
+		min-height: 320vh;
+	}
+
+	.d06-pr__stage {
+		position: sticky;
+		top: 0;
+		min-height: 100svh;
+		display: grid;
+		align-content: center;
+	}
+
+	.pr__in {
+		display: grid;
+		gap: clamp(1.75rem, 5vh, 3.25rem);
+		width: 100%;
+		padding-block: clamp(3.5rem, 9vh, 5rem) clamp(2rem, 6vh, 3.5rem);
+	}
+
+	.pr__h {
+		display: flex;
+		align-items: baseline;
+		gap: clamp(0.75rem, 2.5vw, 2rem);
+		font-size: clamp(1.75rem, 5vw, 4rem);
+		line-height: 1.1;
+		letter-spacing: -0.008em;
+		font-weight: 600;
+	}
+
+	.pr__h-r {
+		flex: 1 1 auto;
+		height: var(--hairline);
+		background: var(--rule-hi);
+		min-width: 2rem;
+		max-width: 18rem;
+		align-self: center;
+	}
+
+	.pr__list {
+		display: grid;
+	}
+
+	.d06-pr__step {
+		display: grid;
+		grid-template-columns: 1.5rem 4.25rem minmax(0, 13rem) minmax(0, 1fr) auto;
+		align-items: center;
+		column-gap: clamp(0.75rem, 2vw, 1.75rem);
+		border-top: var(--hairline) solid var(--rule);
+		padding-block: clamp(0.85rem, 2.4vh, 1.5rem);
+	}
+
+	.d06-pr__step:last-child {
+		border-bottom: var(--hairline) solid var(--rule);
+	}
+
+	.d06-pr__dot {
+		width: 0.75rem;
+		height: 0.75rem;
+		border: 0.125rem solid var(--rule-hi);
+		background: transparent;
+		justify-self: center;
+		transition:
+			border-color 0.35s ease,
+			transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.d06-pr__step.is-on .d06-pr__dot {
+		border-color: var(--orange);
+		transform: scale(1.35);
+	}
+
+	.pr__idx {
+		font-family: var(--font-mono);
+		font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+		font-weight: 700;
+		letter-spacing: 0.02em;
+		color: var(--fg-dim);
+		transition: color 0.35s ease;
+	}
+
+	.d06-pr__step.is-on .pr__idx {
+		color: var(--orange);
+	}
+
+	.pr__en {
+		font-family: var(--font-mono);
+		font-size: clamp(0.9375rem, 1.8vw, 1.375rem);
+		letter-spacing: 0.14em;
+		color: var(--fg-dim);
+		transition: color 0.35s ease;
+	}
+
+	.d06-pr__step.is-on .pr__en {
+		color: var(--fg);
+	}
+
+	.pr__zh {
+		font-size: clamp(0.8125rem, 1.2vw, 1rem);
+		letter-spacing: 0.05em;
+		color: var(--fg-dim);
+	}
+
+	.pr__meta {
+		font-family: var(--font-mono);
+		font-size: 0.5625rem;
+		letter-spacing: 0.2em;
+		color: var(--fg-faint);
+	}
+
+	@media (max-width: 63.99rem) {
+		.d06-pr__step {
+			grid-template-columns: 1.5rem 3.25rem minmax(0, 1fr);
+			grid-template-areas: "d i e" ". . z";
+			row-gap: 0.15rem;
+			align-items: baseline;
+		}
+		.d06-pr__dot {
+			grid-area: d;
+			align-self: center;
+		}
+		.pr__idx {
+			grid-area: i;
+		}
+		.pr__en {
+			grid-area: e;
+		}
+		.pr__zh {
+			grid-area: z;
+		}
+		.pr__meta {
+			display: none;
+		}
+		.pr__h {
+			flex-wrap: wrap;
+		}
+		.pr__h-r {
+			display: none;
+		}
+	}
+
+	/* short viewports cannot hold a sticky stage — fall back to a plain list */
+	@media (max-height: 38rem) {
+		.d06-pr {
+			min-height: 0;
+		}
+		.d06-pr__stage {
+			position: static;
+			min-height: 0;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		gsap.from(".pr__h-a, .pr__h-b", {
+			opacity: 0,
+			y: "1rem",
+			duration: 0.8,
+			ease: "power3.out",
+			stagger: 0.1,
+			scrollTrigger: { trigger: "#process", start: "top 70%" }
+		});
+
+		gsap.from(".pr__h-r", {
+			scaleX: 0,
+			transformOrigin: "0 50%",
+			duration: 1,
+			ease: "power2.out",
+			scrollTrigger: { trigger: "#process", start: "top 70%" }
+		});
+	});
+</script>

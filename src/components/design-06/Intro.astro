@@ -1,0 +1,148 @@
+---
+import { intro } from "../../lib/copy";
+---
+
+<section id="intro" class="d06-intro" aria-labelledby="intro-h">
+	<div class="in__in d06-wrap">
+		<div class="d06-run">
+			<span class="d06-run__i">SECTION 02 / 09</span>
+			<span class="d06-run__l"></span>
+			<span class="d06-run__d">RAIL 02 · MARGIN</span>
+			<span class="d06-run__t">INTRO</span>
+		</div>
+
+		<div class="in__grid">
+			<h2 id="intro-h" class="in__h">
+				<span class="d06-rowclip"><span class="in__part">{intro.headlineParts[0]}</span></span>
+				<span class="d06-rowclip"><span class="in__part">{intro.headlineParts[1]}</span></span>
+			</h2>
+
+			<div class="in__body">
+				{intro.body.map(line => <p class="in__line">{line}</p>)}
+			</div>
+		</div>
+
+		<p class="in__tail" aria-hidden="true">
+			<span>INDEPENDENT DIGITAL STUDIO</span>
+			<span class="in__tail-r"></span>
+			<span>DESIGN × CODE × MOTION</span>
+		</p>
+	</div>
+</section>
+
+<style>
+	.d06-intro {
+		position: relative;
+		padding-block: clamp(5rem, 16vh, 11rem) clamp(6rem, 20vh, 14rem);
+	}
+
+	.in__in {
+		display: grid;
+		gap: clamp(3rem, 10vh, 7rem);
+	}
+
+	.in__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+		gap: clamp(2rem, 6vw, 7rem);
+		align-items: start;
+	}
+
+	.in__h {
+		font-size: clamp(1.875rem, 5.2vw, 4.25rem);
+		line-height: 1.12;
+		letter-spacing: -0.008em;
+		font-weight: 600;
+		text-wrap: balance;
+	}
+
+	.in__part {
+		display: block;
+		will-change: transform;
+	}
+
+	.in__body {
+		display: grid;
+		gap: 0.35rem;
+		align-self: end;
+		padding-top: 0.6rem;
+		border-top: var(--hairline) solid var(--rule-hi);
+		max-width: 25em;
+	}
+
+	.in__line {
+		font-size: clamp(0.9375rem, 1.15vw, 1.0625rem);
+		line-height: 1.9;
+		color: var(--fg-dim);
+	}
+
+	.in__line:first-child {
+		color: var(--fg);
+	}
+
+	.in__tail {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.2em;
+		color: var(--fg-dim);
+	}
+
+	.in__tail-r {
+		flex: 1 1 auto;
+		height: var(--hairline);
+		background: var(--rule);
+	}
+
+	@media (max-width: 63.99rem) {
+		.in__grid {
+			grid-template-columns: minmax(0, 1fr);
+			gap: clamp(2rem, 6vh, 3.5rem);
+		}
+		.in__body {
+			max-width: 30em;
+		}
+	}
+
+	@media (max-width: 30rem) {
+		.in__tail span:last-child {
+			display: none;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		const parts = gsap.utils.toArray<HTMLElement>(".in__part");
+		if (parts.length > 0) {
+			gsap.from(parts, {
+				yPercent: 110,
+				duration: 0.95,
+				ease: "power3.out",
+				stagger: 0.08,
+				scrollTrigger: { trigger: ".in__h", start: "top 82%" }
+			});
+		}
+
+		gsap.from(".in__line", {
+			opacity: 0,
+			y: "0.9rem",
+			duration: 0.8,
+			ease: "power2.out",
+			stagger: 0.09,
+			scrollTrigger: { trigger: ".in__body", start: "top 84%" }
+		});
+
+		gsap.from(".in__tail-r", {
+			scaleX: 0,
+			transformOrigin: "0 50%",
+			duration: 1.1,
+			ease: "power2.out",
+			scrollTrigger: { trigger: ".in__tail", start: "top 92%" }
+		});
+	});
+</script>

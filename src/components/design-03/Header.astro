@@ -1,0 +1,401 @@
+---
+import { brand, cta, nav } from "../../lib/copy";
+
+/* the inquiry triggers are real mailto links first; JS upgrades them into the
+   dialog trigger, so nothing is a dead control when scripting is off */
+const inquiryHref = `mailto:${brand.email}?subject=${encodeURIComponent("詢案 / INQUIRY")}`;
+---
+
+<header class="bar" data-bar>
+	<a class="mark" href="#top">
+		<span class="mark-en">LINYAO</span>
+		<span class="mark-zh">麟曜數位工作室</span>
+	</a>
+
+	<nav class="links" aria-label="主要導覽">
+		<ul>
+			{
+				nav.map((item, i) => (
+					<li>
+						<a href={item.href}>
+							<span class="n" aria-hidden="true">
+								{String(i + 1).padStart(2, "0")}
+							</span>
+							<span class="l">{item.label}</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+
+	<p class="readout" aria-hidden="true" data-z-readout>z −0000</p>
+
+	<a class="ask" href={inquiryHref} data-inquiry-open>{cta.button}</a>
+
+	<button type="button" class="toggle" aria-expanded="false" aria-controls="d03-menu" data-menu-toggle>
+		<span class="visually-hidden">開啟選單</span>
+		<span class="bars" aria-hidden="true"><i></i><i></i></span>
+	</button>
+</header>
+
+<div class="menu" id="d03-menu" hidden data-menu data-lenis-prevent>
+	<div class="menu-inner">
+		<p class="menu-head d03-mono" aria-hidden="true">INDEX / 導覽</p>
+		<ul class="menu-list">
+			{
+				nav.map((item, i) => (
+					<li>
+						<a href={item.href} data-menu-link>
+							<span class="mn" aria-hidden="true">
+								{String(i + 1).padStart(2, "0")}
+							</span>
+							<span class="ml">{item.label}</span>
+							<span class="mz">{item.zh}</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+		<div class="menu-foot">
+			<a class="ask ask-wide" href={inquiryHref} data-inquiry-open data-menu-link>{cta.button}</a>
+			<a class="menu-mail" href={`mailto:${brand.email}`} data-menu-link>{brand.email}</a>
+			<p class="d03-mono menu-eq">{brand.equation}</p>
+		</div>
+	</div>
+</div>
+
+<style>
+	.bar {
+		position: fixed;
+		inset: 0 0 auto 0;
+		z-index: 90;
+		height: var(--hdr-h);
+		display: grid;
+		grid-template-columns: auto 1fr auto auto;
+		align-items: center;
+		gap: clamp(0.75rem, 2vw, 2rem);
+		padding-inline: var(--gutter);
+		background: var(--stage-far);
+		border-bottom: 1px solid color-mix(in oklab, var(--paper) 12%, transparent);
+		color: var(--on-stage);
+	}
+
+	.bar::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		bottom: -1px;
+		width: clamp(3rem, 12vw, 9rem);
+		height: 1px;
+		background: var(--orange);
+	}
+
+	.mark {
+		display: flex;
+		align-items: baseline;
+		gap: 0.5rem;
+		min-height: 2.75rem;
+		align-content: center;
+		flex-wrap: wrap;
+	}
+
+	.mark-en {
+		font-weight: 700;
+		font-size: 0.875rem;
+		letter-spacing: 0.18em;
+		color: var(--on-stage-hi);
+	}
+
+	.mark-zh {
+		font-family: var(--font-cjk);
+		font-size: 0.6875rem;
+		letter-spacing: 0.12em;
+		color: var(--on-stage-mute);
+	}
+
+	.links ul {
+		display: flex;
+		justify-content: flex-start;
+		gap: clamp(1rem, 2.4vw, 2.25rem);
+		padding-left: clamp(1rem, 4vw, 4rem);
+	}
+
+	.links a {
+		display: flex;
+		align-items: baseline;
+		gap: 0.4rem;
+		min-height: 2.75rem;
+		align-content: center;
+		flex-wrap: wrap;
+		font-family: var(--font-mono);
+		font-size: var(--mark);
+		letter-spacing: 0.14em;
+		color: var(--on-stage-dim);
+	}
+
+	.links .n {
+		font-size: 0.5625rem;
+		color: var(--orange);
+	}
+
+	.links a:hover .l,
+	.links a:focus-visible .l {
+		color: var(--on-stage-hi);
+	}
+
+	.readout {
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.16em;
+		color: var(--on-stage-mute);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.ask {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		font-family: var(--font-mono);
+		font-size: var(--mark);
+		letter-spacing: 0.12em;
+		color: var(--paper-hi);
+		background: var(--orange-deep);
+		padding: 0.55rem 0.9rem;
+		border: 1px solid var(--orange);
+		min-height: 2.25rem;
+	}
+
+	.ask:hover,
+	.ask:focus-visible {
+		background: var(--orange);
+	}
+
+	.toggle {
+		display: none;
+		width: 2.75rem;
+		height: 2.75rem;
+		place-items: center;
+		border: 1px solid var(--edge);
+	}
+
+	.bars {
+		display: grid;
+		gap: 0.3rem;
+		width: 1.15rem;
+	}
+
+	.bars i {
+		display: block;
+		height: 1px;
+		background: var(--on-stage);
+	}
+
+	[aria-expanded="true"] .bars i:first-child {
+		background: var(--orange);
+	}
+
+	/* --- full-screen menu -------------------------------------------- */
+	.menu {
+		position: fixed;
+		inset: 0;
+		z-index: 89;
+		background: var(--stage-far);
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+
+	.menu[hidden] {
+		display: none;
+	}
+
+	.menu-inner {
+		min-height: 100%;
+		padding: calc(var(--hdr-h) + 2.5rem) var(--gutter) 3rem;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		color: var(--on-stage);
+	}
+
+	.menu-head {
+		color: var(--on-stage-mute);
+		border-bottom: 1px solid var(--edge-soft);
+		padding-bottom: 0.75rem;
+	}
+
+	.menu-list li + li {
+		border-top: 1px solid var(--edge-soft);
+	}
+
+	.menu-list a {
+		display: grid;
+		grid-template-columns: 3rem 1fr auto;
+		align-items: baseline;
+		gap: 0.75rem;
+		padding-block: 1.1rem;
+		min-height: 2.75rem;
+	}
+
+	.mn {
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.14em;
+		color: var(--orange);
+	}
+
+	.ml {
+		font-size: 1.5rem;
+		font-weight: 500;
+		letter-spacing: 0.04em;
+		color: var(--on-stage-hi);
+	}
+
+	.mz {
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		color: var(--on-stage-mute);
+		letter-spacing: 0.2em;
+	}
+
+	.menu-foot {
+		margin-top: auto;
+		display: grid;
+		gap: 1rem;
+		justify-items: start;
+		border-top: 1px solid var(--edge-soft);
+		padding-top: 1.5rem;
+	}
+
+	.ask-wide {
+		width: 100%;
+		text-align: center;
+		padding-block: 0.95rem;
+	}
+
+	.menu-mail {
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+		letter-spacing: 0.06em;
+		color: var(--on-stage);
+		border-bottom: 1px solid var(--orange);
+		padding-bottom: 0.15rem;
+	}
+
+	.menu-eq {
+		color: var(--on-stage-mute);
+	}
+
+	@media (max-width: 68rem) {
+		.readout {
+			display: none;
+		}
+	}
+
+	@media (max-width: 60rem) {
+		.bar {
+			grid-template-columns: 1fr auto;
+		}
+		.links {
+			display: none;
+		}
+		.bar.is-ready .ask {
+			display: none;
+		}
+		.bar.is-ready .toggle {
+			display: grid;
+		}
+	}
+
+	@media (min-width: 60.0625rem) {
+		.menu {
+			display: none !important;
+		}
+	}
+</style>
+
+<script>
+	import { initSmoothScroll, prefersReducedMotion } from "../../lib/motion";
+
+	const bar = document.querySelector<HTMLElement>("[data-bar]");
+	const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+	const menu = document.querySelector<HTMLElement>("[data-menu]");
+
+	if (bar && toggle && menu) {
+		bar.classList.add("is-ready");
+		const focusables = () => Array.from(menu.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"));
+
+		const setOpen = (open: boolean) => {
+			menu.hidden = !open;
+			toggle.setAttribute("aria-expanded", String(open));
+			toggle.querySelector(".visually-hidden")!.textContent = open ? "關閉選單" : "開啟選單";
+			document.documentElement.style.overflow = open ? "hidden" : "";
+			const l = initSmoothScroll();
+			if (open) l?.stop();
+			else l?.start();
+			if (open) focusables()[0]?.focus();
+			else toggle.focus();
+		};
+
+		toggle.addEventListener("click", () => setOpen(Boolean(menu.hidden)));
+
+		menu.querySelectorAll("[data-menu-link]").forEach(el => {
+			el.addEventListener("click", () => {
+				if (!menu.hidden) setOpen(false);
+			});
+		});
+
+		document.addEventListener("keydown", event => {
+			if (menu.hidden) return;
+			if (event.key === "Escape") {
+				event.preventDefault();
+				setOpen(false);
+				return;
+			}
+			if (event.key !== "Tab") return;
+			const items = focusables();
+			if (!items.length) return;
+			const first = items[0];
+			const last = items[items.length - 1];
+			if (event.shiftKey && document.activeElement === first) {
+				event.preventDefault();
+				last.focus();
+			} else if (!event.shiftKey && document.activeElement === last) {
+				event.preventDefault();
+				first.focus();
+			}
+		});
+
+		const wide = window.matchMedia("(min-width: 60.0625rem)");
+		wide.addEventListener("change", e => {
+			if (e.matches && !menu.hidden) setOpen(false);
+		});
+	}
+
+	/* depth readout — decorative, mirrors scroll position as a z value */
+	const readout = document.querySelector<HTMLElement>("[data-z-readout]");
+	if (readout && !prefersReducedMotion()) {
+		let queued = false;
+		let last = "";
+		const paint = () => {
+			queued = false;
+			const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+			const v = Math.round((window.scrollY / max) * 4800);
+			const next = `z −${String(v).padStart(4, "0")}`;
+			if (next !== last) {
+				last = next;
+				readout.textContent = next;
+			}
+		};
+		window.addEventListener(
+			"scroll",
+			() => {
+				if (queued) return;
+				queued = true;
+				requestAnimationFrame(paint);
+			},
+			{ passive: true }
+		);
+		paint();
+	}
+</script>

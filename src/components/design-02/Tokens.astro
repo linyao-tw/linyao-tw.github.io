@@ -1,0 +1,53 @@
+---
+/**
+ * 02 — KINETIC TYPOGRAPHY
+ * The only global block this version is allowed. Every selector is prefixed
+ * with body.d-02 so it cannot leak into any other direction.
+ */
+---
+
+<style is:global>
+	body.d-02 {
+		--bg: var(--paper);
+		--fg: var(--ink);
+		--accent: var(--orange);
+		/* orange is only ~3.2:1 on paper — small type uses the derived deep tone */
+		--accent-txt: var(--orange-deep);
+
+		/* page gutter */
+		--edge: clamp(1.15rem, 3.6vw, 3.75rem);
+
+		/* rules */
+		--rule: color-mix(in oklab, var(--ink) 34%, var(--paper));
+		--rule-soft: color-mix(in oklab, var(--ink) 16%, var(--paper));
+
+		/* oversized background glyph material */
+		--ghost: color-mix(in oklab, var(--ink) 6%, var(--paper));
+		--ghost-strong: color-mix(in oklab, var(--ink) 9%, var(--paper));
+		--ghost-line: color-mix(in oklab, var(--ink) 17%, var(--paper));
+
+		/* text tones — both pass 4.5:1 on --paper */
+		--dim: color-mix(in oklab, var(--ink) 82%, var(--paper));
+		--quiet: color-mix(in oklab, var(--ink) 90%, var(--paper));
+
+		--measure: 20rem;
+
+		background: var(--paper);
+		color: var(--ink);
+		font-family: var(--font-grotesk);
+	}
+
+	body.d-02 ::selection {
+		background: var(--orange);
+		color: var(--paper-hi);
+	}
+
+	/* full-screen menu scroll lock — body overflow propagates to the viewport */
+	body.d-02.d02-locked {
+		overflow: hidden;
+	}
+
+	body.d-02 main {
+		display: block;
+	}
+</style>

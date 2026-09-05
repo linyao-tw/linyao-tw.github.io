@@ -1,0 +1,244 @@
+---
+import { intro } from "../../lib/copy";
+---
+
+<section class="intro" id="intro" aria-labelledby="d03-intro-h">
+	<div class="grid">
+		<p class="coord" aria-hidden="true">§ 01 <span>/ INTRO</span></p>
+
+		<div class="doc">
+			{intro.body.map(line => <p>{line}</p>)}
+			<p class="note" aria-hidden="true">PLANE A · rot Y −13° · z −140</p>
+		</div>
+
+		<div class="slabstage" data-tilt>
+			<svg class="grid-lines" viewBox="0 0 160 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+				<g fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
+					<line x1="160" y1="50" x2="0" y2="-24"></line>
+					<line x1="160" y1="50" x2="0" y2="8"></line>
+					<line x1="160" y1="50" x2="0" y2="32"></line>
+					<line x1="160" y1="50" x2="0" y2="68"></line>
+					<line x1="160" y1="50" x2="0" y2="92"></line>
+					<line x1="160" y1="50" x2="0" y2="124"></line>
+					<line x1="0" y1="50" x2="160" y2="50"></line>
+					<line x1="0" y1="22" x2="160" y2="22"></line>
+					<line x1="0" y1="78" x2="160" y2="78"></line>
+				</g>
+			</svg>
+
+			<div class="slab-wrap">
+				<div class="slab">
+					<h2 id="d03-intro-h" aria-label={intro.headline}>
+						{intro.headlineParts.map(part => <span aria-hidden="true">{part}</span>)}
+					</h2>
+					<span class="edge-id" aria-hidden="true">A / TILTED PLANE</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.intro {
+		position: relative;
+		background: var(--doc);
+		color: var(--fg);
+		overflow: clip;
+		padding-block: clamp(5rem, 15vh, 11rem);
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: 5rem minmax(0, 28rem) minmax(0, 1fr);
+		align-items: center;
+		gap: clamp(1.5rem, 4vw, 3.5rem);
+		padding-left: var(--gutter);
+	}
+
+	.coord {
+		align-self: start;
+		font-family: var(--font-mono);
+		font-size: var(--mark);
+		letter-spacing: 0.14em;
+		color: var(--orange-dim);
+		writing-mode: vertical-rl;
+		white-space: nowrap;
+		padding-top: 0.35rem;
+	}
+
+	.coord span {
+		color: color-mix(in oklab, var(--graphite) 62%, transparent);
+	}
+
+	.doc p {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9375rem, 1.15vw, 1.0625rem);
+		line-height: 2.15;
+		letter-spacing: 0.06em;
+		color: var(--ink);
+		max-width: 26em;
+	}
+
+	.doc .note {
+		margin-top: 2.25rem;
+		padding-top: 0.7rem;
+		border-top: 1px solid var(--doc-rule);
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.16em;
+		color: color-mix(in oklab, var(--graphite) 62%, transparent);
+	}
+
+	.slabstage {
+		position: relative;
+		perspective: 70rem;
+		perspective-origin: 100% 50%;
+		min-height: clamp(20rem, 42vh, 30rem);
+		display: grid;
+		align-items: center;
+		margin-right: calc(var(--gutter) * -1);
+		color: color-mix(in oklab, var(--graphite) 17%, transparent);
+	}
+
+	.grid-lines {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.slab-wrap {
+		transform-style: preserve-3d;
+	}
+
+	.slab {
+		position: relative;
+		background: var(--stage-mid);
+		border: 1px solid var(--ink-black);
+		border-left: 1px solid var(--orange);
+		padding: clamp(2.25rem, 5vw, 4rem) clamp(1.75rem, 4vw, 3.5rem);
+		transform: rotateY(calc(-13deg + var(--ptr-x, 0) * 1.5deg)) rotateX(calc(2deg + var(--ptr-y, 0) * -1.5deg)) translate3d(0, 0, -2rem);
+		transform-origin: 100% 50%;
+	}
+
+	.slab::after {
+		content: "";
+		position: absolute;
+		left: -1px;
+		bottom: 0;
+		width: 0.5rem;
+		height: 38%;
+		background: var(--orange);
+		clip-path: polygon(0 0, 100% 16%, 100% 100%, 0 100%);
+	}
+
+	h2 {
+		display: grid;
+		gap: 0.5rem;
+		font-family: var(--font-cjk);
+		font-weight: 500;
+		font-size: clamp(1.6rem, 3.4vw, 2.75rem);
+		line-height: 1.6;
+		letter-spacing: 0.1em;
+		color: var(--paper-hi);
+	}
+
+	h2 span:nth-child(2) {
+		padding-left: clamp(1rem, 4vw, 3rem);
+		color: var(--paper);
+	}
+
+	.edge-id {
+		position: absolute;
+		left: 0.9rem;
+		top: 0.9rem;
+		font-family: var(--font-mono);
+		font-size: 0.5625rem;
+		letter-spacing: 0.18em;
+		color: color-mix(in oklab, var(--paper) 42%, transparent);
+		writing-mode: vertical-rl;
+	}
+
+	@media (max-width: 64rem) {
+		.grid {
+			grid-template-columns: 3.5rem minmax(0, 1fr);
+			align-items: start;
+		}
+		.slabstage {
+			grid-column: 2;
+			grid-row: 1;
+			margin-right: 0;
+			margin-bottom: 2.5rem;
+			min-height: 0;
+			padding-right: var(--gutter);
+		}
+		.doc {
+			grid-column: 2;
+			grid-row: 2;
+		}
+		.coord {
+			grid-row: 1 / span 2;
+		}
+	}
+
+	@media (max-width: 48rem) {
+		.intro {
+			padding-block: clamp(3.5rem, 10vh, 6rem);
+		}
+		.grid {
+			grid-template-columns: 2.5rem minmax(0, 1fr);
+			gap: 1rem;
+		}
+		.slabstage {
+			perspective: 40rem;
+		}
+		.slab {
+			transform: rotateY(-7deg) translate3d(0, 0, -1rem);
+			padding: 1.75rem 1.25rem;
+		}
+		.edge-id {
+			display: none;
+		}
+		h2 {
+			font-size: clamp(1.35rem, 6.4vw, 1.9rem);
+			letter-spacing: 0.06em;
+		}
+		.doc p {
+			line-height: 2;
+			max-width: none;
+		}
+		.doc .note {
+			margin-top: 1.5rem;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		const slab = document.querySelector<HTMLElement>(".intro .slab");
+		const doc = document.querySelectorAll(".intro .doc > p");
+		if (!slab) return;
+
+		/* the slab itself carries a var-driven 3D transform — animate its
+		   wrapper so GSAP never overwrites the pointer parallax */
+		gsap.from(slab.parentElement, {
+			opacity: 0,
+			xPercent: 5,
+			duration: 0.9,
+			ease: "power2.out",
+			clearProps: "transform",
+			scrollTrigger: { trigger: slab, start: "top 82%" }
+		});
+
+		gsap.from(doc, {
+			opacity: 0,
+			y: 14,
+			duration: 0.7,
+			ease: "power2.out",
+			stagger: 0.08,
+			scrollTrigger: { trigger: ".intro .doc", start: "top 85%" }
+		});
+	});
+</script>

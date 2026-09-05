@@ -1,0 +1,243 @@
+---
+import { services } from "../../lib/copy";
+const s = services.items[2];
+---
+
+{
+	/* MOVEMENT 06 — horizontal. A short, wide band read left to right, with a
+    genuinely scrollable capability strip instead of a stacked list. */
+}
+<section id="creative" class="cr crop" aria-labelledby="cr-h" data-d10-section>
+	<span class="cr__wedge" aria-hidden="true"></span>
+
+	<div class="cr__top g12">
+		<p class="cr__run note" aria-hidden="true">06 / MOVEMENT — {s.index}</p>
+		<p class="cr__pos">{s.position}</p>
+	</div>
+
+	<div class="cr__band">
+		<h2 id="cr-h" class="cr__h" aria-label={`${s.en} ${s.zh}`} data-reveal>
+			<span class="cr__n" aria-hidden="true">{s.index}</span>
+			<span class="cr__en" aria-hidden="true">CREATIVE</span>
+			<span class="cr__zh" aria-hidden="true">{s.zh}</span>
+			<span class="cr__en2" aria-hidden="true">DEVELOPMENT</span>
+		</h2>
+	</div>
+
+	<div class="cr__low g12">
+		<div class="cr__body">
+			{s.body.map(line => <span>{line}</span>)}
+		</div>
+		<p class="cr__hint note" aria-hidden="true">← 橫向捲動 / DRAG · SCROLL →</p>
+	</div>
+
+	<div class="cr__strip" tabindex="0" role="group" aria-label={`${s.zh}技術範圍`}>
+		<ul class="cr__row">
+			{
+				s.stack.map((t, i) => (
+					<li>
+						<span class="cr__idx" aria-hidden="true">
+							{String(i + 1).padStart(2, "0")}
+						</span>
+						<span class="cr__t">{t}</span>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.cr {
+		position: relative;
+		padding-block: clamp(4rem, 10vw, 8.5rem) clamp(3.5rem, 8vw, 7rem);
+	}
+
+	/* a diagonal cut plane, the only geometry in this movement */
+	.cr__wedge {
+		position: absolute;
+		inset: 0 0 auto 0;
+		height: 62%;
+		background: var(--paper-hi);
+		clip-path: polygon(0 0, 100% 0, 100% 62%, 0 100%);
+		z-index: 0;
+	}
+
+	.cr__top,
+	.cr__low,
+	.cr__band {
+		position: relative;
+		z-index: 1;
+	}
+
+	.cr__top {
+		align-items: baseline;
+		row-gap: 0.5rem;
+	}
+
+	.cr__run {
+		grid-column: 1 / 5;
+		color: var(--d10-mark);
+		border-top: 0.1875rem solid var(--d10-accent);
+		padding-top: 0.5rem;
+	}
+
+	.cr__pos {
+		grid-column: 7 / 13;
+		font-family: var(--font-cjk);
+		font-size: 0.875rem;
+		letter-spacing: 0.16em;
+		color: var(--d10-quiet);
+		text-align: right;
+	}
+
+	/* --- the horizontal band ----------------------------------------- */
+	.cr__band {
+		margin-top: clamp(1.5rem, 4vw, 3rem);
+		padding-left: var(--d10-gl);
+		padding-right: var(--d10-gr);
+	}
+
+	.cr__h {
+		display: flex;
+		align-items: baseline;
+		gap: clamp(0.5rem, 1.6vw, 1.5rem);
+		white-space: nowrap;
+	}
+
+	.cr__n {
+		font-family: var(--font-mono);
+		font-size: clamp(0.75rem, 1.4vw, 1.125rem);
+		letter-spacing: 0.1em;
+		color: var(--d10-mark);
+		align-self: start;
+	}
+
+	.cr__en {
+		font-family: var(--font-grotesk);
+		font-weight: 700;
+		font-size: clamp(1.875rem, 8.6vw, 7rem);
+		line-height: 0.86;
+		letter-spacing: -0.045em;
+	}
+
+	.cr__zh {
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(2.25rem, 11vw, 9rem);
+		line-height: 0.82;
+		letter-spacing: -0.02em;
+		color: var(--d10-accent);
+	}
+
+	.cr__en2 {
+		font-family: var(--font-grotesk);
+		font-weight: 400;
+		font-size: clamp(0.875rem, 2.2vw, 1.875rem);
+		letter-spacing: 0.24em;
+		color: var(--d10-quiet);
+	}
+
+	.cr__low {
+		margin-top: clamp(1.5rem, 4vw, 3rem);
+		align-items: end;
+		row-gap: 1rem;
+	}
+
+	.cr__body {
+		grid-column: 1 / 7;
+		display: grid;
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+		line-height: 2;
+		letter-spacing: 0.04em;
+	}
+
+	.cr__hint {
+		grid-column: 9 / 13;
+		text-align: right;
+		color: var(--d10-quiet);
+	}
+
+	/* --- scrollable strip -------------------------------------------- */
+	.cr__strip {
+		position: relative;
+		z-index: 1;
+		margin-top: clamp(2rem, 5vw, 4rem);
+		overflow-x: auto;
+		overflow-y: hidden;
+		overscroll-behavior-x: contain;
+		scroll-snap-type: x proximity;
+		scroll-padding-left: var(--d10-gl);
+		border-top: var(--hairline) solid var(--d10-rule);
+		border-bottom: var(--hairline) solid var(--d10-rule);
+	}
+
+	.cr__row {
+		display: flex;
+		width: max-content;
+		padding-left: var(--d10-gl);
+		padding-right: var(--d10-gr);
+	}
+
+	.cr__row li {
+		scroll-snap-align: start;
+		display: grid;
+		gap: 0.5rem;
+		padding: clamp(1.25rem, 3vw, 2.25rem) clamp(1.5rem, 4vw, 3.5rem) clamp(1.25rem, 3vw, 2.25rem) 0;
+		border-right: var(--hairline) solid var(--d10-faint);
+		margin-right: clamp(1.5rem, 4vw, 3.5rem);
+	}
+
+	.cr__row li:last-child {
+		border-right: 0;
+		margin-right: 0;
+	}
+
+	.cr__idx {
+		font-family: var(--font-mono);
+		font-weight: 700;
+		font-size: 0.6875rem;
+		letter-spacing: 0.18em;
+		color: var(--d10-mark);
+	}
+
+	.cr__t {
+		font-family: var(--font-grotesk);
+		font-weight: 700;
+		font-size: clamp(1.5rem, 4.6vw, 3.25rem);
+		letter-spacing: -0.03em;
+		line-height: 1;
+		white-space: nowrap;
+	}
+
+	@media (max-width: 63.99em) {
+		.cr__run {
+			grid-column: 1 / 8;
+		}
+
+		.cr__pos {
+			grid-column: 1 / 13;
+			text-align: left;
+		}
+
+		.cr__h {
+			display: grid;
+			gap: 0.25rem;
+			white-space: normal;
+		}
+
+		.cr__body {
+			grid-column: 1 / 13;
+		}
+
+		.cr__hint {
+			grid-column: 1 / 13;
+			text-align: left;
+		}
+
+		.cr__wedge {
+			height: 46%;
+		}
+	}
+</style>

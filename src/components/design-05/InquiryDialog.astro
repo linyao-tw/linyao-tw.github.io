@@ -1,0 +1,295 @@
+---
+import { brand, cta, inquiryFields } from "../../lib/copy";
+---
+
+<dialog class="dlg" id="d05-inquiry" aria-labelledby="d05-dlg-title">
+	<div class="panel">
+		<div class="mass" aria-hidden="true"></div>
+
+		<header class="head">
+			<div>
+				<h2 class="d05-zh" id="d05-dlg-title">{cta.buttonLabel}</h2>
+				<p class="d05-anno d05-anno--paper d05-anno--wrap sub">INQUIRY &mdash; FORM 05 / {brand.nameEn}</p>
+			</div>
+			<button class="close" type="button" data-inquiry-close>
+				<span class="visually-hidden">關閉詢案表單</span>
+				<span class="d05-anno d05-anno--paper" aria-hidden="true">CLOSE &times;</span>
+			</button>
+		</header>
+
+		<form class="form" id="d05-inquiry-form" novalidate={false}>
+			<div class="fields">
+				{
+					inquiryFields.map(field => (
+						<p class="field">
+							<label class="d05-anno d05-anno--paper" for={`d05-${field.name}`}>
+								{field.label}
+								{field.required && (
+									<span class="req" aria-hidden="true">
+										{" "}
+										*
+									</span>
+								)}
+							</label>
+							<input id={`d05-${field.name}`} name={field.name} type={field.type} required={field.required} autocomplete={field.autocomplete} />
+						</p>
+					))
+				}
+				<p class="field field--wide">
+					<label class="d05-anno d05-anno--paper" for="d05-message">訊息 / MESSAGE<span class="req" aria-hidden="true">*</span></label>
+					<textarea id="d05-message" name="message" rows="4" required></textarea>
+				</p>
+			</div>
+
+			<div class="foot">
+				<p class="d05-anno d05-anno--paper d05-anno--wrap d05-anno--plain hint">送出後會開啟你的郵件軟體，寄件至 {brand.email}</p>
+				<button class="submit" type="submit"><span>送出詢案 ↗</span></button>
+			</div>
+
+			<p class="status d05-anno d05-anno--paper d05-anno--wrap d05-anno--plain" role="status" aria-live="polite" data-inquiry-status></p>
+		</form>
+	</div>
+</dialog>
+
+<style>
+	.dlg {
+		padding: 0;
+		border: 0;
+		background: none;
+		max-width: none;
+		max-height: none;
+		width: 100%;
+		height: 100%;
+		color: var(--paper-hi);
+	}
+
+	.dlg[open] {
+		display: grid;
+		place-items: center;
+		padding: clamp(1rem, 4svh, 3rem) var(--gutter);
+	}
+
+	.dlg::backdrop {
+		background: color-mix(in oklab, var(--void) 78%, transparent);
+	}
+
+	.panel {
+		position: relative;
+		width: min(46rem, 100%);
+		max-height: min(92svh, 48rem);
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		background: var(--mass-deep);
+		padding: clamp(1.5rem, 4svh, 2.5rem) clamp(1.25rem, 3vw, 2.5rem) clamp(1.5rem, 4svh, 2.25rem);
+		/* the panel is a plan: one corner cut at 22° */
+		clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2.75rem), calc(100% - 6.8rem) 100%, 0 100%);
+	}
+
+	.mass {
+		position: absolute;
+		inset: auto 0 0;
+		height: 0.5rem;
+		background: var(--orange);
+	}
+
+	.head {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1.5rem;
+		padding-bottom: 1.25rem;
+		border-bottom: 1px solid var(--line-paper);
+	}
+
+	.head h2 {
+		font-size: clamp(1.125rem, 1.9vw, 1.5rem);
+		letter-spacing: 0.2em;
+		font-weight: 500;
+		line-height: 1.6;
+	}
+
+	.sub {
+		margin-top: 0.5rem;
+	}
+
+	.close {
+		min-height: 2.75rem;
+		min-width: 2.75rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: flex-end;
+	}
+
+	.close:hover span,
+	.close:focus-visible span {
+		color: var(--orange);
+	}
+
+	.fields {
+		margin-top: clamp(1.5rem, 4svh, 2.25rem);
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: clamp(1rem, 2.5svh, 1.5rem) clamp(1rem, 2.5vw, 2rem);
+	}
+
+	.field {
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	.field--wide {
+		grid-column: 1 / -1;
+	}
+
+	.req {
+		color: var(--orange);
+	}
+
+	input,
+	textarea {
+		width: 100%;
+		background: none;
+		border: 0;
+		border-bottom: 1px solid var(--line-paper);
+		padding: 0.5rem 0;
+		color: var(--paper-hi);
+		font-family: var(--font-grotesk);
+		font-size: 0.9375rem;
+		letter-spacing: 0.04em;
+		border-radius: 0;
+		transition: border-color 0.35s ease;
+	}
+
+	textarea {
+		resize: vertical;
+		min-height: 5.5rem;
+		line-height: 1.8;
+	}
+
+	input:hover,
+	textarea:hover,
+	input:focus,
+	textarea:focus {
+		border-bottom-color: var(--orange);
+	}
+
+	input:focus-visible,
+	textarea:focus-visible {
+		outline-offset: 0.125rem;
+	}
+
+	.foot {
+		margin-top: clamp(1.75rem, 4svh, 2.5rem);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+		flex-wrap: wrap;
+	}
+
+	.hint {
+		max-width: 22rem;
+		color: color-mix(in oklab, var(--paper) 62%, transparent);
+	}
+
+	.submit {
+		display: inline-flex;
+		align-items: center;
+		min-height: 3rem;
+		padding: 0 2.5rem 0 1.5rem;
+		background: var(--orange);
+		color: var(--paper-hi);
+		font-size: 0.875rem;
+		letter-spacing: 0.2em;
+		clip-path: polygon(0 0, 100% 0, calc(100% - 1.1875rem) 100%, 0 100%);
+		transition: background 0.4s ease;
+	}
+
+	.submit:hover,
+	.submit:focus-visible {
+		background: var(--paper-hi);
+		color: var(--void);
+	}
+
+	.status {
+		margin-top: 1.25rem;
+		color: var(--paper-hi);
+		min-height: 1.25rem;
+	}
+
+	@media (max-width: 48rem) {
+		.fields {
+			grid-template-columns: 1fr;
+		}
+
+		.panel {
+			clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2rem), calc(100% - 4.95rem) 100%, 0 100%);
+			padding-bottom: 3rem;
+		}
+	}
+</style>
+
+<script>
+	import { brand } from "../../lib/copy";
+
+	const dlg = document.querySelector<HTMLDialogElement>("#d05-inquiry");
+	const form = document.querySelector<HTMLFormElement>("#d05-inquiry-form");
+	const status = document.querySelector<HTMLElement>("[data-inquiry-status]");
+	const openers = Array.from(document.querySelectorAll<HTMLElement>("[data-inquiry-open]"));
+
+	if (dlg && form) {
+		let opener: HTMLElement | null = null;
+
+		const open = (from: HTMLElement) => {
+			opener = from;
+			if (status) status.textContent = "";
+			dlg.showModal();
+			document.documentElement.style.overflow = "hidden";
+			window.dispatchEvent(new CustomEvent("d05:lock"));
+			dlg.querySelector<HTMLInputElement>("input, textarea")?.focus();
+		};
+
+		openers.forEach(btn => {
+			btn.setAttribute("aria-haspopup", "dialog");
+			btn.setAttribute("aria-controls", "d05-inquiry");
+			btn.addEventListener("click", () => open(btn));
+		});
+
+		dlg.querySelectorAll<HTMLButtonElement>("[data-inquiry-close]").forEach(btn => btn.addEventListener("click", () => dlg.close()));
+
+		/* backdrop click — the dialog box itself fills the viewport, so a click
+		   that lands on it rather than on .panel is a click outside */
+		dlg.addEventListener("click", event => {
+			if (event.target === dlg) dlg.close();
+		});
+
+		dlg.addEventListener("close", () => {
+			document.documentElement.style.overflow = "";
+			window.dispatchEvent(new CustomEvent("d05:unlock"));
+			opener?.focus();
+		});
+
+		form.addEventListener("submit", event => {
+			event.preventDefault();
+			if (!form.reportValidity()) return;
+
+			const data = new FormData(form);
+			const value = (key: string) => String(data.get(key) ?? "").trim();
+
+			const lines = [
+				`姓名 / NAME: ${value("name")}`,
+				`信箱 / EMAIL: ${value("email")}`,
+				`公司・單位 / COMPANY: ${value("company") || "—"}`,
+				`預算範圍 / BUDGET: ${value("budget") || "—"}`,
+				"",
+				"訊息 / MESSAGE:",
+				value("message")
+			];
+
+			const href = `mailto:${brand.email}?subject=${encodeURIComponent(`詢案 / ${value("name")} — ${brand.nameEn}`)}&body=${encodeURIComponent(lines.join("\n"))}`;
+
+			window.location.href = href;
+			if (status) status.textContent = `已開啟你的郵件軟體。若沒有自動開啟，請直接寄到 ${brand.email}。`;
+		});
+	}
+</script>

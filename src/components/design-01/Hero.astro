@@ -1,0 +1,246 @@
+---
+import { brand, hero } from "../../lib/copy";
+import ColumnRules from "./ColumnRules.astro";
+---
+
+<section class="hero" aria-label="封面">
+	<div class="disc-crop" aria-hidden="true">
+		<span class="d01-disc hero-disc"></span>
+	</div>
+
+	<ColumnRules class="hero-cols" />
+
+	<div class="d01-shell hero-grid">
+		<div class="hero-top">
+			<p class="hero-run d01-label">
+				<span>{brand.nameZh}</span>
+				<span class="sep" aria-hidden="true"></span>
+				<span>{brand.nameEn}</span>
+			</p>
+			<p class="hero-sheet d01-label">
+				<span>ISSUE 01</span>
+				<span aria-hidden="true">/</span>
+				<span>EDITORIAL · SWISS</span>
+			</p>
+			<span class="d01-rule d01-rule--hair hero-top-rule d01-draw" aria-hidden="true"></span>
+		</div>
+
+		<h1 class="hero-display d01-lines" data-headline={hero.headline}>
+			{
+				hero.headlineParts.map(part => (
+					<span class="d01-line">
+						<span>{part}</span>
+					</span>
+				))
+			}
+		</h1>
+
+		<div class="hero-foot">
+			<span class="d01-rule d01-rule--mid hero-mid-rule d01-draw" aria-hidden="true"></span>
+			<dl class="hero-data">
+				<div>
+					<dt class="d01-label">EQUATION</dt>
+					<dd class="hero-eq">{brand.equation}</dd>
+				</div>
+				<div>
+					<dt class="d01-label">DISCIPLINES</dt>
+					<dd class="hero-disciplines">{brand.disciplines}</dd>
+				</div>
+			</dl>
+			<a class="hero-cue d01-label" href="#intro">
+				<span class="d01-rule d01-rule--heavy cue-bar" aria-hidden="true"></span>
+				<span>{hero.scrollCue}</span>
+			</a>
+		</div>
+	</div>
+</section>
+
+<style>
+	.hero {
+		position: relative;
+		overflow: clip;
+		min-height: calc(100svh - var(--head-h));
+		display: flex;
+		border-bottom: 1px solid var(--rule-hair);
+	}
+
+	.disc-crop {
+		position: absolute;
+		inset: 0;
+		overflow: clip;
+		z-index: 0;
+	}
+	.hero-disc {
+		left: 62%;
+		top: 30%;
+		width: 110vh;
+		aspect-ratio: 1;
+	}
+	.hero-cols {
+		z-index: 0;
+	}
+
+	.hero-grid {
+		position: relative;
+		z-index: 1;
+		width: 100%;
+		grid-template-rows: auto 1fr auto;
+		padding-block: 1.75rem 2rem;
+		row-gap: 0;
+	}
+
+	/* --- top band ------------------------------------------------------ */
+	.hero-top {
+		grid-column: 1 / -1;
+		grid-row: 1;
+		display: grid;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		column-gap: var(--col-gap);
+		align-items: baseline;
+	}
+	.hero-run {
+		grid-column: 1 / 8;
+		display: flex;
+		gap: 0.625rem;
+		align-items: baseline;
+		flex-wrap: wrap;
+	}
+	.hero-run .sep {
+		width: 1.25rem;
+		height: 0.25rem;
+		background: var(--orange);
+		align-self: center;
+		flex: none;
+	}
+	.hero-sheet {
+		grid-column: 10 / 13;
+		display: flex;
+		gap: 0.5rem;
+		justify-content: flex-end;
+		color: var(--graphite);
+	}
+	.hero-top-rule {
+		grid-column: 1 / -1;
+		margin-top: 1.125rem;
+	}
+
+	/* --- display -------------------------------------------------------- */
+	.hero-display {
+		grid-column: 1 / 10;
+		grid-row: 2;
+		align-self: center;
+		font-size: var(--display);
+		font-weight: 700;
+		line-height: 0.9;
+		letter-spacing: var(--tr-display);
+		color: var(--ink-display);
+		padding-block: clamp(2rem, 6vh, 4rem);
+	}
+
+	/* --- bottom band ----------------------------------------------------- */
+	.hero-foot {
+		grid-column: 1 / -1;
+		grid-row: 3;
+		display: grid;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		column-gap: var(--col-gap);
+		row-gap: 1.25rem;
+		align-items: end;
+	}
+	.hero-mid-rule {
+		grid-column: 1 / 7;
+	}
+	.hero-data {
+		grid-column: 1 / 6;
+		display: flex;
+		gap: clamp(1.5rem, 3vw, 3rem);
+		flex-wrap: wrap;
+	}
+	.hero-data dt {
+		color: var(--graphite);
+		margin-bottom: 0.375rem;
+	}
+	.hero-eq {
+		font-size: clamp(0.9375rem, 1.2vw, 1.25rem);
+		font-weight: 700;
+		letter-spacing: 0.01em;
+	}
+	.hero-disciplines {
+		font-size: clamp(0.875rem, 1vw, 1rem);
+		font-weight: 500;
+	}
+	.hero-cue {
+		grid-column: 6 / 9;
+		justify-self: start;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		min-height: 2.75rem;
+		justify-content: flex-end;
+	}
+	.cue-bar {
+		--rule-w: 3.5rem;
+		--rule-c: var(--graphite);
+	}
+	.hero-cue:hover .cue-bar {
+		--rule-c: var(--orange);
+	}
+
+	/* --- laptop / tablet landscape ------------------------------------- */
+	@media (max-width: 64rem) {
+		.hero-disc {
+			left: 58%;
+			top: 34%;
+			width: 104vh;
+		}
+		.hero-display {
+			grid-column: 1 / 11;
+		}
+		.hero-data {
+			grid-column: 1 / 9;
+		}
+		.hero-cue {
+			grid-column: 1 / -1;
+			justify-self: start;
+			align-items: flex-start;
+			text-align: left;
+		}
+	}
+
+	/* --- the running head stacks --------------------------------------- */
+	@media (max-width: 60rem) {
+		.hero-run {
+			grid-column: 1 / -1;
+		}
+		.hero-sheet {
+			grid-column: 1 / -1;
+			justify-content: flex-start;
+			margin-top: 0.5rem;
+		}
+		.hero-mid-rule {
+			grid-column: 1 / 6;
+		}
+		.hero-data {
+			grid-column: 1 / -1;
+			flex-direction: column;
+			gap: 1rem;
+		}
+	}
+
+	/* --- phone ---------------------------------------------------------- */
+	@media (max-width: 40rem) {
+		.hero-disc {
+			left: 63%;
+			top: 51%;
+			width: 66vh;
+		}
+		.hero-display {
+			grid-column: 1 / -1;
+			align-self: start;
+			padding-block: clamp(1.75rem, 5vh, 3rem) 0;
+		}
+		.hero-mid-rule {
+			grid-column: 1 / 5;
+		}
+	}
+</style>

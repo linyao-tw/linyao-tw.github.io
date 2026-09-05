@@ -1,0 +1,35 @@
+---
+/** The measured substrate made visible: the 12 columns the chaos is derived from. */
+interface Props {
+	class?: string;
+}
+const { class: cls = "" } = Astro.props;
+const cols = Array.from({ length: 12 }, (_, i) => i);
+---
+
+<div class:list={["field", "g12", cls]} aria-hidden="true">
+	{cols.map(i => <span class="field__c" data-col={i + 1} />)}
+</div>
+
+<style>
+	.field {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		z-index: 0;
+	}
+
+	.field__c {
+		border-left: var(--hairline) solid var(--d10-faint);
+	}
+
+	.field__c:last-child {
+		border-right: var(--hairline) solid var(--d10-faint);
+	}
+
+	@media (max-width: 47.99em) {
+		.field__c:nth-child(even) {
+			border-left-color: transparent;
+		}
+	}
+</style>

@@ -1,0 +1,250 @@
+---
+import { brand, hero } from "../../lib/copy";
+import Corridor from "./Corridor.astro";
+---
+
+<section class="hero" id="top" aria-labelledby="d03-hero-h">
+	<Corridor variant="hero" planes={7} vpx={57} vpy={47}>
+		<div class="mouth-grid">
+			<p class="ident">
+				<span class="zh">{brand.nameZh}</span>
+				<span class="en">{brand.nameEn}</span>
+			</p>
+
+			<div class="type">
+				<h1 id="d03-hero-h" aria-label={hero.headline}>
+					{hero.headlineParts.map(part => <span aria-hidden="true">{part}</span>)}
+				</h1>
+				<p class="eq">{brand.equation}</p>
+			</div>
+
+			<ul class="axis" aria-hidden="true">
+				<li><b>X</b> 0.00</li>
+				<li><b>Y</b> 0.00</li>
+				<li><b>Z</b> −480</li>
+				<li class="hot"><b>FOV</b> 62</li>
+			</ul>
+
+			<p class="disc">{brand.disciplines}</p>
+
+			<a class="cue" href="#intro">
+				<span>{hero.scrollCue}</span>
+				<span class="rail" aria-hidden="true"></span>
+			</a>
+		</div>
+	</Corridor>
+</section>
+
+<style>
+	.hero {
+		position: relative;
+		background: var(--stage-near);
+		color: var(--on-stage);
+		overflow: clip;
+		--scene-min: 100svh;
+		--mouth-min: 100svh;
+	}
+
+	.mouth-grid {
+		min-height: 100svh;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		grid-template-rows: auto minmax(0, 1fr) auto;
+		gap: clamp(1rem, 3vw, 2.5rem);
+		padding: calc(var(--hdr-h) + clamp(1.25rem, 3vh, 2.5rem)) var(--gutter) clamp(1.5rem, 4vh, 3rem);
+	}
+
+	.ident {
+		grid-column: 1 / -1;
+		display: flex;
+		align-items: baseline;
+		gap: 0.9rem;
+		flex-wrap: wrap;
+		border-top: 1px solid var(--edge-soft);
+		padding-top: 0.9rem;
+	}
+
+	.ident .zh {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.875rem, 1.4vw, 1rem);
+		letter-spacing: 0.34em;
+		color: var(--on-stage-hi);
+	}
+
+	.ident .en {
+		font-family: var(--font-mono);
+		font-size: var(--mark);
+		letter-spacing: 0.24em;
+		color: var(--on-stage-mute);
+	}
+
+	.type {
+		grid-column: 1;
+		align-self: center;
+		max-width: min(100%, 42rem);
+		padding-left: clamp(0.9rem, 2.4vw, 2.25rem);
+		border-left: 1px solid var(--orange);
+	}
+
+	h1 {
+		display: grid;
+		font-family: var(--font-grotesk);
+		font-weight: 500;
+		font-size: clamp(2.35rem, 6.2vw, 5rem);
+		line-height: 1.42;
+		letter-spacing: 0.1em;
+		color: var(--on-stage-hi);
+		text-wrap: balance;
+	}
+
+	h1 span:nth-child(2) {
+		padding-left: clamp(0.75rem, 3vw, 3.25rem);
+		color: var(--on-stage);
+	}
+
+	h1 span:nth-child(3) {
+		padding-left: clamp(1.5rem, 6vw, 6.5rem);
+	}
+
+	.eq {
+		margin-top: clamp(1rem, 2.4vh, 1.9rem);
+		font-family: var(--font-mono);
+		font-size: clamp(0.6875rem, 1.05vw, 0.8125rem);
+		letter-spacing: 0.32em;
+		color: var(--orange);
+		white-space: nowrap;
+	}
+
+	.axis {
+		grid-column: 2;
+		align-self: center;
+		justify-self: end;
+		display: grid;
+		gap: 0.7rem;
+		text-align: right;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.16em;
+		color: var(--on-stage-mute);
+		font-variant-numeric: tabular-nums;
+		border-right: 1px solid var(--edge-soft);
+		padding-right: 0.8rem;
+	}
+
+	.axis b {
+		font-weight: 400;
+		color: var(--on-stage-dim);
+		margin-right: 0.45rem;
+	}
+
+	.axis .hot b {
+		color: var(--orange);
+	}
+
+	.disc {
+		grid-column: 1;
+		align-self: end;
+		font-family: var(--font-cjk);
+		font-size: clamp(0.8125rem, 1.2vw, 0.9375rem);
+		letter-spacing: 0.26em;
+		color: var(--on-stage-dim);
+	}
+
+	.cue {
+		grid-column: 2;
+		align-self: end;
+		justify-self: end;
+		display: grid;
+		justify-items: end;
+		gap: 0.6rem;
+		min-height: 2.75rem;
+		align-content: end;
+		font-family: var(--font-mono);
+		font-size: var(--mark);
+		letter-spacing: 0.2em;
+		color: var(--on-stage-dim);
+	}
+
+	.cue .rail {
+		display: block;
+		width: clamp(3rem, 8vw, 7rem);
+		height: 1px;
+		background: var(--orange);
+		transform-origin: right center;
+	}
+
+	.cue:hover,
+	.cue:focus-visible {
+		color: var(--on-stage-hi);
+	}
+
+	@media (max-width: 48rem) {
+		.mouth-grid {
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-rows: auto minmax(0, 1fr) auto auto;
+		}
+		.axis {
+			display: none;
+		}
+		.type,
+		.disc,
+		.cue {
+			grid-column: 1;
+		}
+		h1 {
+			font-size: clamp(2.1rem, 10.5vw, 3.1rem);
+			line-height: 1.5;
+			letter-spacing: 0.08em;
+		}
+		.eq {
+			letter-spacing: 0.2em;
+		}
+		.cue {
+			justify-self: start;
+			justify-items: start;
+			padding-top: 1.25rem;
+		}
+		.cue .rail {
+			transform-origin: left center;
+		}
+		.disc {
+			letter-spacing: 0.16em;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap, ScrollTrigger }) => {
+		const hero = document.querySelector<HTMLElement>(".hero");
+		const corridor = hero?.querySelector<HTMLElement>("[data-corridor]");
+		if (!hero || !corridor) return;
+
+		/* scroll-scrubbed travel down the corridor */
+		ScrollTrigger.create({
+			trigger: hero,
+			start: "top top",
+			end: "bottom top",
+			onUpdate: self => {
+				corridor.style.setProperty("--scrub", (self.progress * 13).toFixed(2) + "rem");
+			}
+		});
+
+		gsap.from(hero.querySelectorAll(".ident, h1 span, .eq, .disc, .cue"), {
+			opacity: 0,
+			y: 18,
+			duration: 0.85,
+			ease: "power2.out",
+			stagger: 0.075,
+			delay: 0.1
+		});
+
+		gsap.from(hero.querySelectorAll(".plane"), {
+			opacity: 0,
+			duration: 1.1,
+			ease: "power1.out",
+			stagger: 0.06
+		});
+	});
+</script>

@@ -1,0 +1,288 @@
+---
+import { process } from "../../lib/copy";
+import { hRibbon, osc, polyD, smoothD, type Pt } from "./geo";
+
+const layers = [
+	{ amp: 6.4, freq: 0.85, phase: 1.15 },
+	{ amp: 2.3, freq: 2.2, phase: 4.1 }
+];
+const base = 20;
+const centre = (t: number) => osc(t, layers, base);
+
+const ribbon = hRibbon({
+	width: 100,
+	samples: 80,
+	centre,
+	thickness: t => 3.6 + 1.6 * Math.sin(t * Math.PI * 1.4 + 0.9)
+});
+
+const spots = [0.09, 0.295, 0.5, 0.705, 0.91];
+const steps = process.steps.map((s, i) => ({
+	...s,
+	x: spots[i] * 100,
+	y: (centre(spots[i]) / 40) * 100,
+	side: i % 2 === 0 ? "dn" : "up",
+	indent: (Math.sin((i / 4) * Math.PI) * 4.4).toFixed(2)
+}));
+
+/* narrow screens: the same five points, restacked — the connector is generated
+   from the very same indent curve the list items use, so it threads the nodes */
+const indents = process.steps.map((_, i) => Math.sin((i / 4) * Math.PI) * 4.4);
+const nodeHalf = 1.7;
+const span = Math.max(...indents) + nodeHalf * 2;
+const vpts: Pt[] = indents.map((v, i) => [((v + nodeHalf) / span) * 10, ((i + 0.5) / indents.length) * 100] as Pt);
+const vline = smoothD(vpts);
+const vspan = `${span.toFixed(2)}rem`;
+
+const rule = polyD(
+	Array.from({ length: 121 }, (_, i): Pt => {
+		const t = i / 120;
+		return [t * 100, osc(t, [{ amp: 3.2, freq: 2.1, phase: 0.4 }], 8)];
+	})
+);
+---
+
+<section class="proc" id="process" aria-labelledby="d09-proc-h">
+	<div class="ground" aria-hidden="true"></div>
+
+	<div class="top">
+		<p class="side" aria-hidden="true"><span>G</span><span>{process.kicker.toUpperCase()}</span><span>流程</span></p>
+
+		<h2 class="hl" id="d09-proc-h">
+			<span>{process.headlineParts[0]}</span>{" "}
+			<svg class="dash" viewBox="0 0 100 16" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+				<path d={rule} vector-effect="non-scaling-stroke"></path>
+			</svg>
+			<span>{process.headlineParts[1]}</span>
+		</h2>
+	</div>
+
+	<div class="scene">
+		<svg class="path" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+			<path class="rf" d={ribbon.fill}></path>
+			<path class="re" d={ribbon.fill} vector-effect="non-scaling-stroke"></path>
+		</svg>
+
+		<svg class="vpath" viewBox="0 0 10 100" preserveAspectRatio="none" aria-hidden="true" focusable="false" style={`--vspan:${vspan}`}>
+			<path d={vline} vector-effect="non-scaling-stroke"></path>
+		</svg>
+
+		<ol class="steps">
+			{
+				steps.map(s => (
+					<li class={s.side} data-step={`${s.index} ${s.en}`} style={`--x:${s.x}%;--y:${s.y}%;--in:${s.indent}rem`}>
+						<span class="node" aria-hidden="true">
+							<span class="idx">{s.index}</span>
+						</span>
+						<div class="lab">
+							<h3>{s.en}</h3>
+							<p>{s.zh}</p>
+						</div>
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>
+
+<style>
+	.proc {
+		padding-block: clamp(6rem, 15vh, 12rem);
+	}
+
+	.ground {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: var(--band-b);
+		clip-path: var(--arc-both);
+	}
+
+	.top {
+		position: relative;
+		z-index: 2;
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: clamp(1.5rem, 4vw, 4.5rem);
+		padding-inline: var(--pad);
+	}
+
+	.side {
+		writing-mode: vertical-rl;
+		display: flex;
+		gap: 1.4rem;
+		align-items: center;
+		font-size: var(--meta);
+		letter-spacing: 0.32em;
+		color: var(--ink-2);
+	}
+
+	.side span:first-child {
+		color: var(--orange);
+	}
+
+	.hl {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.6rem clamp(1rem, 2.5vw, 2.5rem);
+		font-family: var(--font-serif);
+		font-size: var(--dsp-2);
+		line-height: 1.32;
+		letter-spacing: 0.12em;
+	}
+
+	.dash {
+		flex: 1 1 6rem;
+		min-width: 5rem;
+		max-width: 22rem;
+		height: 1.5rem;
+		fill: none;
+		stroke: var(--orange);
+		stroke-width: 1.5;
+	}
+
+	.scene {
+		position: relative;
+		z-index: 2;
+		height: clamp(21rem, 40vh, 27rem);
+		margin: clamp(3rem, 8vh, 6rem) var(--pad) 0;
+	}
+
+	.path {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.rf {
+		fill: var(--orange);
+	}
+
+	.re {
+		fill: none;
+		stroke: var(--ink-black);
+		stroke-width: 1;
+		opacity: 0.3;
+	}
+
+	.vpath {
+		display: none;
+		fill: none;
+		stroke: var(--orange);
+		stroke-width: 2.5;
+	}
+
+	.steps {
+		position: absolute;
+		inset: 0;
+	}
+
+	.steps li {
+		position: absolute;
+		left: var(--x);
+		top: var(--y);
+		translate: -50% -50%;
+	}
+
+	.node {
+		display: grid;
+		place-items: center;
+		width: clamp(3.4rem, 5vw, 4.6rem);
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: var(--wg);
+		border: 1px solid var(--line);
+	}
+
+	.idx {
+		font-family: var(--font-serif);
+		font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+		letter-spacing: 0.04em;
+		line-height: 1;
+	}
+
+	.lab {
+		position: absolute;
+		left: 50%;
+		translate: -50% 0;
+		width: 11rem;
+		text-align: center;
+		display: grid;
+		gap: 0.4rem;
+	}
+
+	.up .lab {
+		bottom: calc(100% + 1.4rem);
+	}
+
+	.dn .lab {
+		top: calc(100% + 1.4rem);
+	}
+
+	.lab h3 {
+		font-size: clamp(0.72rem, 0.95vw, 0.85rem);
+		letter-spacing: 0.28em;
+		font-weight: 600;
+	}
+
+	.lab p {
+		font-family: var(--font-serif);
+		font-size: clamp(0.85rem, 1vw, 1rem);
+		letter-spacing: 0.1em;
+		color: var(--fg);
+	}
+
+	@media (max-width: 62rem) {
+		.top {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.side {
+			writing-mode: horizontal-tb;
+			gap: 1rem;
+		}
+
+		.scene {
+			height: auto;
+		}
+
+		.path {
+			display: none;
+		}
+
+		.vpath {
+			display: block;
+			position: absolute;
+			inset: 0 auto 0 0;
+			width: var(--vspan);
+			height: 100%;
+		}
+
+		.steps {
+			position: static;
+			display: grid;
+			gap: clamp(1.75rem, 4vh, 2.75rem);
+		}
+
+		.steps li {
+			position: relative;
+			left: auto;
+			top: auto;
+			translate: none;
+			margin-inline-start: var(--in);
+			display: grid;
+			grid-template-columns: auto minmax(0, 1fr);
+			align-items: center;
+			gap: 1.25rem;
+		}
+
+		.lab {
+			position: static;
+			translate: none;
+			width: auto;
+			text-align: start;
+		}
+	}
+</style>

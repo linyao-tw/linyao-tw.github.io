@@ -1,0 +1,168 @@
+---
+/**
+ * design-01 — EDITORIAL / SWISS
+ * The single permitted global style block. Every selector is prefixed with
+ * `body.d-01` so nothing can leak into the other nine versions.
+ *
+ * Holds: local tokens, the 12-column shell, the three-weight rule system,
+ * the running-head/margin-numeral pattern, and the clipped line-reveal
+ * primitive used by the motion layer.
+ */
+---
+
+<style is:global>
+	body.d-01 {
+		/* ground + ink */
+		--bg: var(--warm-gray);
+		--fg: var(--graphite);
+		--accent: var(--orange);
+
+		/* grid */
+		--margin: clamp(1.25rem, 4vw, 4rem);
+		--col-gap: clamp(0.75rem, 1.6vw, 1.5rem);
+		--head-h: 3.25rem;
+
+		/* the only three rule weights in the system */
+		--w-hair: 1px;
+		--w-mid: 0.25rem;
+		--w-heavy: 1rem;
+		--rule-hair: color-mix(in oklab, var(--graphite) 38%, transparent);
+		--rule-hair-faint: color-mix(in oklab, var(--graphite) 20%, transparent);
+		--rule-hair-rev: color-mix(in oklab, var(--warm-gray) 40%, transparent);
+
+		/* hierarchy on the light ground goes DARKER, never lighter */
+		--ink-display: var(--ink-deep);
+
+		/* type scale — display is deliberately far from body */
+		--display: clamp(3.25rem, 11vw, 10.5rem);
+		--display-2: clamp(2.5rem, 7.6vw, 7.25rem);
+		--display-3: clamp(1.875rem, 4.6vw, 4.25rem);
+		--display-4: clamp(1.5rem, 3vw, 2.75rem);
+		--lead: clamp(1.25rem, 2.3vw, 2.125rem);
+		--body: clamp(0.875rem, 0.42vw + 0.78rem, 1rem);
+		--small: 0.8125rem;
+		--label: 0.6875rem;
+
+		/* tracking */
+		--tr-display: -0.035em;
+		--tr-label: 0.16em;
+
+		background: var(--warm-gray);
+		color: var(--graphite);
+		font-family: var(--font-grotesk);
+		font-size: var(--body);
+		line-height: 1.5;
+	}
+
+	body.d-01 [id] {
+		scroll-margin-top: calc(var(--head-h) + 1rem);
+	}
+
+	/* --- 12-column shell ------------------------------------------------ */
+	body.d-01 .d01-shell {
+		display: grid;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		column-gap: var(--col-gap);
+		padding-inline: var(--margin);
+		position: relative;
+	}
+
+	/* --- three rule weights --------------------------------------------- */
+	body.d-01 .d01-rule {
+		display: block;
+		width: var(--rule-w, 100%);
+		background: var(--rule-c, currentColor);
+		transform-origin: left center;
+		border: 0;
+	}
+	body.d-01 .d01-rule--hair {
+		height: var(--w-hair);
+		background: var(--rule-c, var(--rule-hair));
+	}
+	body.d-01 .d01-rule--mid {
+		height: var(--w-mid);
+	}
+	body.d-01 .d01-rule--heavy {
+		height: var(--w-heavy);
+	}
+	body.d-01 .d01-rule--accent {
+		--rule-c: var(--orange);
+	}
+
+	/* --- functional small caps ------------------------------------------ */
+	body.d-01 .d01-label {
+		font-size: var(--label);
+		font-weight: 500;
+		letter-spacing: var(--tr-label);
+		text-transform: uppercase;
+		line-height: 1.2;
+	}
+
+	/* --- margin notation: hanging numeral + running head ----------------- */
+	body.d-01 .d01-runhead {
+		grid-column: 1 / 2;
+		display: flex;
+		flex-direction: column;
+		gap: 0.625rem;
+		align-self: start;
+	}
+	body.d-01 .d01-runhead b {
+		font-size: clamp(2rem, 3.1vw, 3.25rem);
+		font-weight: 700;
+		letter-spacing: -0.04em;
+		line-height: 0.82;
+		color: var(--orange);
+		font-variant-numeric: lining-nums tabular-nums;
+	}
+	body.d-01 .d01-runhead--rev b {
+		color: var(--warm-gray);
+	}
+	body.d-01 .d01-runhead span {
+		overflow-wrap: normal;
+		word-break: keep-all;
+		font-size: var(--label);
+		font-weight: 500;
+		letter-spacing: var(--tr-label);
+		text-transform: uppercase;
+		color: var(--graphite);
+	}
+	body.d-01 .d01-runhead--rev span {
+		color: var(--warm-gray);
+	}
+
+	@media (max-width: 60rem) {
+		body.d-01 .d01-runhead {
+			grid-column: 1 / -1;
+			flex-direction: row;
+			align-items: baseline;
+			justify-content: flex-start;
+			gap: 1rem;
+			padding-bottom: 0.75rem;
+			border-bottom: 1px solid var(--rule-hair);
+			margin-bottom: 1.75rem;
+		}
+		body.d-01 .d01-runhead--rev {
+			border-bottom-color: var(--rule-hair-rev);
+		}
+	}
+
+	/* --- clipped line reveal primitive ----------------------------------- */
+	body.d-01 .d01-line {
+		display: block;
+		overflow: clip;
+		padding-block: 0.1em;
+		margin-block: -0.1em;
+	}
+	body.d-01 .d01-line > span {
+		display: block;
+	}
+
+	/* --- signature disc --------------------------------------------------- */
+	body.d-01 .d01-disc {
+		position: absolute;
+		border-radius: 50%;
+		background: var(--orange);
+		pointer-events: none;
+		z-index: 0;
+	}
+</style>

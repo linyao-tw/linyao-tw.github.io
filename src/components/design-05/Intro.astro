@@ -1,0 +1,161 @@
+---
+import { intro } from "../../lib/copy";
+---
+
+<section class="intro" id="intro" data-scene aria-labelledby="d05-intro-title">
+	<div class="plane" data-plane data-par="-2.6" aria-hidden="true"></div>
+	<p class="plane-note d05-anno d05-anno--paper" aria-hidden="true">EL. &minus;2.400 &nbsp;/&nbsp; VOID</p>
+
+	<div class="band">
+		<p class="idx d05-anno" aria-hidden="true">0.02<br />INTRO</p>
+
+		<div class="text" data-reveal>
+			<h2 class="d05-zh headline" id="d05-intro-title">
+				{intro.headlineParts.map(part => <span>{part}</span>)}
+			</h2>
+
+			<p class="d05-zh body">
+				{intro.body.map(line => <span>{line}</span>)}
+			</p>
+
+			<div class="metric">
+				<span class="d05-dim"></span>
+				<span class="d05-anno d05-anno--wrap">INDEPENDENT DIGITAL STUDIO &mdash; TAIPEI</span>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.intro {
+		--sh: 64svh;
+		--ph: calc(var(--sh) + 2 * var(--ov));
+		--px: 64vw;
+		--dxb: calc(var(--ph) * var(--tan-b));
+		--dya: calc(100vw * var(--tan-a));
+
+		position: relative;
+		min-height: var(--sh);
+		overflow: clip;
+		isolation: isolate;
+	}
+
+	.plane {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: calc(-1 * var(--ov));
+		bottom: calc(-1 * var(--ov));
+		z-index: 0;
+		background: var(--mass-deep);
+		will-change: transform;
+		/* 22° cut; the last vertex continues the edge vertically if the band
+		   ever grows past its nominal height, so the angle never distorts */
+		clip-path: polygon(var(--px) 0, 100% 0, 100% 100%, calc(var(--px) - var(--dxb)) 100%, calc(var(--px) - var(--dxb)) var(--ph));
+	}
+
+	.plane-note {
+		position: absolute;
+		right: var(--gutter);
+		bottom: clamp(1.75rem, 5svh, 3rem);
+		z-index: 1;
+	}
+
+	.band {
+		position: relative;
+		z-index: 2;
+		display: grid;
+		grid-template-columns: 4.5rem minmax(0, auto);
+		gap: clamp(1.25rem, 3vw, 3rem);
+		padding: clamp(4rem, 11svh, 7.5rem) var(--gutter) clamp(3rem, 8svh, 5.5rem);
+	}
+
+	.idx {
+		color: color-mix(in oklab, var(--graphite) 58%, transparent);
+		line-height: 1.7;
+		border-top: 1px solid var(--line);
+		padding-top: 0.5rem;
+	}
+
+	.text {
+		max-width: 30rem;
+	}
+
+	.headline {
+		font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+		line-height: 1.78;
+		letter-spacing: 0.09em;
+		font-weight: 500;
+	}
+
+	.headline span:last-child {
+		padding-left: 1.5em;
+	}
+
+	/* deliberately dense: tight measure, tight leading against the empty mass */
+	.body {
+		margin-top: clamp(1.5rem, 4svh, 2.5rem);
+		font-size: clamp(0.8125rem, 1.05vw, 0.9375rem);
+		line-height: 1.95;
+		letter-spacing: 0.05em;
+		color: var(--graphite);
+	}
+
+	.metric {
+		margin-top: clamp(2rem, 5svh, 3.25rem);
+		display: grid;
+		gap: 0.625rem;
+		max-width: 22rem;
+	}
+
+	.metric .d05-anno {
+		color: var(--graphite);
+	}
+
+	@media (max-width: 64rem) {
+		.intro {
+			--px: 80vw;
+		}
+
+		.band {
+			grid-template-columns: 3.5rem minmax(0, auto);
+		}
+	}
+
+	/* 768 / 390 — the void reorients: it becomes the ground the band stands on */
+	@media (max-width: 48rem) {
+		.intro {
+			--sh: 58svh;
+		}
+
+		.plane {
+			clip-path: polygon(0 calc(100% - var(--ov) - 16svh), 100% calc(100% - var(--ov) - 16svh - var(--dya)), 100% 100%, 0 100%);
+		}
+
+		.band {
+			padding-bottom: clamp(7rem, 22svh, 11rem);
+		}
+
+		.plane-note {
+			bottom: 1.5rem;
+		}
+	}
+
+	@media (max-width: 30rem) {
+		.band {
+			grid-template-columns: 1fr;
+			gap: 1.25rem;
+			padding-top: 4.5rem;
+		}
+
+		.idx {
+			border-top: 0;
+			border-left: 1px solid var(--line);
+			padding: 0 0 0 0.625rem;
+		}
+
+		.headline span:last-child {
+			padding-left: 1em;
+		}
+	}
+</style>

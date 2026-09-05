@@ -1,0 +1,205 @@
+---
+/**
+ * design-04 · colophon
+ *
+ * The back of the sheet: imprint, contents repeated as printed links (so the
+ * page is navigable with scripting off), inks and edition data.
+ */
+import { brand, nav } from "../../lib/copy";
+import Plate from "./Plate.astro";
+import PlateBar from "./PlateBar.astro";
+
+const sheets = ["02 / 09", "03 / 09", "07 / 09", "08 / 09", "09 / 09"];
+---
+
+<Plate as="footer" plate="COLOPHON — IMPRINT" tone="ink" pad="md">
+	<div class="wrap">
+		<div class="mark">
+			<p class="en">{brand.nameEn}</p>
+			<p class="zh">{brand.nameZh}</p>
+			<p class="eq">{brand.equation}</p>
+		</div>
+
+		<nav class="contents" aria-label="頁尾索引">
+			<p class="ct" aria-hidden="true">CONTENTS</p>
+			<ul>
+				{
+					nav.map((item, i) => (
+						<li>
+							<a href={item.href}>
+								<span class="t">{item.label}</span>
+								<span class="z">{item.zh}</span>
+								<span class="s" aria-hidden="true">
+									{sheets[i]}
+								</span>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<dl class="imprint">
+			<div><dt>EMAIL</dt><dd><a href={`mailto:${brand.email}`}>{brand.email}</a></dd></div>
+			<div><dt>EDITION</dt><dd>04 — PRINT / POSTER SYSTEM</dd></div>
+			<div><dt>SHEETS</dt><dd>09 · TRIM 594 × 841</dd></div>
+			<div><dt>SET IN</dt><dd>GROTESK 800 / MONO</dd></div>
+		</dl>
+
+		<div class="bar">
+			<PlateBar note="INK SPECIFICATION — 3 SEPARATIONS" />
+		</div>
+
+		<p class="rights">
+			<span>{brand.copyright}</span>
+			<span class="r" aria-hidden="true"></span>
+			<span aria-hidden="true">END OF SHEET 09/09</span>
+		</p>
+	</div>
+</Plate>
+
+<style>
+	.wrap {
+		display: grid;
+		gap: clamp(1.75rem, 4vw, 3rem);
+	}
+
+	.mark .en {
+		display: inline-block;
+		transform: scaleX(0.92);
+		transform-origin: 0 50%;
+		font-family: var(--font-grotesk);
+		font-weight: 800;
+		font-size: clamp(1.75rem, 1rem + 4vw, 4.5rem);
+		line-height: 0.92;
+		letter-spacing: -0.03em;
+		color: var(--paper-hi);
+	}
+
+	.mark .zh {
+		margin-top: 0.35rem;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(1rem, 0.9rem + 0.7vw, 1.4rem);
+		letter-spacing: 0.24em;
+		color: var(--paper);
+	}
+
+	.mark .eq {
+		margin-top: 0.6rem;
+		font-family: var(--font-mono);
+		font-size: var(--mono-lg);
+		letter-spacing: var(--track);
+		color: var(--accent-text);
+	}
+
+	.ct {
+		padding-bottom: 0.5rem;
+		border-bottom: 1px solid var(--rule-soft);
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: color-mix(in oklab, currentColor 55%, transparent);
+	}
+
+	.contents a {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: baseline;
+		gap: 0.2rem 1rem;
+		min-height: 2.75rem;
+		align-content: center;
+		padding-block: 0.5rem;
+		border-bottom: 1px solid var(--rule-faint);
+	}
+
+	.contents .t {
+		font-family: var(--font-mono);
+		font-size: var(--mono-lg);
+		letter-spacing: var(--track);
+	}
+
+	.contents .z {
+		grid-column: 1;
+		font-family: var(--font-cjk);
+		font-size: 0.8rem;
+		letter-spacing: 0.1em;
+		color: color-mix(in oklab, currentColor 58%, transparent);
+	}
+
+	.contents .s {
+		grid-column: 2;
+		grid-row: 1;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.1em;
+		color: color-mix(in oklab, currentColor 45%, transparent);
+	}
+
+	.contents a:hover .t {
+		color: var(--accent);
+	}
+
+	.imprint {
+		display: grid;
+		gap: 0.55rem;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.1em;
+	}
+
+	.imprint div {
+		display: grid;
+		grid-template-columns: 5.5rem minmax(0, 1fr);
+		gap: 0.75rem;
+		padding-bottom: 0.45rem;
+		border-bottom: 1px solid var(--rule-faint);
+	}
+
+	.imprint dt {
+		color: color-mix(in oklab, currentColor 45%, transparent);
+	}
+
+	.imprint dd {
+		overflow-wrap: anywhere;
+	}
+
+	.imprint a {
+		border-bottom: 1px solid var(--accent);
+	}
+
+	.imprint a:hover {
+		color: var(--accent);
+	}
+
+	.rights {
+		display: flex;
+		align-items: center;
+		gap: 0.9rem;
+		padding-top: 0.9rem;
+		border-top: 1px solid var(--rule-soft);
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: color-mix(in oklab, currentColor 62%, transparent);
+	}
+
+	.rights .r {
+		flex: 1;
+		height: 1px;
+		background: var(--rule-faint);
+	}
+
+	@media (min-width: 60rem) {
+		.wrap {
+			grid-template-columns: minmax(0, 1.2fr) minmax(0, 15rem) minmax(0, 17rem);
+			column-gap: clamp(2rem, 5vw, 5rem);
+			align-items: start;
+		}
+
+		.bar,
+		.rights {
+			grid-column: 1 / -1;
+		}
+	}
+</style>

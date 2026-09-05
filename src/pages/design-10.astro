@@ -1,0 +1,240 @@
+---
+import Contact from "../components/design-10/Contact.astro";
+import Footer from "../components/design-10/Footer.astro";
+import Header from "../components/design-10/Header.astro";
+import Hero from "../components/design-10/Hero.astro";
+import InquiryDialog from "../components/design-10/InquiryDialog.astro";
+import Intro from "../components/design-10/Intro.astro";
+import Manifesto from "../components/design-10/Manifesto.astro";
+import Process from "../components/design-10/Process.astro";
+import ServiceCreative from "../components/design-10/ServiceCreative.astro";
+import ServiceSystem from "../components/design-10/ServiceSystem.astro";
+import ServiceWeb from "../components/design-10/ServiceWeb.astro";
+import Services from "../components/design-10/Services.astro";
+import SpatialIndex from "../components/design-10/SpatialIndex.astro";
+import Tokens from "../components/design-10/Tokens.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout title="麟曜數位工作室 LINYAO DIGITAL STUDIO — 010 EXPERIMENTAL" bodyClass="d-10" themeColor="#d3ccc1">
+	<Tokens />
+	<a class="skip-link" href="#main">跳至主要內容</a>
+
+	<Header />
+	<SpatialIndex />
+
+	<main id="main">
+		<Hero />
+		<Intro />
+		<Services />
+		<ServiceWeb />
+		<ServiceSystem />
+		<ServiceCreative />
+		<Manifesto />
+		<Process />
+		<Contact />
+	</main>
+
+	<Footer />
+	<InquiryDialog />
+</SiteLayout>
+
+<script>
+	import { sections } from "../components/design-10/sections";
+	import { bindAnchorScroll, motion, ScrollTrigger } from "../lib/motion";
+
+	/* ------------------------------------------------------------------ *
+	 * 1. Spatial index — this is navigation, not decoration, so it runs
+	 *    whether or not the visitor wants motion. ScrollTrigger is used as
+	 *    a scroll observer here, never as an animator.
+	 * ------------------------------------------------------------------ */
+	const items = Array.from(document.querySelectorAll<HTMLElement>("[data-idx-item]"));
+	const hudN = document.querySelector<HTMLElement>("[data-hud-n]");
+	const hudEn = document.querySelector<HTMLElement>("[data-hud-en]");
+	const hudZh = document.querySelector<HTMLElement>("[data-hud-zh]");
+	const hudSub = document.querySelector<HTMLElement>("[data-hud-sub]");
+	const live = document.querySelector<HTMLElement>("[data-live]");
+
+	let currentId = "";
+	let liveTimer = 0;
+
+	function setActive(id: string) {
+		if (id === currentId) return;
+		const movement = sections.find(s => s.id === id);
+		if (!movement) return;
+		currentId = id;
+
+		for (const el of items) {
+			if (el.dataset.idxItem === id) el.setAttribute("aria-current", "true");
+			else el.removeAttribute("aria-current");
+		}
+
+		if (hudN) hudN.textContent = movement.n;
+		if (hudEn) hudEn.textContent = movement.en;
+		if (hudZh) hudZh.textContent = movement.zh;
+		if (hudSub && id !== "process") hudSub.textContent = "";
+
+		if (live) {
+			window.clearTimeout(liveTimer);
+			liveTimer = window.setTimeout(() => {
+				live.textContent = `目前章節 ${movement.n} ${movement.en} ${movement.zh}`;
+			}, 350);
+		}
+	}
+
+	const observed = Array.from(document.querySelectorAll<HTMLElement>("[data-d10-section]"));
+	let offsets: number[] = [];
+
+	function measure() {
+		offsets = observed.map(el => el.getBoundingClientRect().top + window.scrollY);
+	}
+
+	function pick() {
+		if (!offsets.length) return;
+		const marker = window.scrollY + window.innerHeight * 0.46;
+		let id = observed[0].id;
+		for (let i = 0; i < observed.length; i++) {
+			if (offsets[i] <= marker) id = observed[i].id;
+		}
+		setActive(id);
+	}
+
+	const indexTriggers = [
+		ScrollTrigger.create({
+			start: 0,
+			end: "max",
+			onUpdate: pick,
+			onRefresh: () => {
+				measure();
+				pick();
+			}
+		})
+	];
+	measure();
+	pick();
+
+	/* --- process 01–05 feed the same index -------------------------- */
+	const steps = Array.from(document.querySelectorAll<HTMLElement>("[data-step]"));
+	const readout = document.querySelector<HTMLElement>("[data-proc-readout]");
+	const stepTriggers = steps.map(step =>
+		ScrollTrigger.create({
+			trigger: step,
+			start: "top 72%",
+			end: "bottom 42%",
+			onToggle: self => {
+				step.classList.toggle("is-on", self.isActive);
+				if (!self.isActive) return;
+				const n = step.dataset.step ?? "01";
+				if (readout) readout.textContent = `STEP ${n} / 05`;
+				if (hudSub) hudSub.textContent = `— STEP ${n}`;
+			}
+		})
+	);
+
+	window.addEventListener(
+		"pagehide",
+		() => {
+			indexTriggers.forEach(t => t.kill());
+			stepTriggers.forEach(t => t.kill());
+		},
+		{ once: true }
+	);
+
+	/* ------------------------------------------------------------------ *
+	 * 2. Motion. Everything below is enhancement only: every from-state is
+	 *    declared in JS so the document is complete without it.
+	 * ------------------------------------------------------------------ */
+	motion(
+		({ gsap, lenis }) => {
+			document.addEventListener("d10:lock", () => lenis?.stop());
+			document.addEventListener("d10:unlock", () => lenis?.start());
+
+			/* --- hero: the crop drifts apart as you leave it ------------- */
+			const heroTl = gsap.timeline({
+				scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: 0.6 }
+			});
+			heroTl
+				.to(".hl__a", { xPercent: -6, ease: "none" }, 0)
+				.to(".hl__b", { xPercent: 9, ease: "none" }, 0)
+				.to(".hl__c", { xPercent: 5, yPercent: 6, ease: "none" }, 0)
+				.to(".bar", { scaleY: 1.6, transformOrigin: "top center", ease: "none" }, 0);
+
+			gsap.from(".cue", { opacity: 0, y: 18, duration: 0.8, delay: 0.35, ease: "power2.out" });
+
+			/* --- masked reveals on every movement headline --------------- */
+			gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach(el => {
+				gsap.from(el, {
+					clipPath: "inset(0% 0% 100% 0%)",
+					yPercent: 6,
+					duration: 1,
+					ease: "power3.out",
+					scrollTrigger: { trigger: el, start: "top 88%", once: true }
+				});
+			});
+
+			/* --- masked movement transitions ----------------------------- */
+			gsap.fromTo(
+				"#web",
+				{ clipPath: "inset(16% 0% 0% 0%)" },
+				{
+					clipPath: "inset(0% 0% 0% 0%)",
+					ease: "none",
+					scrollTrigger: { trigger: "#web", start: "top 92%", end: "top 34%", scrub: true }
+				}
+			);
+
+			gsap.fromTo(
+				"#manifesto",
+				{ clipPath: "inset(11% 0% 0% 0%)" },
+				{
+					clipPath: "inset(0% 0% 0% 0%)",
+					ease: "none",
+					scrollTrigger: { trigger: "#manifesto", start: "top 95%", end: "top 40%", scrub: true }
+				}
+			);
+
+			/* --- THE SIGNATURE ------------------------------------------- *
+			 * The manifesto's near-black composition is carried over the top
+			 * of the process movement and then wiped off in one continuous
+			 * move: the veil's bottom edge (marked by an orange rule) sweeps
+			 * up the viewport and the process is uncovered behind it.        */
+			const sticky = document.querySelector<HTMLElement>("[data-wipe-sticky]");
+			const stage = document.querySelector<HTMLElement>("[data-wipe-stage]");
+			if (sticky && stage) {
+				const state = { p: 0 };
+				sticky.style.setProperty("--wipe", "0svh");
+				gsap.to(state, {
+					p: 100,
+					ease: "none",
+					scrollTrigger: { trigger: stage, start: "top top", end: "bottom bottom", scrub: 0.35 },
+					onUpdate: () => sticky.style.setProperty("--wipe", `${state.p}svh`)
+				});
+			}
+
+			/* --- evidence figures land at different speeds ---------------- */
+			gsap.from(".mf__c", {
+				yPercent: 14,
+				opacity: 0,
+				duration: 0.9,
+				stagger: 0.12,
+				ease: "power2.out",
+				scrollTrigger: { trigger: ".mf__cred", start: "top 82%", once: true }
+			});
+
+			/* --- the capability band opens from its own centre line -------- */
+			gsap.fromTo(
+				".mq",
+				{ clipPath: "inset(50% 0% 50% 0%)" },
+				{
+					clipPath: "inset(0% 0% 0% 0%)",
+					ease: "none",
+					scrollTrigger: { trigger: ".mq", start: "top 96%", end: "top 58%", scrub: true }
+				}
+			);
+		},
+		{ smooth: true }
+	);
+
+	bindAnchorScroll();
+	requestAnimationFrame(() => ScrollTrigger.refresh());
+</script>

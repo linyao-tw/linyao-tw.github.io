@@ -1,0 +1,125 @@
+---
+import { intro } from "../../lib/copy";
+---
+
+<section class="intro" id="intro" aria-labelledby="intro-title">
+	<div class="d01-shell intro-grid">
+		<p class="d01-runhead">
+			<b>02</b>
+			<span>Intro</span>
+		</p>
+
+		<h2 class="intro-title d01-lines" id="intro-title" data-headline={intro.headline}>
+			{
+				intro.headlineParts.map(part => (
+					<span class="d01-line">
+						<span>{part}</span>
+					</span>
+				))
+			}
+		</h2>
+
+		<div class="intro-note">
+			<span class="d01-rule d01-rule--hair d01-draw" aria-hidden="true"></span>
+			<p class="intro-body">
+				{intro.body.map(line => <span>{line}</span>)}
+			</p>
+		</div>
+
+		<p class="intro-tail">
+			<span class="d01-rule d01-rule--mid tail-bar" aria-hidden="true"></span>
+			<span class="d01-label">INDEPENDENT DIGITAL STUDIO — DESIGN &amp; ENGINEERING UNDER ONE ROOF</span>
+		</p>
+	</div>
+</section>
+
+<style>
+	.intro {
+		position: relative;
+		border-bottom: 1px solid var(--rule-hair);
+	}
+	.intro-grid {
+		padding-block: clamp(5rem, 15vh, 11rem) clamp(4.5rem, 13vh, 9rem);
+		row-gap: clamp(2.5rem, 6vh, 5rem);
+		align-items: start;
+	}
+
+	.intro-title {
+		grid-column: 4 / 13;
+		grid-row: 1;
+		font-size: var(--display-2);
+		font-weight: 700;
+		line-height: 0.94;
+		letter-spacing: var(--tr-display);
+		color: var(--ink-display);
+	}
+	.intro-title .d01-line:last-child > span {
+		padding-left: clamp(2rem, 9vw, 9rem);
+	}
+
+	.intro-note {
+		grid-column: 2 / 7;
+		grid-row: 2;
+		display: grid;
+		gap: 1rem;
+	}
+	.intro-body {
+		max-width: 26em;
+		font-size: var(--body);
+		line-height: 1.85;
+		color: var(--graphite);
+		text-wrap: pretty;
+	}
+	.intro-body span {
+		display: block;
+	}
+
+	.intro-tail {
+		grid-column: 8 / 13;
+		grid-row: 2;
+		display: flex;
+		flex-direction: column;
+		gap: 0.875rem;
+		align-self: end;
+	}
+	.tail-bar {
+		--rule-c: var(--orange);
+	}
+	.intro-tail .d01-label {
+		color: var(--graphite);
+		line-height: 1.7;
+	}
+
+	@media (max-width: 64rem) {
+		.intro-title {
+			grid-column: 3 / 13;
+		}
+		.intro-note {
+			grid-column: 1 / 6;
+		}
+		.intro-tail {
+			grid-column: 7 / 13;
+		}
+	}
+
+	@media (max-width: 60rem) {
+		.intro-title {
+			grid-column: 1 / -1;
+			grid-row: 2;
+		}
+		.intro-note {
+			grid-column: 1 / -1;
+			grid-row: 3;
+		}
+		.intro-tail {
+			grid-column: 1 / -1;
+			grid-row: 4;
+		}
+		.intro-grid {
+			row-gap: 2rem;
+		}
+		.intro-title .d01-line:last-child > span {
+			padding-left: clamp(1.5rem, 8vw, 4rem);
+		}
+	}
+</style>

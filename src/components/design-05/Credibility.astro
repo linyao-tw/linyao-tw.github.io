@@ -1,0 +1,344 @@
+---
+import { manifesto } from "../../lib/copy";
+
+const figScale = ["clamp(1.375rem, 2.6vw, 2.25rem)", "clamp(1.125rem, 2vw, 1.75rem)", "clamp(0.8125rem, 1.35vw, 1.1875rem)"];
+const heights = ["40%", "68%", "100%"];
+const marks = ["H 04.200", "H 08.400", "H 12.600"];
+---
+
+<section class="cred" aria-labelledby="d05-cred-title">
+	<header class="titleblock" data-reveal>
+		<p class="idx d05-anno" aria-hidden="true">0.04</p>
+		<div class="tb-box">
+			<h2 class="d05-zh" id="d05-cred-title">工作室紀錄</h2>
+			<p class="d05-anno">ELEVATION 01 &mdash; RECORD</p>
+			<p class="d05-anno">SCALE 1&nbsp;:&nbsp;200 &nbsp;/&nbsp; DRAWN LY&middot;05</p>
+		</div>
+	</header>
+
+	<div class="drawing">
+		<div class="datums" aria-hidden="true">
+			<span style="--dy:25%"><i></i><em class="d05-anno">EL. +4.200</em></span>
+			<span style="--dy:50%"><i></i><em class="d05-anno">EL. +8.400</em></span>
+			<span style="--dy:75%"><i></i><em class="d05-anno">EL. +12.600</em></span>
+		</div>
+
+		<ul class="stories">
+			{
+				manifesto.credibility.map((item, i) => (
+					<li class="story" style={`--h:${heights[i]};--fig:${figScale[i]}`}>
+						<div class="mass" data-mass>
+							<span class="vdim" aria-hidden="true">
+								<em class="d05-anno d05-anno--paper">{marks[i]}</em>
+							</span>
+							<p class="fig d05-latin">{item.figure}</p>
+							<p class="fen d05-anno d05-anno--paper d05-anno--wrap">{item.en}</p>
+						</div>
+						<p class="lab d05-zh">{item.label}</p>
+					</li>
+				))
+			}
+		</ul>
+
+		<div class="ground" aria-hidden="true"></div>
+		<div class="earth" aria-hidden="true"></div>
+		<p class="el d05-anno" aria-hidden="true">EL. &plusmn;0.000</p>
+	</div>
+</section>
+
+<style>
+	.cred {
+		--colgap: clamp(0.5rem, 1.6vw, 1.75rem);
+		--colw: calc((100vw - 2 * var(--gutter) - 2 * var(--colgap)) / 3);
+		--dh: clamp(16rem, 42svh, 26rem);
+
+		position: relative;
+		padding: clamp(4rem, 12svh, 8rem) var(--gutter) clamp(4rem, 10svh, 6.5rem);
+		border-top: 1px solid var(--line);
+	}
+
+	.titleblock {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 2rem;
+		margin-bottom: clamp(3rem, 8svh, 5rem);
+	}
+
+	.idx {
+		color: color-mix(in oklab, var(--graphite) 58%, transparent);
+	}
+
+	.tb-box {
+		border: 1px solid var(--line);
+		padding: 0.875rem 1.125rem;
+		display: grid;
+		gap: 0.375rem;
+		min-width: 14rem;
+	}
+
+	.tb-box h2 {
+		font-size: clamp(0.9375rem, 1.3vw, 1.125rem);
+		letter-spacing: 0.2em;
+		font-weight: 500;
+		line-height: 1.6;
+	}
+
+	.tb-box .d05-anno {
+		color: var(--graphite);
+	}
+
+	.drawing {
+		position: relative;
+	}
+
+	.datums {
+		position: absolute;
+		inset: 0 0 auto;
+		height: var(--dh);
+		z-index: 0;
+	}
+
+	.datums span {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: var(--dy);
+		display: flex;
+		align-items: center;
+		gap: 0.625rem;
+	}
+
+	.datums i {
+		flex: 1;
+		height: 1px;
+		background: repeating-linear-gradient(to right, var(--line-soft) 0 0.375rem, transparent 0.375rem 0.75rem);
+	}
+
+	.datums em {
+		font-style: normal;
+		color: color-mix(in oklab, var(--graphite) 48%, transparent);
+	}
+
+	.stories {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0 var(--colgap);
+		align-items: end;
+	}
+
+	.story {
+		display: grid;
+		grid-template-rows: var(--dh) auto;
+	}
+
+	/* each story is an elevation block cut at 8° — the same angle as every
+	   ground plane on the page */
+	.mass {
+		position: relative;
+		align-self: end;
+		height: var(--h);
+		background: var(--mass-deep);
+		clip-path: polygon(0 calc(var(--colw) * var(--tan-a)), 100% 0, 100% 100%, 0 100%);
+		padding: 0 1.125rem 1.75rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		gap: 0.5rem;
+		overflow: hidden;
+	}
+
+	.story:nth-child(2) .mass {
+		background: var(--mass);
+	}
+
+	.story:nth-child(3) .mass {
+		background: var(--mass-black);
+	}
+
+	.vdim {
+		position: absolute;
+		left: 1.125rem;
+		/* clears the 8° cut, whatever the column width */
+		top: calc(var(--colw) * var(--tan-a) + 0.75rem);
+		bottom: 1.125rem;
+		width: 1px;
+		background: var(--line-paper);
+	}
+
+	.vdim::before,
+	.vdim::after {
+		content: "";
+		position: absolute;
+		left: -0.28125rem;
+		width: 0.625rem;
+		height: 1px;
+		background: var(--line-paper);
+	}
+
+	.vdim::before {
+		top: 0;
+	}
+
+	.vdim::after {
+		bottom: 0;
+	}
+
+	.vdim em {
+		position: absolute;
+		left: 0.5rem;
+		top: 0;
+		font-style: normal;
+		writing-mode: vertical-rl;
+		color: color-mix(in oklab, var(--paper) 58%, transparent);
+	}
+
+	.fig {
+		font-size: var(--fig);
+		letter-spacing: 0.12em;
+		color: var(--paper-hi);
+		line-height: 1.1;
+		padding-left: 2.5rem;
+	}
+
+	.fen {
+		padding-left: 2.5rem;
+	}
+
+	.lab {
+		padding-top: 3.25rem;
+		font-size: clamp(0.75rem, 0.95vw, 0.875rem);
+		line-height: 1.9;
+		letter-spacing: 0.06em;
+		color: var(--graphite);
+		max-width: 15rem;
+	}
+
+	.ground {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: var(--dh);
+		height: 1px;
+		background: var(--graphite);
+		z-index: 2;
+	}
+
+	.earth {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: calc(var(--dh) + 1px);
+		height: 1.75rem;
+		background: var(--hatch-b);
+		z-index: 2;
+	}
+
+	.el {
+		position: absolute;
+		right: 0;
+		top: calc(var(--dh) + 2.25rem);
+		z-index: 3;
+		color: color-mix(in oklab, var(--graphite) 58%, transparent);
+	}
+
+	@media (max-width: 48rem) {
+		.cred {
+			--dh: clamp(13rem, 34svh, 19rem);
+		}
+
+		.mass {
+			padding: 0 0.75rem 1.25rem;
+		}
+
+		.fig,
+		.fen {
+			padding-left: 1.75rem;
+		}
+
+		.vdim {
+			left: 0.75rem;
+			bottom: 0.75rem;
+		}
+
+		.datums em {
+			display: none;
+		}
+
+		.lab {
+			padding-top: 2.75rem;
+		}
+	}
+
+	/* 390 — the elevation turns: three stories stacked on one datum,
+	   read top-down instead of left-right */
+	@media (max-width: 30rem) {
+		.cred {
+			--colw: calc(100vw - 2 * var(--gutter));
+			--dh: 9rem;
+		}
+
+		.titleblock {
+			flex-direction: column;
+			gap: 1.5rem;
+		}
+
+		.tb-box {
+			min-width: 0;
+			width: 100%;
+		}
+
+		.stories {
+			grid-template-columns: 1fr;
+			gap: 2.75rem 0;
+		}
+
+		.story {
+			grid-template-rows: var(--dh) auto;
+		}
+
+		.story:nth-child(1) {
+			--h: 68%;
+		}
+
+		.story:nth-child(2) {
+			--h: 84%;
+		}
+
+		.datums,
+		.ground,
+		.earth,
+		.el {
+			display: none;
+		}
+
+		/* the 8° cut eats the left of a full-width block, so the figures move
+		   to the tall edge and the block reads as a rising step */
+		.mass {
+			border-bottom: 1px solid var(--graphite);
+			align-items: flex-end;
+			text-align: right;
+			padding: 0 1.125rem 1rem;
+		}
+
+		.vdim {
+			display: none;
+		}
+
+		.fen.d05-anno {
+			white-space: nowrap;
+		}
+
+		.lab {
+			padding-top: 0.875rem;
+			max-width: none;
+		}
+
+		.fig,
+		.fen {
+			padding-left: 0;
+		}
+	}
+</style>

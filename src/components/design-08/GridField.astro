@@ -1,0 +1,70 @@
+---
+/** Persistent drafting field: module grid + margin alignment ticks. Decorative. */
+const ticks = Array.from({ length: 40 }, (_, i) => i);
+---
+
+<div class="field" aria-hidden="true">
+	<div class="grid"></div>
+	<div class="margin margin-l">
+		{ticks.map(i => <span style={`--i:${i}`} />)}
+	</div>
+	<div class="margin margin-r">
+		{ticks.map(i => <span style={`--i:${i}`} />)}
+	</div>
+</div>
+
+<style>
+	.field {
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		pointer-events: none;
+		contain: layout style paint;
+	}
+
+	.grid {
+		position: absolute;
+		inset: 0;
+		background-image: var(--grid-image);
+	}
+
+	.margin {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 0;
+		border-left: 1px solid var(--rule-soft);
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		padding-block: 1.25rem;
+	}
+
+	.margin-l {
+		left: var(--pad);
+	}
+
+	.margin-r {
+		right: var(--pad);
+	}
+
+	.margin span {
+		display: block;
+		width: 0.375rem;
+		height: 1px;
+		background: var(--rule);
+		margin-left: -0.1875rem;
+	}
+
+	.margin span:nth-child(5n + 1) {
+		width: 0.75rem;
+		margin-left: -0.375rem;
+		background: var(--rule);
+	}
+
+	@media (max-width: 48rem) {
+		.margin span:nth-child(2n) {
+			opacity: 0;
+		}
+	}
+</style>

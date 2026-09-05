@@ -1,0 +1,468 @@
+---
+interface Props {
+	index: string;
+	en: string;
+	zh: string;
+	position: string;
+	body: readonly string[];
+	stack: readonly string[];
+	variant: "comb" | "loop" | "tree";
+	coord: string;
+}
+
+const { index, en, zh, position, body, stack, variant, coord } = Astro.props;
+
+const topoName = { comb: "SERIAL COMB", loop: "CLOSED LOOP", tree: "BRANCH TREE" }[variant];
+const topoSpec = { comb: "1 TRUNK / 6 LEAF", loop: "1 PORT / 6 NODE", tree: "2 BRANCH / 3+3 LEAF" }[variant];
+
+/* comb geometry */
+const combY = [26, 64, 102, 140, 178, 216];
+/* tree geometry */
+const treeY = [100, 148, 196];
+---
+
+<section class={`svc svc-${variant}`} id={`svc-${index}`} aria-labelledby={`d08-svc-${index}`}>
+	<div class="in d08-shell">
+		<p class="d08-head">
+			<span class="d08-coord">[{coord}]</span>
+			<b>SERVICE MODULE</b>
+			<i aria-hidden="true"></i>
+			<span>TOPOLOGY — {topoName}</span>
+		</p>
+
+		<div class="grid">
+			<div class="txt">
+				<p class="num" aria-hidden="true">{index}</p>
+				<h2 id={`d08-svc-${index}`}>
+					<span class="en">{en}</span>
+					<span class="zh">{zh}</span>
+				</h2>
+				<p class="pos">⟦ {position} ⟧</p>
+				<div class="rule" aria-hidden="true"></div>
+				<p class="cp">{body.map(l => <span class="cl">{l}</span>)}</p>
+			</div>
+
+			<figure class="fig">
+				<ul class="visually-hidden">{stack.map(s => <li>{s}</li>)}</ul>
+
+				{
+					variant === "comb" && (
+						<svg viewBox="0 0 240 250" role="presentation" aria-hidden="true" focusable="false">
+							<path class="d08-route rt hub" pathLength="100" d="M20 121 H40" />
+							<path class="d08-route rt hub" pathLength="100" d="M40 26 V216" />
+							{combY.map(y => (
+								<path class="d08-route rt" pathLength="100" d={`M40 ${y} H77`} />
+							))}
+							<rect class="crn" x="36" y="117" width="8" height="8" />
+							<rect class="d08-node nd nd-root" x="8" y="115" width="12" height="12" />
+							{combY.map(y => (
+								<rect class="d08-node nd" x="77" y={y - 5} width="10" height="10" />
+							))}
+							{stack.map((s, i) => (
+								<text class="lf" x="97" y={combY[i] + 4} font-size="12">
+									{s}
+								</text>
+							))}
+						</svg>
+					)
+				}
+
+				{
+					variant === "loop" && (
+						<Fragment>
+							<svg class="g-wide" viewBox="0 0 500 210" role="presentation" aria-hidden="true" focusable="false">
+								<path class="d08-route rt hub" pathLength="100" d="M54 95 H110" />
+								<path class="d08-route rt loop" pathLength="100" d="M110 40 H470 V150 H110 Z" />
+								<rect class="d08-node nd nd-root" x="42" y="89" width="12" height="12" />
+								<rect class="d08-node nd nd-port" x="105" y="90" width="10" height="10" />
+								<rect class="d08-node nd" x="104" y="34" width="12" height="12" />
+								<rect class="d08-node nd" x="284" y="34" width="12" height="12" />
+								<rect class="d08-node nd" x="464" y="34" width="12" height="12" />
+								<rect class="d08-node nd" x="464" y="144" width="12" height="12" />
+								<rect class="d08-node nd" x="284" y="144" width="12" height="12" />
+								<rect class="d08-node nd" x="104" y="144" width="12" height="12" />
+								<text class="lf" x="110" y="26" font-size="10.5">
+									{stack[0]}
+								</text>
+								<text class="lf" x="290" y="26" font-size="10.5" text-anchor="middle">
+									{stack[1]}
+								</text>
+								<text class="lf" x="470" y="26" font-size="10.5" text-anchor="end">
+									{stack[2]}
+								</text>
+								<text class="lf" x="110" y="174" font-size="10.5">
+									{stack[3]}
+								</text>
+								<text class="lf" x="290" y="174" font-size="10.5" text-anchor="middle">
+									{stack[4]}
+								</text>
+								<text class="lf" x="470" y="174" font-size="10.5" text-anchor="end">
+									{stack[5]}
+								</text>
+								<text class="ct" x="290" y="99" font-size="12" text-anchor="middle">
+									CLOSED LOOP
+								</text>
+							</svg>
+
+							<svg class="g-narrow" viewBox="0 0 320 396" role="presentation" aria-hidden="true" focusable="false">
+								<path class="d08-route rt hub" pathLength="100" d="M40 26 V40" />
+								<path class="d08-route rt loop" pathLength="100" d="M40 40 V340" />
+								<path class="d08-route rt loop" pathLength="100" d="M40 345 V360 H16 V20 H34" />
+								<rect class="crn" x="12" y="356" width="8" height="8" />
+								<rect class="crn" x="12" y="16" width="8" height="8" />
+								<rect class="d08-node nd nd-root" x="34" y="14" width="12" height="12" />
+								{[40, 100, 160, 220, 280, 340].map(y => (
+									<rect class="d08-node nd" x="35" y={y - 5} width="10" height="10" />
+								))}
+								{stack.map((t, i) => (
+									<text class="lf" x="58" y={[40, 100, 160, 220, 280, 340][i] + 4} font-size="14">
+										{t}
+									</text>
+								))}
+								<text class="ct" x="16" y="384" font-size="11">
+									CLOSED LOOP
+								</text>
+							</svg>
+						</Fragment>
+					)
+				}
+
+				{
+					variant === "tree" && (
+						<Fragment>
+							<svg class="g-wide" viewBox="0 0 440 230" role="presentation" aria-hidden="true" focusable="false">
+								<path class="d08-route rt hub" pathLength="100" d="M220 25 V50" />
+								<path class="d08-route rt hub" pathLength="100" d="M48 50 H392" />
+								<path class="d08-route rt hub" pathLength="100" d="M48 56 V196" />
+								<path class="d08-route rt hub" pathLength="100" d="M392 56 V196" />
+								{treeY.map(y => (
+									<path class="d08-route rt" pathLength="100" d={`M48 ${y} H71`} />
+								))}
+								{treeY.map(y => (
+									<path class="d08-route rt" pathLength="100" d={`M392 ${y} H369`} />
+								))}
+								<rect class="crn" x="44" y="46" width="8" height="8" />
+								<rect class="crn" x="388" y="46" width="8" height="8" />
+								<rect class="d08-node nd nd-root" x="213" y="11" width="14" height="14" />
+								<rect class="d08-node nd nd-br" x="42" y="44" width="12" height="12" />
+								<rect class="d08-node nd nd-br" x="386" y="44" width="12" height="12" />
+								{treeY.map(y => (
+									<rect class="d08-node nd" x="71" y={y - 5} width="10" height="10" />
+								))}
+								{treeY.map(y => (
+									<rect class="d08-node nd" x="359" y={y - 5} width="10" height="10" />
+								))}
+								<text class="ct" x="48" y="34" font-size="10" text-anchor="middle">
+									RUNTIME
+								</text>
+								<text class="ct" x="392" y="34" font-size="10" text-anchor="middle">
+									BEHAVIOUR
+								</text>
+								{treeY.map((y, i) => (
+									<text class="lf" x="88" y={y + 4} font-size="11">
+										{stack[i]}
+									</text>
+								))}
+								{treeY.map((y, i) => (
+									<text class="lf" x="352" y={y + 4} font-size="11" text-anchor="end">
+										{stack[i + 3]}
+									</text>
+								))}
+							</svg>
+
+							<svg class="g-narrow" viewBox="0 0 320 412" role="presentation" aria-hidden="true" focusable="false">
+								<path class="d08-route rt hub" pathLength="100" d="M40 27 V390" />
+								{[100, 150, 200, 290, 340, 390].map(y => (
+									<path class="d08-route rt" pathLength="100" d={`M40 ${y} H65`} />
+								))}
+								<rect class="d08-node nd nd-root" x="33" y="13" width="14" height="14" />
+								<rect class="d08-node nd nd-br" x="34" y="54" width="12" height="12" />
+								<rect class="d08-node nd nd-br" x="34" y="244" width="12" height="12" />
+								{[100, 150, 200, 290, 340, 390].map(y => (
+									<rect class="d08-node nd" x="65" y={y - 5} width="10" height="10" />
+								))}
+								<text class="ct" x="58" y="64" font-size="10">
+									RUNTIME
+								</text>
+								<text class="ct" x="58" y="254" font-size="10">
+									BEHAVIOUR
+								</text>
+								{stack.map((t, i) => (
+									<text class="lf" x="82" y={[100, 150, 200, 290, 340, 390][i] + 4} font-size="14">
+										{t}
+									</text>
+								))}
+							</svg>
+						</Fragment>
+					)
+				}
+
+				<figcaption>
+					<span class="d08-coord">[{coord}.T]</span>
+					{topoSpec}
+				</figcaption>
+			</figure>
+		</div>
+	</div>
+</section>
+
+<style>
+	.svc {
+		padding-block: clamp(3.5rem, 9vw, 8rem);
+		border-bottom: 1px solid var(--rule-soft);
+		overflow: clip;
+	}
+
+	.grid {
+		display: grid;
+		gap: var(--mod);
+		padding-top: clamp(1.5rem, 4vw, 3rem);
+		align-items: start;
+	}
+
+	.svc-comb .grid {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+	}
+
+	.svc-loop .grid {
+		grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
+		align-items: center;
+	}
+
+	.svc-tree .grid {
+		grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
+	}
+
+	.svc-tree .fig {
+		order: -1;
+	}
+
+	.svc-tree .txt {
+		padding-top: clamp(1rem, 4vw, 4rem);
+	}
+
+	.num {
+		font-size: clamp(3.5rem, 8vw, 7rem);
+		line-height: 0.82;
+		letter-spacing: -0.02em;
+		color: var(--accent);
+	}
+
+	.svc h2 {
+		display: grid;
+		margin-top: clamp(0.75rem, 2vw, 1.5rem);
+	}
+
+	.en {
+		font-size: clamp(1.375rem, 3vw, 2.5rem);
+		letter-spacing: 0.02em;
+		line-height: 1.05;
+	}
+
+	.zh {
+		font-family: var(--font-cjk);
+		font-weight: 600;
+		font-size: clamp(1.125rem, 2.1vw, 1.75rem);
+		letter-spacing: 0.2em;
+		color: var(--dim);
+		margin-top: 0.35rem;
+	}
+
+	.pos {
+		margin-top: 0.9rem;
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		letter-spacing: 0.08em;
+		color: var(--accent-ink);
+	}
+
+	.rule {
+		height: 1px;
+		background: var(--rule);
+		margin-block: clamp(1.25rem, 2.5vw, 2rem);
+		transform-origin: left center;
+	}
+
+	.cp {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+		line-height: 1.95;
+		letter-spacing: 0.04em;
+		max-width: 40ch;
+	}
+
+	.cl {
+		display: block;
+	}
+
+	.fig {
+		margin: 0;
+		display: grid;
+		gap: 0.75rem;
+		border-left: 1px solid var(--rule-soft);
+		padding-left: clamp(1rem, 2vw, 2rem);
+	}
+
+	.svc-tree .fig {
+		border-left: 0;
+		border-right: 1px solid var(--rule-soft);
+		padding-left: 0;
+		padding-right: clamp(1rem, 2vw, 2rem);
+	}
+
+	.fig svg {
+		width: 100%;
+		height: auto;
+	}
+
+	.g-narrow {
+		display: none;
+	}
+
+	.fig figcaption {
+		font-size: 0.6875rem;
+		letter-spacing: 0.14em;
+		color: var(--dim);
+		border-top: 1px solid var(--rule-soft);
+		padding-top: 0.5rem;
+	}
+
+	.rt {
+		fill: none;
+		stroke: var(--fg);
+		stroke-width: 1.25;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.hub {
+		stroke-width: 1.75;
+	}
+
+	.loop {
+		stroke: var(--accent);
+		stroke-width: 2;
+	}
+
+	.nd {
+		fill: var(--paper-hi);
+		stroke: var(--fg);
+		stroke-width: 1.25;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.nd-root {
+		fill: var(--accent);
+		stroke: var(--accent);
+	}
+
+	.nd-port,
+	.nd-br {
+		fill: var(--ink-deep);
+		stroke: var(--ink-deep);
+	}
+
+	.crn {
+		fill: var(--accent);
+	}
+
+	.fig text {
+		font-family: var(--font-mono);
+		fill: var(--fg);
+		letter-spacing: 0.04em;
+	}
+
+	.fig .ct {
+		fill: var(--dim);
+		letter-spacing: 0.18em;
+	}
+
+	@media (max-width: 68rem) {
+		.svc-comb .grid,
+		.svc-loop .grid,
+		.svc-tree .grid {
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--s-8);
+		}
+
+		.svc-tree .fig {
+			order: 0;
+			border-right: 0;
+			border-left: 1px solid var(--rule-soft);
+			padding-right: 0;
+			padding-left: clamp(1rem, 2vw, 2rem);
+		}
+
+		.fig {
+			max-width: 34rem;
+		}
+
+		.svc-comb .fig {
+			max-width: 20rem;
+		}
+
+		.svc-loop .fig {
+			max-width: 44rem;
+		}
+	}
+
+	@media (max-width: 40rem) {
+		.g-wide {
+			display: none;
+		}
+
+		.g-narrow {
+			display: block;
+		}
+	}
+
+	@media (max-width: 48rem) {
+		.fig {
+			border-left: 0;
+			padding-left: 0;
+			border-top: 1px solid var(--rule);
+			padding-top: 1rem;
+		}
+
+		.svc-tree .fig {
+			border-left: 0;
+			padding-left: 0;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		document.querySelectorAll<HTMLElement>(".svc").forEach(sec => {
+			const routes = sec.querySelectorAll<SVGPathElement>(".d08-route");
+			const nodes = sec.querySelectorAll<SVGRectElement>(".d08-node");
+
+			const tl = gsap.timeline({
+				scrollTrigger: { trigger: sec.querySelector(".fig"), start: "top 82%" }
+			});
+
+			tl.fromTo(routes, { strokeDasharray: 100, strokeDashoffset: 100 }, { strokeDashoffset: 0, duration: 0.5, stagger: 0.055, ease: "none" }).from(
+				nodes,
+				{ scale: 0, transformOrigin: "50% 50%", duration: 0.2, stagger: 0.04, ease: "power1.out" },
+				"-=0.45"
+			);
+
+			gsap.from(sec.querySelectorAll(".num, .en, .zh, .pos"), {
+				opacity: 0,
+				y: 14,
+				duration: 0.45,
+				stagger: 0.07,
+				ease: "power2.out",
+				scrollTrigger: { trigger: sec, start: "top 76%" }
+			});
+
+			gsap.from(sec.querySelector(".rule"), {
+				scaleX: 0,
+				duration: 0.55,
+				ease: "power2.inOut",
+				scrollTrigger: { trigger: sec, start: "top 72%" }
+			});
+		});
+	});
+</script>

@@ -1,0 +1,232 @@
+---
+import { manifesto } from "../../lib/copy";
+import GridField from "./GridField.astro";
+---
+
+{
+	/* MOVEMENT 07 — the loudest. Inverted ground, the statement cancelled and
+    re-stated, evidence set at violent scale contrast underneath. */
+}
+<section id="manifesto" class="mf inv crop" aria-labelledby="mf-h" data-d10-section>
+	<GridField class="mf__field" />
+
+	<div class="mf__g g12">
+		<p class="mf__run note" aria-hidden="true">07 / MANIFESTO</p>
+
+		<h2 id="mf-h" class="mf__h" aria-label={`${manifesto.headlineParts[0]}，${manifesto.headlineParts[1]}`} data-reveal>
+			<span class="mf__neg" aria-hidden="true">
+				<span class="mf__negT">{manifesto.headlineParts[0]}</span>
+				<span class="mf__strike"></span>
+			</span>
+			<span class="mf__pos" aria-hidden="true">{manifesto.headlineParts[1]}</span>
+		</h2>
+
+		<div class="mf__body">
+			{manifesto.body.map(line => <span>{line}</span>)}
+		</div>
+	</div>
+
+	<div class="mf__ev g12">
+		<p class="mf__evRun note" aria-hidden="true">EVIDENCE — 01 / 02 / 03</p>
+		<ul class="mf__cred">
+			{
+				manifesto.credibility.map((c, i) => (
+					<li class={`mf__c mf__c--${i + 1}`}>
+						<p class="mf__fig" aria-hidden="true">
+							{c.figure}
+						</p>
+						<h3 class="mf__lbl">
+							<span class="visually-hidden">{c.figure} — </span>
+							{c.label}
+						</h3>
+						<p class="mf__en note">{c.en}</p>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.mf {
+		position: relative;
+		padding-block: clamp(5rem, 14vw, 13rem) clamp(4rem, 10vw, 9rem);
+	}
+
+	.mf__field {
+		opacity: 0.9;
+	}
+
+	.mf__g,
+	.mf__ev {
+		position: relative;
+		z-index: 1;
+	}
+
+	.mf__run {
+		grid-column: 1 / 4;
+		color: var(--d10-accent);
+		border-top: 0.1875rem solid var(--d10-accent);
+		padding-top: 0.5rem;
+	}
+
+	.mf__h {
+		grid-column: 1 / 13;
+		margin-top: clamp(1.5rem, 4vw, 3rem);
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		line-height: 0.86;
+		letter-spacing: -0.035em;
+	}
+
+	.mf__neg {
+		position: relative;
+		display: block;
+		font-size: clamp(2rem, 10vw, 8rem);
+		color: color-mix(in oklab, var(--d10-paper) 58%, transparent);
+		width: fit-content;
+	}
+
+	.mf__negT {
+		display: block;
+	}
+
+	.mf__strike {
+		position: absolute;
+		left: -1.5rem;
+		right: -3vw;
+		top: 52%;
+		height: clamp(0.25rem, 0.9vw, 0.75rem);
+		background: var(--d10-accent);
+	}
+
+	.mf__pos {
+		display: block;
+		white-space: nowrap;
+		font-size: clamp(2.875rem, 19vw, 16rem);
+		margin-left: -0.04em;
+		margin-top: 0.06em;
+		color: var(--d10-paper-hi);
+	}
+
+	.mf__body {
+		grid-column: 7 / 12;
+		margin-top: clamp(2rem, 5vw, 4rem);
+		display: grid;
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9375rem, 1.15vw, 1.125rem);
+		line-height: 2.1;
+		letter-spacing: 0.05em;
+		color: var(--d10-paper);
+		border-left: 0.1875rem solid var(--d10-accent);
+		padding-left: clamp(1rem, 2vw, 1.75rem);
+	}
+
+	/* --- evidence ----------------------------------------------------- */
+	.mf__ev {
+		margin-top: clamp(4rem, 11vw, 10rem);
+	}
+
+	.mf__evRun {
+		grid-column: 1 / 13;
+		color: color-mix(in oklab, var(--d10-paper) 68%, transparent);
+		border-bottom: var(--hairline) solid var(--d10-rule);
+		padding-bottom: 0.625rem;
+		margin-bottom: clamp(1.5rem, 4vw, 3rem);
+	}
+
+	.mf__cred {
+		grid-column: 1 / 13;
+		display: grid;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		column-gap: var(--d10-gap);
+		row-gap: clamp(2.5rem, 6vw, 5rem);
+		align-items: start;
+	}
+
+	.mf__c {
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	.mf__c--1 {
+		grid-column: 1 / 5;
+	}
+
+	.mf__c--2 {
+		grid-column: 5 / 9;
+		transform: translateY(clamp(1.5rem, 4vw, 4rem));
+	}
+
+	.mf__c--3 {
+		grid-column: 9 / 13;
+		transform: translateY(clamp(3rem, 8vw, 8rem));
+	}
+
+	.mf__fig {
+		font-family: var(--font-grotesk);
+		font-weight: 700;
+		line-height: 0.8;
+		letter-spacing: -0.05em;
+		color: var(--d10-accent);
+	}
+
+	.mf__c--1 .mf__fig {
+		font-size: clamp(4.5rem, 15vw, 13rem);
+	}
+
+	.mf__c--2 .mf__fig {
+		font-size: clamp(2rem, 6.2vw, 5rem);
+		letter-spacing: -0.03em;
+	}
+
+	.mf__c--3 .mf__fig {
+		font-size: clamp(1.125rem, 3.2vw, 2.5rem);
+		letter-spacing: 0.06em;
+		color: var(--d10-paper-hi);
+	}
+
+	.mf__lbl {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.8125rem, 1vw, 0.9375rem);
+		line-height: 1.7;
+		letter-spacing: 0.06em;
+		color: var(--d10-paper);
+		border-top: var(--hairline) solid var(--d10-rule);
+		padding-top: 0.625rem;
+	}
+
+	.mf__en {
+		color: color-mix(in oklab, var(--d10-paper) 68%, transparent);
+	}
+
+	@media (max-width: 63.99em) {
+		.mf__run {
+			grid-column: 1 / 7;
+		}
+
+		.mf__body {
+			grid-column: 1 / 13;
+		}
+
+		.mf__c--1,
+		.mf__c--2,
+		.mf__c--3 {
+			grid-column: 1 / 13;
+			transform: none;
+		}
+
+		.mf__c--2 {
+			padding-left: 16.666%;
+		}
+
+		.mf__c--3 {
+			padding-left: 33.333%;
+		}
+
+		.mf__strike {
+			left: -1rem;
+			right: -8vw;
+		}
+	}
+</style>

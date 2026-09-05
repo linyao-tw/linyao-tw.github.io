@@ -1,0 +1,218 @@
+---
+import { intro } from "../../lib/copy";
+---
+
+<section class="intro" id="intro" aria-labelledby="d08-intro-h">
+	<div class="in d08-shell">
+		<p class="d08-head">
+			<span class="d08-coord">[02.00]</span>
+			<b>SPEC BLOCK — STUDIO</b>
+			<i aria-hidden="true"></i>
+			<span>REV. 08</span>
+		</p>
+
+		<div class="body">
+			<div class="side" aria-hidden="true">
+				<span class="side-ln">02</span>
+				<span class="side-rule"></span>
+				<span class="side-tx">INTRO</span>
+			</div>
+
+			<div class="measure">
+				<h2 id="d08-intro-h">
+					{intro.headlineParts.map(p => <span class="ln">{p}</span>)}
+				</h2>
+				<div class="rule" aria-hidden="true"></div>
+				<p class="copy">
+					{intro.body.map(l => <span class="cl">{l}</span>)}
+				</p>
+			</div>
+
+			<dl class="annot">
+				<div><dt>MODULE</dt><dd>02 / INTRO</dd></div>
+				<div><dt>OUTPUT</dt><dd>DIGITAL EXPERIENCE</dd></div>
+				<div><dt>MODE</dt><dd>INDEPENDENT STUDIO</dd></div>
+				<div><dt>AXIS</dt><dd>DESIGN · CODE · MOTION</dd></div>
+			</dl>
+		</div>
+	</div>
+</section>
+
+<style>
+	.intro {
+		padding-block: clamp(4rem, 11vw, 11rem) clamp(4rem, 11vw, 10rem);
+	}
+
+	.body {
+		display: grid;
+		grid-template-columns: 6ch minmax(0, 1fr) minmax(0, 22ch);
+		gap: var(--mod);
+		padding-top: clamp(2rem, 5vw, 4.5rem);
+	}
+
+	.side {
+		display: grid;
+		justify-items: start;
+		align-content: start;
+		gap: 0.75rem;
+	}
+
+	.side-ln {
+		font-size: 1.5rem;
+		color: var(--accent);
+		line-height: 1;
+	}
+
+	.side-rule {
+		width: 1px;
+		height: 5rem;
+		background: var(--rule);
+	}
+
+	.side-tx {
+		writing-mode: vertical-rl;
+		font-size: 0.6875rem;
+		letter-spacing: 0.3em;
+		color: var(--dim);
+	}
+
+	.measure {
+		max-width: 42ch;
+	}
+
+	.measure h2 {
+		font-family: var(--font-cjk);
+		font-weight: 600;
+		font-size: clamp(1.75rem, 3.6vw, 3.25rem);
+		line-height: 1.16;
+		letter-spacing: 0.01em;
+		display: grid;
+		justify-items: start;
+	}
+
+	.measure h2 .ln:last-child {
+		color: var(--accent);
+	}
+
+	.rule {
+		height: 1px;
+		background: var(--fg);
+		margin-block: clamp(1.5rem, 3vw, 2.5rem);
+		transform-origin: left center;
+	}
+
+	.copy {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9375rem, 1.15vw, 1.0625rem);
+		line-height: 2;
+		letter-spacing: 0.05em;
+		color: var(--fg);
+	}
+
+	.cl {
+		display: block;
+	}
+
+	.annot {
+		font-size: 0.6875rem;
+		letter-spacing: 0.1em;
+		align-self: start;
+	}
+
+	.annot > div {
+		display: grid;
+		grid-template-columns: 8ch 1fr;
+		gap: 1ch;
+		border-top: 1px solid var(--rule-soft);
+		padding-block: 0.5rem;
+	}
+
+	.annot > div:last-child {
+		border-bottom: 1px solid var(--rule-soft);
+	}
+
+	.annot dt {
+		color: var(--dim);
+	}
+
+	.annot dd {
+		color: var(--fg);
+	}
+
+	@media (max-width: 68rem) {
+		.body {
+			grid-template-columns: 5ch minmax(0, 1fr);
+			gap: var(--s-8);
+		}
+
+		.annot {
+			grid-column: 2;
+			max-width: 32rem;
+		}
+	}
+
+	@media (max-width: 48rem) {
+		.body {
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--s-6);
+		}
+
+		.side {
+			grid-auto-flow: column;
+			align-items: center;
+			gap: 1ch;
+		}
+
+		.side-rule {
+			width: 3rem;
+			height: 1px;
+		}
+
+		.side-tx {
+			writing-mode: horizontal-tb;
+		}
+
+		.annot {
+			grid-column: 1;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		gsap.from(".intro .measure h2 .ln", {
+			yPercent: 60,
+			opacity: 0,
+			duration: 0.5,
+			stagger: 0.08,
+			ease: "power2.out",
+			scrollTrigger: { trigger: ".intro", start: "top 78%" }
+		});
+
+		gsap.from(".intro .rule", {
+			scaleX: 0,
+			duration: 0.6,
+			ease: "power2.inOut",
+			scrollTrigger: { trigger: ".intro .rule", start: "top 88%" }
+		});
+
+		gsap.from(".intro .cl", {
+			opacity: 0,
+			x: -8,
+			duration: 0.4,
+			stagger: 0.07,
+			ease: "none",
+			scrollTrigger: { trigger: ".intro .copy", start: "top 88%" }
+		});
+
+		gsap.from(".intro .annot > div", {
+			opacity: 0,
+			duration: 0.3,
+			stagger: 0.06,
+			ease: "none",
+			scrollTrigger: { trigger: ".intro .annot", start: "top 88%" }
+		});
+	});
+</script>

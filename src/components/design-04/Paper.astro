@@ -1,0 +1,147 @@
+---
+/**
+ * design-04 · ground plane
+ *
+ * Emits three things, exactly once per page:
+ *   1. the version token block (the only permitted global style, all selectors prefixed body.d-04)
+ *   2. the single reusable feTurbulence paper-grain filter + the halftone dot patterns,
+ *      declared once in <defs> and referenced by id from every other component
+ *   3. the fixed full-viewport grain sheet
+ *
+ * It also carries the page's whole motion budget: a two-step "plate registration"
+ * snap on reveal. Nothing else moves except the colophon marquee.
+ */
+
+/** seven-step halftone ramp: dot radius grows across the field, tile stays at 13 units */
+const ramp = [0.85, 1.65, 2.45, 3.25, 4.1, 5, 5.85];
+const bandW = 138;
+const bandStep = 137.2;
+---
+
+<svg class="sheet" aria-hidden="true" focusable="false" preserveAspectRatio="none">
+	<defs>
+		<filter id="d04-grain" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+			<feTurbulence type="fractalNoise" baseFrequency="0.86" numOctaves="4" seed="19" stitchTiles="stitch"></feTurbulence>
+			<feColorMatrix type="matrix" values="0 0 0 0 0.13  0 0 0 0 0.12  0 0 0 0 0.10  0.45 0.40 0.32 0 -0.30"></feColorMatrix>
+		</filter>
+
+		{
+			ramp.map((r, i) => (
+				<pattern id={`d04-dot-${i}`} class="ht-orange" width="13" height="13" patternUnits="userSpaceOnUse">
+					<circle cx="6.5" cy="6.5" r={r} fill="currentColor" />
+				</pattern>
+			))
+		}
+
+		<pattern id="d04-dot-ink" class="ht-ink" width="10" height="10" patternUnits="userSpaceOnUse">
+			<circle cx="5" cy="5" r="1.6" fill="currentColor"></circle>
+		</pattern>
+
+		<pattern id="d04-dot-fine" class="ht-orange" width="7" height="7" patternUnits="userSpaceOnUse">
+			<circle cx="3.5" cy="3.5" r="1.15" fill="currentColor"></circle>
+		</pattern>
+
+		{/* the ramp itself — referenced with <use href="#d04-halftone"> from any host svg with a 0 0 480 480 viewBox */}
+		<g id="d04-halftone" transform="rotate(-24 240 240)">
+			{ramp.map((_, i) => <rect x={-160 + i * bandStep} y="-160" width={bandW} height="960" fill={`url(#d04-dot-${i})`} />)}
+		</g>
+	</defs>
+
+	<rect class="grain-src" width="100%" height="100%" filter="url(#d04-grain)"></rect>
+</svg>
+
+<style is:global>
+	body.d-04 {
+		/* ground + ink */
+		--bg: var(--paper-hi);
+		--fg: var(--ink-deep);
+		--accent: var(--orange);
+		/* orange for text: the derived deep tone clears 4.9:1 on paper, pure orange does not */
+		--accent-text: var(--orange-deep);
+		--field: var(--paper);
+		--field-lo: var(--paper-lo);
+
+		/* printed rules */
+		--rule: color-mix(in oklab, var(--ink) 52%, transparent);
+		--rule-soft: color-mix(in oklab, var(--ink) 24%, transparent);
+		--rule-faint: color-mix(in oklab, var(--ink) 12%, transparent);
+
+		/* plate geometry */
+		--crop-inset: clamp(0.5rem, 1.5vw, 1.35rem);
+		--crop-len: clamp(0.7rem, 1.9vw, 1.45rem);
+		--plate-x: clamp(1.15rem, 4.4vw, 4.75rem);
+		--plate-y: clamp(3.25rem, 6vw, 6.75rem);
+		--head-h: 3.25rem;
+
+		/* technical notation */
+		--mono: clamp(0.625rem, 0.56rem + 0.2vw, 0.76rem);
+		--mono-lg: clamp(0.72rem, 0.64rem + 0.3vw, 0.94rem);
+		--track: 0.16em;
+
+		background: var(--paper-hi);
+		color: var(--ink-deep);
+		font-family: var(--font-grotesk);
+	}
+
+	/* the global CJK rule sets overflow-wrap: break-word, which snaps Latin display words mid-glyph */
+	body.d-04 * {
+		overflow-wrap: normal;
+	}
+
+	body.d-04 [id] {
+		scroll-margin-top: calc(var(--head-h) + 1rem);
+	}
+
+	body.d-04 ::selection {
+		background: var(--accent);
+		color: var(--paper-hi);
+	}
+</style>
+
+<style>
+	.sheet {
+		position: fixed;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 90;
+		pointer-events: none;
+		mix-blend-mode: multiply;
+		opacity: 0.55;
+	}
+
+	.grain-src {
+		fill: var(--ink);
+	}
+
+	.ht-orange {
+		color: var(--accent);
+	}
+
+	.ht-ink {
+		color: var(--ink);
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	/**
+	 * Plate registration: the orange separation lands ~0.55rem off-register and
+	 * snaps into alignment in two hard steps. Transform only, from-state authored
+	 * from JS, so the page is complete and aligned with JS off or motion reduced.
+	 */
+	motion(({ gsap }) => {
+		const plates = Array.from(document.querySelectorAll<HTMLElement>("[data-reg]"));
+		plates.forEach(el => {
+			const flip = el.dataset.reg === "flip";
+			gsap.from(el, {
+				x: flip ? "-0.55rem" : "0.6rem",
+				y: flip ? "0.4rem" : "-0.5rem",
+				ease: "steps(2)",
+				duration: 0.28,
+				scrollTrigger: { trigger: el, start: "top 90%", once: true }
+			});
+		});
+	});
+</script>

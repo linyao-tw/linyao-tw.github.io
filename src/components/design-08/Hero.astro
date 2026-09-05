@@ -1,0 +1,427 @@
+---
+import { brand, hero } from "../../lib/copy";
+
+const ruler = Array.from({ length: 32 }, (_, i) => i);
+---
+
+<section class="hero" aria-labelledby="d08-h1">
+	<div class="hero-in d08-shell">
+		<p class="d08-head">
+			<span class="d08-coord">[01.00]</span>
+			<b>MOD.HERO</b>
+			<i aria-hidden="true"></i>
+			<span>{brand.equation}</span>
+		</p>
+
+		<div class="stage">
+			<div class="title">
+				<h1 id="d08-h1">
+					{hero.headlineParts.map(p => <span class="ln">{p}</span>)}
+				</h1>
+				<p class="sub">⟦ CREATE STRIKING EXPERIENCES ⟧</p>
+				<p class="disc">{brand.disciplines}</p>
+			</div>
+
+			<dl class="meta">
+				<div><dt>REV</dt><dd>08 / SYSTEM · CODE · GRID</dd></div>
+				<div><dt>MOD</dt><dd>4REM · 4COL SUBDIVISION</dd></div>
+				<div><dt>INK</dt><dd>GRAPHITE 4D4D4D</dd></div>
+				<div><dt>ACT</dt><dd>ORANGE RED FE3300</dd></div>
+			</dl>
+
+			<figure class="graph">
+				<svg class="wide" viewBox="0 0 1200 420" role="presentation" aria-hidden="true" focusable="false">
+					<g class="brk">
+						<path d="M40 66 V30 H92"></path><path d="M1160 66 V30 H1108"></path>
+						<path d="M40 374 V410 H92"></path><path d="M1160 374 V410 H1108"></path>
+					</g>
+
+					<path class="d08-route rt" pathLength="100" d="M150 141 V280 H583"></path>
+					<path class="d08-route rt" pathLength="100" d="M600 141 V263"></path>
+					<path class="d08-route rt" pathLength="100" d="M1050 141 V280 H617"></path>
+					<path class="d08-route rt rt-live" pathLength="100" d="M600 297 V369"></path>
+
+					<rect class="crn" x="146" y="276" width="9" height="9"></rect>
+					<rect class="crn" x="1046" y="276" width="9" height="9"></rect>
+
+					<rect class="d08-node nd" x="139" y="119" width="22" height="22"></rect>
+					<rect class="d08-node nd" x="589" y="119" width="22" height="22"></rect>
+					<rect class="d08-node nd" x="1039" y="119" width="22" height="22"></rect>
+					<rect class="d08-node nd nd-hub" x="583" y="263" width="34" height="34"></rect>
+					<rect class="d08-node nd nd-out" x="589" y="369" width="22" height="22"></rect>
+
+					<g class="lb">
+						<text x="150" y="66" text-anchor="middle" class="id" font-size="18">[A]</text>
+						<text x="150" y="100" text-anchor="middle" class="nm" font-size="34">DESIGN</text>
+						<text x="600" y="66" text-anchor="middle" class="id" font-size="18">[B]</text>
+						<text x="600" y="100" text-anchor="middle" class="nm" font-size="34">CODE</text>
+						<text x="1050" y="66" text-anchor="middle" class="id" font-size="18">[C]</text>
+						<text x="1050" y="100" text-anchor="middle" class="nm" font-size="34">MOTION</text>
+						<text x="375" y="138" text-anchor="middle" class="op" font-size="38">×</text>
+						<text x="825" y="138" text-anchor="middle" class="op" font-size="38">×</text>
+						<text x="645" y="318" class="mt" font-size="21">⟦ SYNTHESIS ⟧</text>
+						<text x="645" y="388" class="mt hi" font-size="21">⟦ EXPERIENCE ⟧</text>
+					</g>
+				</svg>
+
+				<svg class="narrow" viewBox="0 0 320 420" role="presentation" aria-hidden="true" focusable="false">
+					<path class="d08-route rt" pathLength="100" d="M56 48 V122"></path>
+					<path class="d08-route rt" pathLength="100" d="M56 138 V212"></path>
+					<path class="d08-route rt" pathLength="100" d="M56 228 V298"></path>
+					<path class="d08-route rt rt-live" pathLength="100" d="M56 322 V386"></path>
+
+					<rect class="d08-node nd" x="48" y="32" width="16" height="16"></rect>
+					<rect class="d08-node nd" x="48" y="122" width="16" height="16"></rect>
+					<rect class="d08-node nd" x="48" y="212" width="16" height="16"></rect>
+					<rect class="d08-node nd nd-hub" x="44" y="298" width="24" height="24"></rect>
+					<rect class="d08-node nd nd-out" x="48" y="386" width="16" height="16"></rect>
+
+					<g class="lb">
+						<text x="82" y="46" class="nm" font-size="21">DESIGN</text>
+						<text x="82" y="136" class="nm" font-size="21">CODE</text>
+						<text x="82" y="226" class="nm" font-size="21">MOTION</text>
+						<text x="82" y="316" class="mt" font-size="14">⟦ SYNTHESIS ⟧</text>
+						<text x="82" y="400" class="mt hi" font-size="14">⟦ EXPERIENCE ⟧</text>
+					</g>
+				</svg>
+
+				<figcaption>
+					<span class="d08-coord">[01.T]</span> TOPOLOGY.A — 3 IN / 1 SYNTHESIS / 1 OUT
+				</figcaption>
+			</figure>
+		</div>
+
+		<div class="foot">
+			<p class="cue"><span class="sq" aria-hidden="true"></span>{hero.scrollCue}</p>
+			<div class="ruler" aria-hidden="true">
+				{ruler.map(() => <span class="d08-tick" />)}
+			</div>
+			<p class="idx"><span class="d08-coord">[01.00]</span> / 08 — SYSTEM · CODE · GRID</p>
+		</div>
+	</div>
+</section>
+
+<style>
+	.hero {
+		min-height: calc(100svh - var(--mod) * 1.5);
+		display: flex;
+		overflow: clip;
+	}
+
+	.hero-in {
+		flex: 1;
+		display: grid;
+		grid-template-rows: max-content 1fr max-content;
+		padding-block: var(--s-3) var(--s-4);
+	}
+
+	.stage {
+		display: grid;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		align-items: start;
+		align-content: center;
+		column-gap: clamp(0.75rem, 1.8vw, 2rem);
+		row-gap: clamp(1rem, 2.2vw, 2rem);
+		padding-block: clamp(1rem, 2.4vw, 2.25rem);
+	}
+
+	.title {
+		grid-column: 1 / 6;
+		grid-row: 1;
+	}
+
+	.meta {
+		grid-column: 1 / 6;
+		grid-row: 2;
+		align-self: start;
+		font-size: 0.6875rem;
+		letter-spacing: 0.12em;
+		color: var(--dim);
+	}
+
+	.meta > div {
+		display: grid;
+		grid-template-columns: 5ch 1fr;
+		gap: 1ch;
+		border-top: 1px solid var(--rule-soft);
+		padding-block: 0.4rem;
+	}
+
+	.meta dt {
+		color: var(--accent-ink);
+	}
+
+	.meta dd {
+		color: var(--fg);
+	}
+
+	.graph {
+		grid-column: 6 / 13;
+		grid-row: 1 / 3;
+		align-self: center;
+		margin: 0;
+		display: grid;
+		gap: 0.6rem;
+		max-width: 64rem;
+	}
+
+	.title h1 {
+		font-family: var(--font-cjk);
+		font-weight: 600;
+		font-size: clamp(2.5rem, 5.6vw, 5.5rem);
+		line-height: 0.96;
+		letter-spacing: 0.01em;
+		display: grid;
+		justify-items: start;
+	}
+
+	.ln {
+		display: block;
+	}
+
+	.ln:nth-child(2) {
+		color: var(--accent);
+	}
+
+	.ln:nth-child(3) {
+		padding-left: 1.4ch;
+	}
+
+	.sub {
+		margin-top: clamp(1rem, 2vw, 1.5rem);
+		font-size: clamp(0.6875rem, 1.05vw, 0.875rem);
+		letter-spacing: 0.22em;
+		border-top: 1px solid var(--rule);
+		padding-top: 0.6rem;
+	}
+
+	.disc {
+		margin-top: 0.4rem;
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		letter-spacing: 0.16em;
+		color: var(--dim);
+	}
+
+	.graph svg {
+		width: 100%;
+		height: auto;
+	}
+
+	.graph figcaption {
+		font-size: 0.6875rem;
+		letter-spacing: 0.14em;
+		color: var(--dim);
+		border-top: 1px solid var(--rule-soft);
+		padding-top: 0.5rem;
+	}
+
+	.narrow {
+		display: none;
+	}
+
+	.rt {
+		fill: none;
+		stroke: var(--fg);
+		stroke-width: 1.5;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.rt-live {
+		stroke: var(--accent);
+		stroke-width: 2.5;
+	}
+
+	.brk path {
+		fill: none;
+		stroke: var(--rule);
+		stroke-width: 1;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.nd {
+		fill: var(--paper-hi);
+		stroke: var(--fg);
+		stroke-width: 1.5;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.nd-hub {
+		fill: var(--ink-deep);
+		stroke: var(--ink-deep);
+	}
+
+	.nd-out {
+		fill: var(--accent);
+		stroke: var(--accent);
+	}
+
+	.crn {
+		fill: var(--fg);
+	}
+
+	.lb text {
+		font-family: var(--font-mono);
+		fill: var(--fg);
+	}
+
+	.lb .id {
+		fill: var(--dimmer);
+		letter-spacing: 0.1em;
+	}
+
+	.lb .nm {
+		letter-spacing: 0.08em;
+	}
+
+	.lb .op {
+		fill: var(--accent);
+	}
+
+	.lb .mt {
+		letter-spacing: 0.1em;
+		fill: var(--dim);
+		paint-order: stroke fill;
+		stroke: var(--paper-hi);
+		stroke-width: 6;
+		stroke-linejoin: round;
+	}
+
+	.lb .hi {
+		fill: var(--accent-ink);
+	}
+
+	.foot {
+		display: grid;
+		grid-template-columns: max-content 1fr max-content;
+		align-items: end;
+		gap: var(--s-6);
+		border-top: 1px solid var(--rule);
+		padding-top: 0.6rem;
+		font-size: 0.6875rem;
+		letter-spacing: 0.16em;
+		color: var(--dim);
+	}
+
+	.cue {
+		display: flex;
+		align-items: center;
+		gap: 1ch;
+		color: var(--fg);
+	}
+
+	.sq {
+		width: 0.4375rem;
+		height: 0.4375rem;
+		background: var(--accent);
+	}
+
+	.ruler {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		height: 1.25rem;
+	}
+
+	.ruler span {
+		flex: none;
+		width: 1px;
+		height: 0.375rem;
+		background: var(--rule);
+		transform-origin: bottom;
+	}
+
+	.ruler span:nth-child(4n + 1) {
+		height: 1.125rem;
+		background: var(--fg);
+	}
+
+	.idx {
+		white-space: nowrap;
+	}
+
+	@media (max-width: 68rem) {
+		.hero {
+			min-height: 0;
+		}
+
+		.stage {
+			grid-template-columns: minmax(0, 1fr);
+			row-gap: var(--s-8);
+			padding-block: var(--s-8) var(--s-12);
+		}
+
+		.title,
+		.meta,
+		.graph {
+			grid-column: 1;
+			grid-row: auto;
+		}
+
+		.meta {
+			max-width: 32rem;
+		}
+
+		.title h1 {
+			font-size: clamp(2.5rem, 7.6vw, 5rem);
+		}
+	}
+
+	@media (max-width: 56rem) {
+		.meta {
+			max-width: 26rem;
+		}
+
+		.wide {
+			display: none;
+		}
+
+		.narrow {
+			display: block;
+			max-width: 24rem;
+		}
+
+		.title h1 {
+			font-size: clamp(2.5rem, 11vw, 4.5rem);
+		}
+
+		.foot {
+			grid-template-columns: 1fr;
+			gap: var(--s-3);
+		}
+
+		.ruler {
+			order: 3;
+		}
+
+		.idx {
+			order: 2;
+			white-space: normal;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap, ScrollTrigger }) => {
+		const routes = gsap.utils.toArray<SVGPathElement>(".hero .d08-route");
+		const nodes = gsap.utils.toArray<SVGRectElement>(".hero .d08-node");
+
+		const tl = gsap.timeline({ defaults: { ease: "none" } });
+		tl.from(".hero .ln", { yPercent: 108, opacity: 0, duration: 0.5, stagger: 0.07, ease: "power2.out" })
+			.from(".hero .sub, .hero .disc", { opacity: 0, duration: 0.35, stagger: 0.06 }, "-=0.2")
+			.fromTo(routes, { strokeDasharray: 100, strokeDashoffset: 100 }, { strokeDashoffset: 0, duration: 0.55, stagger: 0.09 }, "-=0.3")
+			.from(nodes, { scale: 0, transformOrigin: "50% 50%", duration: 0.22, stagger: 0.06, ease: "power1.out" }, "-=0.5")
+			.from(".hero .ruler .d08-tick", { scaleY: 0, duration: 0.18, stagger: 0.012 }, "-=0.35");
+
+		gsap.to(".hero .stage", {
+			yPercent: -5,
+			opacity: 0.35,
+			ease: "none",
+			scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true }
+		});
+
+		ScrollTrigger.refresh();
+	});
+</script>

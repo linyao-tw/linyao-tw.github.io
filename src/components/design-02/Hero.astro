@@ -1,0 +1,273 @@
+---
+import { brand, hero } from "../../lib/copy";
+
+const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
+---
+
+<section class="hero d02-hero" id="top" aria-labelledby="d02-h1">
+	<div class="ghost" aria-hidden="true">動</div>
+
+	<p class="side" aria-hidden="true">{brand.disciplines}</p>
+
+	<div class="type" data-d02-hero>
+		<h1 class="h1" id="d02-h1" aria-label={hero.headline}>
+			<span class="ln ln-a"><span class="d02-li">{hero.headlineParts[0]}</span></span>
+			<span class="ln ln-b"><span class="d02-li" data-d02-track="0.34em">{hero.headlineParts[1]}</span></span>
+			<span class="ln ln-c">
+				<span class="d02-li"><span class="solid">體</span><span class="hollow">驗</span></span>
+			</span>
+		</h1>
+	</div>
+
+	<div class="disc" lang="zh-Hant" data-d02-track="0.95em">{brand.disciplines}</div>
+
+	<div class="eq" aria-label={brand.equation}>
+		<div class="eq-track d02-eq-track" aria-hidden="true">
+			{
+				eqRepeat.map(i => (
+					<span class="eq-item">
+						<span class="eq-txt">{brand.equation}</span>
+						<span class="eq-mark">/{String(i + 1).padStart(2, "0")}</span>
+					</span>
+				))
+			}
+		</div>
+	</div>
+
+	<div class="foot">
+		<p class="cue">{hero.scrollCue}</p>
+		<p class="loc">
+			<span>25.0330°N</span>
+			<span>121.5654°E</span>
+			<span>TAIPEI</span>
+		</p>
+	</div>
+</section>
+
+<style>
+	.hero {
+		position: relative;
+		overflow: clip;
+		min-height: 100vh;
+		min-height: 100svh;
+		display: grid;
+		grid-template-rows: 1fr auto auto;
+		padding-block: clamp(6rem, 16vh, 10rem) 0;
+		border-bottom: var(--hairline) solid var(--rule);
+	}
+
+	.hero > :not(.ghost):not(.side) {
+		position: relative;
+		z-index: 1;
+	}
+
+	.ghost {
+		position: absolute;
+		z-index: 0;
+		inset-block-start: 26%;
+		inset-inline-end: -16vw;
+		font-family: var(--font-cjk);
+		font-size: 64vw;
+		font-weight: 700;
+		line-height: 0.78;
+		color: var(--ghost);
+		user-select: none;
+		pointer-events: none;
+	}
+
+	.side {
+		position: absolute;
+		z-index: 2;
+		bottom: 27%;
+		right: calc(var(--edge) * 0.3);
+		writing-mode: vertical-rl;
+		font-family: var(--font-cjk);
+		font-size: 0.64rem;
+		letter-spacing: 0.26em;
+		color: var(--dim);
+		display: none;
+	}
+
+	/* --- the headline ------------------------------------------------- */
+	.type {
+		align-self: center;
+		width: 100%;
+	}
+
+	.h1 {
+		display: grid;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		color: var(--ink);
+	}
+
+	.ln {
+		display: block;
+		overflow: clip;
+		padding-block: 0.06em;
+		margin-block: -0.06em;
+	}
+
+	.ln .d02-li {
+		display: block;
+		line-height: 0.82;
+		white-space: nowrap;
+		will-change: transform;
+	}
+
+	.ln-a .d02-li {
+		font-size: var(--h-a);
+		margin-inline-start: -0.19em;
+		letter-spacing: -0.02em;
+	}
+
+	.ln-b {
+		margin-block-start: 0.4rem;
+	}
+
+	.ln-b .d02-li {
+		font-size: var(--h-b);
+		margin-inline-start: var(--h-b-x);
+		letter-spacing: 0.02em;
+		color: var(--dim);
+	}
+
+	.ln-c {
+		margin-block-start: 0.15rem;
+	}
+
+	.ln-c .d02-li {
+		font-size: var(--h-c);
+		margin-inline-start: var(--h-c-x);
+		letter-spacing: -0.03em;
+	}
+
+	.ln-c .hollow {
+		color: transparent;
+		-webkit-text-stroke: 0.013em var(--ink);
+	}
+
+	.hero {
+		--h-a: 17.5vw;
+		--h-b: 6.4vw;
+		--h-b-x: 34vw;
+		--h-c: 21.5vw;
+		--h-c-x: 15vw;
+	}
+
+	/* --- disciplines line --------------------------------------------- */
+	.disc {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.68rem, 1.1vw, 0.82rem);
+		letter-spacing: 0.4em;
+		color: var(--dim);
+		padding: 1.25rem var(--edge) 1.1rem;
+		border-top: var(--hairline) solid var(--rule-soft);
+		margin-block-start: clamp(1.5rem, 5vh, 3rem);
+	}
+
+	/* --- horizontally travelling equation band ------------------------ */
+	.eq {
+		overflow: clip;
+		border-block: 0.15rem solid var(--ink);
+	}
+
+	.eq-track {
+		display: flex;
+		align-items: baseline;
+		gap: clamp(1.5rem, 4vw, 3.5rem);
+		width: max-content;
+		padding-block: clamp(0.35rem, 1vw, 0.7rem);
+		padding-inline-start: var(--edge);
+		will-change: transform;
+	}
+
+	.eq-item {
+		display: flex;
+		align-items: baseline;
+		gap: clamp(1.5rem, 4vw, 3.5rem);
+	}
+
+	.eq-txt {
+		font-size: clamp(1.35rem, 3.4vw, 3rem);
+		font-weight: 800;
+		letter-spacing: 0.02em;
+		white-space: nowrap;
+	}
+
+	.eq-txt {
+		color: var(--ink);
+	}
+
+	.eq-item:nth-child(even) .eq-txt {
+		color: transparent;
+		-webkit-text-stroke: 1px var(--ink);
+	}
+
+	.eq-mark {
+		font-family: var(--font-mono);
+		font-size: 0.6rem;
+		letter-spacing: 0.18em;
+		color: var(--accent-txt);
+	}
+
+	/* --- footer strip -------------------------------------------------- */
+	.foot {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 0.75rem 1.5rem;
+		padding: 0.9rem var(--edge) 1.1rem;
+	}
+
+	.cue {
+		font-family: var(--font-mono);
+		font-size: 0.62rem;
+		letter-spacing: 0.24em;
+		color: var(--accent-txt);
+	}
+
+	.loc {
+		display: flex;
+		gap: 1.25rem;
+		font-family: var(--font-mono);
+		font-size: 0.58rem;
+		letter-spacing: 0.16em;
+		color: var(--dim);
+	}
+
+	@media (max-width: 48rem) {
+		.hero {
+			--h-a: 29vw;
+			--h-b: 10.5vw;
+			--h-b-x: 22vw;
+			--h-c: 34vw;
+			--h-c-x: 8vw;
+		}
+
+		.ghost {
+			inset-block-start: 52%;
+			inset-inline-end: -26vw;
+			font-size: 92vw;
+		}
+
+		.disc {
+			letter-spacing: 0.24em;
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.side {
+			display: block;
+		}
+
+		.hero {
+			--h-a: 15vw;
+			--h-b: 5.2vw;
+			--h-b-x: 42vw;
+			--h-c: 18.5vw;
+			--h-c-x: 20vw;
+		}
+	}
+</style>

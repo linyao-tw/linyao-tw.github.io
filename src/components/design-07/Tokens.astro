@@ -1,0 +1,99 @@
+---
+/**
+ * design-07 — DARK GRAPHITE
+ * The single permitted global block for this version. Every selector is
+ * prefixed with `body.d-07` so nothing can leak into the other nine designs.
+ */
+---
+
+<style is:global>
+	body.d-07 {
+		/* --- fields (dark first) ------------------------------------- */
+		--d07-void: var(--void);
+		--d07-black: var(--ink-black);
+		--d07-deep: var(--ink-deep);
+		--d07-graphite: var(--graphite);
+
+		/* --- warm gray at measured strengths -------------------------
+		   text  94% · mute  70% · dim  58% (smallest readable)
+		   ghost 32% and the two rule tones are decorative only. */
+		--d07-text: color-mix(in oklab, var(--warm-gray) 94%, transparent);
+		--d07-mute: color-mix(in oklab, var(--warm-gray) 70%, transparent);
+		--d07-dim: color-mix(in oklab, var(--warm-gray) 58%, transparent);
+		--d07-ghost: color-mix(in oklab, var(--warm-gray) 32%, transparent);
+		--d07-line: color-mix(in oklab, var(--warm-gray) 24%, transparent);
+		--d07-line-soft: color-mix(in oklab, var(--warm-gray) 11%, transparent);
+
+		--d07-gutter: clamp(1.25rem, 5vw, 6rem);
+		--d07-max: 100rem;
+		--d07-slit: 0.1875rem;
+
+		--bg: var(--d07-void);
+		--fg: var(--d07-text);
+
+		background: var(--d07-void);
+		color: var(--d07-text);
+		font-family: var(--font-grotesk);
+		font-weight: 300;
+		letter-spacing: 0.012em;
+	}
+
+	body.d-07 ::selection {
+		background: var(--orange);
+		color: var(--d07-void);
+	}
+
+	/* --- shell: the page architecture ------------------------------- */
+	body.d-07 .d07-shell {
+		width: 100%;
+		max-width: var(--d07-max);
+		margin-inline: auto;
+		padding-inline: var(--d07-gutter);
+	}
+
+	/* --- running head: hairline fills the measure, label sits right -- */
+	body.d-07 .d07-run {
+		display: flex;
+		align-items: center;
+		gap: clamp(0.75rem, 2vw, 1.5rem);
+		margin: 0 0 clamp(3rem, 8vh, 7rem);
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		font-weight: 400;
+		line-height: 1;
+		letter-spacing: 0.36em;
+		text-transform: uppercase;
+		color: var(--d07-dim);
+	}
+
+	body.d-07 .d07-run::before {
+		content: "";
+		flex: 1 1 auto;
+		height: var(--hairline);
+		background: var(--d07-line-soft);
+	}
+
+	body.d-07 .d07-run[data-mark]::after {
+		content: "";
+		flex: 0 0 auto;
+		width: var(--d07-slit);
+		height: 0.75rem;
+		background: var(--orange);
+	}
+
+	/* --- the recurring vertical orange slit -------------------------- */
+	body.d-07 .d07-slit {
+		display: block;
+		flex: 0 0 auto;
+		width: var(--d07-slit);
+		background: var(--orange);
+	}
+
+	body.d-07 .d07-mono {
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--d07-dim);
+	}
+</style>

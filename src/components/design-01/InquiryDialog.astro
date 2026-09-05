@@ -1,0 +1,341 @@
+---
+import { brand, cta, inquiryFields } from "../../lib/copy";
+---
+
+<dialog class="dlg" id="d01-inquiry" aria-labelledby="d01-inquiry-title">
+	<form class="dlg-form" id="d01-inquiry-form" novalidate>
+		<header class="dlg-head">
+			<p class="dlg-index" aria-hidden="true">09</p>
+			<h2 class="dlg-title" id="d01-inquiry-title">
+				<span class="dlg-title-zh">{cta.buttonLabel}</span>
+				<span class="dlg-title-en d01-label">PROJECT INQUIRY</span>
+			</h2>
+			<button class="dlg-close" type="button" data-inquiry-close aria-label="關閉詢案表單">
+				<span aria-hidden="true">CLOSE</span>
+				<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" focusable="false">
+					<path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.5"></path>
+				</svg>
+			</button>
+			<span class="d01-rule d01-rule--mid dlg-head-rule" aria-hidden="true"></span>
+		</header>
+
+		<div class="dlg-fields">
+			{
+				inquiryFields.map((field, i) => (
+					<p class="fld">
+						<label class="fld-label d01-label" for={`d01-${field.name}`}>
+							<i aria-hidden="true">{String(i + 1).padStart(2, "0")}</i>
+							{field.label}
+							{field.required && <b aria-hidden="true">*</b>}
+						</label>
+						<input class="fld-input" id={`d01-${field.name}`} name={field.name} type={field.type} required={field.required} autocomplete={field.autocomplete} />
+					</p>
+				))
+			}
+
+			<p class="fld fld--wide">
+				<label class="fld-label d01-label" for="d01-message">
+					<i aria-hidden="true">05</i>
+					專案內容 / MESSAGE
+					<b aria-hidden="true">*</b>
+				</label>
+				<textarea class="fld-input fld-area" id="d01-message" name="message" rows="4" required></textarea>
+			</p>
+		</div>
+
+		<footer class="dlg-foot">
+			<span class="d01-rule d01-rule--hair" aria-hidden="true"></span>
+			<p class="dlg-note">送出後會開啟你的郵件程式，草稿寄件人為 <span class="dlg-mail">{brand.email}</span>。</p>
+			<p class="dlg-status" id="d01-inquiry-status" role="status" aria-live="polite"></p>
+			<button class="dlg-submit" type="submit">
+				<span>送出詢問 SEND</span>
+				<span class="dlg-submit-rule" aria-hidden="true"></span>
+			</button>
+		</footer>
+	</form>
+</dialog>
+
+<style>
+	.dlg {
+		border: 0;
+		padding: 0;
+		margin: 0 0 0 auto;
+		max-width: min(38rem, 100%);
+		width: 100%;
+		max-height: 100dvh;
+		height: 100dvh;
+		background: var(--paper-hi);
+		color: var(--graphite);
+	}
+	.dlg::backdrop {
+		background: color-mix(in oklab, var(--ink-black) 72%, transparent);
+	}
+	.dlg-form {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		height: 100%;
+		overflow-y: auto;
+		padding: clamp(1.25rem, 3.5vw, 2.5rem);
+		border-left: 1rem solid var(--orange);
+	}
+
+	/* --- head ----------------------------------------------------------- */
+	.dlg-head {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: start;
+		gap: 1rem;
+	}
+	.dlg-index {
+		font-size: clamp(2rem, 5vw, 3rem);
+		font-weight: 700;
+		line-height: 0.8;
+		letter-spacing: -0.05em;
+		color: var(--orange);
+		font-variant-numeric: lining-nums tabular-nums;
+	}
+	.dlg-title {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+	.dlg-title-zh {
+		font-size: clamp(1.5rem, 3.4vw, 2.125rem);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		line-height: 1;
+		color: var(--ink-display);
+	}
+	.dlg-title-en {
+		color: var(--graphite);
+	}
+	.dlg-close {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		min-height: 2.75rem;
+		min-width: 2.75rem;
+		justify-content: flex-end;
+		font-size: var(--label);
+		font-weight: 500;
+		letter-spacing: var(--tr-label);
+	}
+	.dlg-close:hover {
+		color: var(--orange-deep);
+	}
+	.dlg-head-rule {
+		grid-column: 1 / -1;
+		--rule-c: var(--graphite);
+		margin-top: 0.5rem;
+	}
+
+	/* --- fields ---------------------------------------------------------- */
+	.dlg-fields {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.25rem 1.25rem;
+		align-content: start;
+	}
+	.fld {
+		display: grid;
+		gap: 0.375rem;
+		align-content: start;
+	}
+	.fld--wide {
+		grid-column: 1 / -1;
+	}
+	.fld-label {
+		display: flex;
+		align-items: baseline;
+		gap: 0.5rem;
+		color: var(--graphite);
+	}
+	.fld-label i {
+		font-style: normal;
+		color: color-mix(in oklab, var(--graphite) 72%, transparent);
+		font-variant-numeric: tabular-nums;
+	}
+	.fld-label b {
+		color: var(--orange-deep);
+	}
+	.fld-input {
+		background: transparent;
+		border: 0;
+		border-bottom: 1px solid color-mix(in oklab, var(--graphite) 72%, transparent);
+		border-radius: 0;
+		padding: 0.625rem 0 0.5rem;
+		font-size: 1rem;
+		font-family: var(--font-grotesk);
+		min-height: 2.75rem;
+		width: 100%;
+	}
+	.fld-input:hover {
+		border-bottom-color: var(--graphite);
+	}
+	.fld-input:focus-visible {
+		outline-offset: 0.125rem;
+	}
+	.fld-area {
+		resize: vertical;
+		border: 1px solid color-mix(in oklab, var(--graphite) 72%, transparent);
+		padding: 0.75rem;
+		line-height: 1.6;
+	}
+	.fld-input[aria-invalid="true"] {
+		border-color: var(--orange-deep);
+	}
+
+	/* --- foot ------------------------------------------------------------ */
+	.dlg-foot {
+		display: grid;
+		gap: 1rem;
+		margin-top: auto;
+		padding-top: 0.5rem;
+	}
+	.dlg-foot .d01-rule--hair {
+		--rule-c: color-mix(in oklab, var(--graphite) 55%, transparent);
+	}
+	.dlg-note {
+		font-size: var(--small);
+		line-height: 1.7;
+		color: var(--graphite);
+	}
+	.dlg-mail {
+		font-weight: 700;
+	}
+	.dlg-status {
+		font-size: var(--small);
+		font-weight: 700;
+		min-height: 1.25rem;
+		color: var(--orange-deep);
+	}
+	.dlg-submit {
+		display: grid;
+		gap: 0.875rem;
+		background: var(--graphite);
+		color: var(--paper-hi);
+		padding: 1.125rem 1.25rem 1rem;
+		font-size: 1rem;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		min-height: 2.75rem;
+		text-align: left;
+	}
+	.dlg-submit-rule {
+		display: block;
+		height: 0.25rem;
+		background: var(--orange);
+		transform-origin: left center;
+		transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.dlg-submit:hover {
+		background: var(--ink-black);
+	}
+	.dlg-submit:hover .dlg-submit-rule {
+		transform: scaleX(0.4);
+	}
+
+	/* the message field takes up the sheet's spare height */
+	@media (min-width: 40.0625rem) {
+		.dlg-fields {
+			flex: 1 1 auto;
+			grid-template-rows: auto auto minmax(8rem, 1fr);
+		}
+		.fld--wide {
+			grid-template-rows: auto 1fr;
+		}
+		.fld-area {
+			height: 100%;
+		}
+	}
+
+	@media (max-width: 40rem) {
+		.dlg {
+			max-width: 100%;
+		}
+		.dlg-form {
+			border-left-width: 0.5rem;
+			gap: 1.5rem;
+		}
+		.dlg-fields {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+</style>
+
+<script>
+	import { brand } from "../../lib/copy";
+
+	const dialog = document.getElementById("d01-inquiry") as HTMLDialogElement | null;
+	const form = document.getElementById("d01-inquiry-form") as HTMLFormElement | null;
+	const status = document.getElementById("d01-inquiry-status");
+
+	if (dialog && form) {
+		let trigger: HTMLElement | null = null;
+
+		const open = (from: HTMLElement | null) => {
+			trigger = from;
+			if (status) status.textContent = "";
+			if (!dialog.open) dialog.showModal();
+			dialog.querySelector<HTMLInputElement>("input, textarea")?.focus();
+		};
+
+		document.querySelectorAll<HTMLElement>("[data-inquiry-open]").forEach(btn => {
+			btn.addEventListener("click", () => open(btn));
+		});
+
+		dialog.querySelectorAll<HTMLElement>("[data-inquiry-close]").forEach(btn => {
+			btn.addEventListener("click", () => dialog.close());
+		});
+
+		/* backdrop click */
+		dialog.addEventListener("click", event => {
+			if (event.target === dialog) dialog.close();
+		});
+
+		dialog.addEventListener("close", () => {
+			const back = trigger && trigger.isConnected && trigger.offsetParent !== null ? trigger : document.querySelector<HTMLElement>("[data-inquiry-open]");
+			back?.focus();
+			trigger = null;
+		});
+
+		form.addEventListener("submit", event => {
+			event.preventDefault();
+
+			const fields = Array.from(form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("input, textarea"));
+			fields.forEach(f => f.removeAttribute("aria-invalid"));
+
+			const missing = fields.filter(f => f.required && !f.value.trim());
+			const email = form.querySelector<HTMLInputElement>("#d01-email");
+			const badEmail = email && email.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+
+			if (missing.length || badEmail) {
+				missing.forEach(f => f.setAttribute("aria-invalid", "true"));
+				if (badEmail) email!.setAttribute("aria-invalid", "true");
+				if (status) status.textContent = badEmail && !missing.length ? "請輸入正確的信箱格式。" : "請填寫必填欄位。";
+				(missing[0] ?? email)?.focus();
+				return;
+			}
+
+			const data = new FormData(form);
+			const get = (key: string) => String(data.get(key) ?? "").trim();
+
+			const body = [
+				`姓名 / NAME: ${get("name")}`,
+				`信箱 / EMAIL: ${get("email")}`,
+				`公司 / COMPANY: ${get("company") || "—"}`,
+				`預算 / BUDGET: ${get("budget") || "—"}`,
+				"",
+				"專案內容 / MESSAGE:",
+				get("message")
+			].join("\n");
+
+			const href = `mailto:${brand.email}?subject=${encodeURIComponent(`[詢案] ${get("name")} — LINYAO DIGITAL STUDIO`)}&body=${encodeURIComponent(body)}`;
+
+			if (status) status.textContent = "已開啟郵件草稿，請於郵件程式中送出。";
+			window.location.href = href;
+		});
+	}
+</script>

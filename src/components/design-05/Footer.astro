@@ -1,0 +1,176 @@
+---
+import { brand, nav } from "../../lib/copy";
+---
+
+<footer class="foot">
+	<div class="inner">
+		<div class="brand">
+			<p class="zh d05-zh">{brand.nameZh}</p>
+			<p class="en d05-latin">{brand.nameEn}</p>
+			<p class="eq d05-anno d05-anno--paper">{brand.equation}</p>
+		</div>
+
+		<nav class="links" aria-label="頁尾導覽">
+			<ul>
+				{
+					nav.map(item => (
+						<li>
+							<a href={item.href} class="d05-anno d05-anno--paper">
+								{item.label} <span aria-hidden="true">&middot;</span> {item.zh}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<div class="contact">
+			<p class="d05-anno d05-anno--paper">EMAIL</p>
+			<a class="mail" href={`mailto:${brand.email}`}>{brand.email}</a>
+			<p class="d05-anno d05-anno--paper d05-anno--wrap disc">{brand.disciplines}</p>
+		</div>
+	</div>
+
+	<div class="datum" aria-hidden="true">
+		<span class="d05-anno d05-anno--paper">EL. &plusmn;0.000</span>
+		<span class="rule"></span>
+		<span class="d05-anno d05-anno--paper">SECTION A&ndash;A / B&ndash;B / C&ndash;C</span>
+	</div>
+
+	<div class="bottom">
+		<p class="d05-anno d05-anno--paper">{brand.copyright}</p>
+		<p class="d05-anno d05-anno--paper">TAIPEI &nbsp;/&nbsp; 25.03&deg;N 121.56&deg;E</p>
+	</div>
+
+	<div class="earth" aria-hidden="true"></div>
+</footer>
+
+<style>
+	.foot {
+		position: relative;
+		background: var(--mass-black);
+		color: var(--paper-hi);
+		padding: clamp(3rem, 9svh, 5.5rem) var(--gutter) 0;
+	}
+
+	.inner {
+		display: grid;
+		grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+		gap: clamp(2rem, 5vw, 4rem);
+		align-items: start;
+	}
+
+	.brand .zh {
+		font-size: clamp(1.125rem, 2vw, 1.625rem);
+		letter-spacing: 0.24em;
+		line-height: 1.5;
+		font-weight: 500;
+	}
+
+	.brand .en {
+		margin-top: 0.75rem;
+		font-size: clamp(0.6875rem, 0.95vw, 0.8125rem);
+		letter-spacing: 0.22em;
+		color: color-mix(in oklab, var(--paper) 72%, transparent);
+	}
+
+	.brand .eq {
+		margin-top: 1.75rem;
+		letter-spacing: 0.2em;
+		color: var(--orange);
+	}
+
+	.links ul {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.links a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 1.75rem;
+		letter-spacing: 0.16em;
+		border-bottom: 1px solid transparent;
+		transition: border-color 0.4s ease;
+	}
+
+	.links a:hover,
+	.links a:focus-visible {
+		border-bottom-color: var(--orange);
+	}
+
+	.contact .mail {
+		display: inline-block;
+		margin-top: 0.625rem;
+		font-size: clamp(0.875rem, 1.2vw, 1.0625rem);
+		letter-spacing: 0.1em;
+		border-bottom: 1px solid var(--line-paper);
+		padding-bottom: 0.1875rem;
+		transition: border-color 0.4s ease;
+	}
+
+	.contact .mail:hover,
+	.contact .mail:focus-visible {
+		border-bottom-color: var(--orange);
+	}
+
+	.disc {
+		margin-top: 1.75rem;
+		letter-spacing: 0.16em;
+		color: color-mix(in oklab, var(--paper) 62%, transparent);
+	}
+
+	.datum {
+		margin-top: clamp(3rem, 8svh, 5rem);
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.datum .rule {
+		flex: 1;
+		height: 1px;
+		background: var(--line-paper);
+	}
+
+	.bottom {
+		display: flex;
+		justify-content: space-between;
+		gap: 1.5rem;
+		flex-wrap: wrap;
+		padding: 1.25rem 0 1.75rem;
+	}
+
+	.earth {
+		height: 2.25rem;
+		margin: 0 calc(-1 * var(--gutter));
+		border-top: 1px solid var(--line-paper);
+		background: var(--hatch-paper);
+	}
+
+	@media (max-width: 64rem) {
+		.inner {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		}
+
+		.brand {
+			grid-column: 1 / -1;
+		}
+	}
+
+	@media (max-width: 30rem) {
+		.inner {
+			grid-template-columns: 1fr;
+			gap: 2.25rem;
+		}
+
+		.datum .rule {
+			display: none;
+		}
+
+		.datum {
+			flex-wrap: wrap;
+			gap: 0.5rem 1rem;
+		}
+	}
+</style>

@@ -1,0 +1,176 @@
+---
+import { brand, cta } from "../../lib/copy";
+
+const mailto = `mailto:${brand.email}?subject=${encodeURIComponent("詢案 — LINYAO DIGITAL STUDIO")}`;
+---
+
+{
+	/* MOVEMENT 09 — the close. Extreme crop again, mirrored: the headline leaves
+    the frame on the right, the button is the only mass on the left. */
+}
+<section id="contact" class="ct crop" aria-labelledby="ct-h" data-d10-section>
+	<div class="ct__g g12">
+		<p class="ct__run note" aria-hidden="true">09 / CONTACT — 麟曜</p>
+
+		<h2 id="ct-h" class="ct__h" aria-label={`${cta.headlineParts[0]}${cta.headlineParts[1]}`} data-reveal>
+			<span class="ct__l1" aria-hidden="true">{cta.headlineParts[0]}</span><span class="ct__l2" aria-hidden="true">{cta.headlineParts[1]}</span>
+		</h2>
+
+		<div class="ct__body">
+			{cta.body.map(line => <span>{line}</span>)}
+		</div>
+
+		<div class="ct__act">
+			<a class="ct__btn" href={mailto} data-inquiry-open>
+				<span class="ct__btnT">{cta.button}</span>
+				<span class="ct__btnM" aria-hidden="true"></span>
+			</a>
+			<a class="ct__mail" href={`mailto:${brand.email}`}>{brand.email}</a>
+		</div>
+
+		<p class="ct__eq" aria-hidden="true">{brand.equation}</p>
+	</div>
+</section>
+
+<style>
+	.ct {
+		position: relative;
+		padding-block: clamp(5rem, 14vw, 13rem) clamp(4rem, 10vw, 9rem);
+	}
+
+	.ct__g {
+		row-gap: clamp(1.5rem, 4vw, 3rem);
+		align-items: start;
+	}
+
+	.ct__run {
+		grid-column: 1 / 4;
+		color: var(--d10-mark);
+		border-top: 0.1875rem solid var(--d10-accent);
+		padding-top: 0.5rem;
+	}
+
+	.ct__h {
+		grid-column: 1 / 13;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		line-height: 0.88;
+		letter-spacing: -0.04em;
+		color: var(--d10-ink);
+	}
+
+	.ct__l1 {
+		display: block;
+		font-size: clamp(2.25rem, 11vw, 9rem);
+		color: var(--d10-accent);
+	}
+
+	.ct__l2 {
+		display: block;
+		font-size: clamp(2.5rem, 15.5vw, 13rem);
+		margin-left: -0.03em;
+		white-space: nowrap;
+	}
+
+	.ct__body {
+		grid-column: 1 / 6;
+		display: grid;
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9375rem, 1.15vw, 1.0625rem);
+		line-height: 2.05;
+		letter-spacing: 0.05em;
+		border-left: var(--hairline) solid var(--d10-rule);
+		padding-left: clamp(0.875rem, 1.6vw, 1.5rem);
+	}
+
+	.ct__act {
+		grid-column: 7 / 13;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 1.25rem 2rem;
+	}
+
+	.ct__btn {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		min-height: 4rem;
+		padding: 0.75rem clamp(1.5rem, 4vw, 3rem);
+		background: var(--d10-void);
+		color: var(--paper-hi);
+		font-family: var(--font-cjk);
+		font-size: clamp(1rem, 1.9vw, 1.5rem);
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		overflow: clip;
+		isolation: isolate;
+		transition: color 0.42s cubic-bezier(0.22, 0.65, 0.2, 1);
+	}
+
+	.ct__btnT {
+		position: relative;
+		z-index: 2;
+	}
+
+	.ct__btnM {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		background: var(--d10-accent);
+		clip-path: inset(0 0 100% 0);
+		transition: clip-path 0.42s cubic-bezier(0.22, 0.65, 0.2, 1);
+	}
+
+	.ct__btn:hover .ct__btnM,
+	.ct__btn:focus-visible .ct__btnM {
+		clip-path: inset(0 0 0 0);
+	}
+
+	.ct__btn:hover,
+	.ct__btn:focus-visible {
+		color: var(--d10-void);
+	}
+
+	.ct__mail {
+		font-family: var(--font-mono);
+		font-size: clamp(0.75rem, 1.2vw, 0.9375rem);
+		letter-spacing: 0.14em;
+		border-bottom: var(--hairline) solid var(--d10-rule);
+		padding-bottom: 0.1875rem;
+		min-height: 2.75rem;
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.ct__mail:hover,
+	.ct__mail:focus-visible {
+		color: var(--d10-accent);
+		border-bottom-color: var(--d10-accent);
+	}
+
+	.ct__eq {
+		grid-column: 1 / 13;
+		margin-top: clamp(2rem, 6vw, 5rem);
+		font-family: var(--font-mono);
+		font-size: clamp(0.6875rem, 1.5vw, 1.125rem);
+		letter-spacing: 0.4em;
+		color: var(--d10-quiet);
+		border-top: var(--hairline) solid var(--d10-rule);
+		padding-top: 0.75rem;
+	}
+
+	@media (max-width: 63.99em) {
+		.ct__run {
+			grid-column: 1 / 8;
+		}
+
+		.ct__body {
+			grid-column: 1 / 13;
+		}
+
+		.ct__act {
+			grid-column: 1 / 13;
+		}
+	}
+</style>

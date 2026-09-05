@@ -1,0 +1,107 @@
+---
+/**
+ * A hard-edged sheet of orange "light".
+ *
+ * Flat colour, no blur, no glow, no shadow, no gradient — the shape is cut with
+ * `clip-path` so the light reads as projected geometry. `seed` is a degenerate
+ * version of the same polygon (identical point count) that JS wipes open from;
+ * with JS off or reduced motion the beam is simply present at `shape`.
+ */
+interface Props {
+	/** final clip-path polygon */
+	shape: string;
+	/** collapsed polygon, same number of points, used as the wipe from-state */
+	seed?: string;
+	/** narrow-viewport variant of the same shape (≤52rem) */
+	shapeSm?: string;
+	seedSm?: string;
+	tone?: "orange" | "deep" | "dim";
+	/** scrub-linked vertical drift, in percent of the beam box */
+	drift?: number;
+	/** wipe duration in seconds */
+	speed?: number;
+}
+
+const { shape, seed, shapeSm, seedSm, tone = "orange", drift = 0, speed = 1.5 } = Astro.props;
+const smallShape = shapeSm ?? shape;
+const smallSeed = seedSm ?? seed;
+---
+
+<span
+	class:list={["beam", `t-${tone}`]}
+	aria-hidden="true"
+	data-d07-beam
+	data-shape={shape}
+	data-seed={seed}
+	data-shape-sm={smallShape}
+	data-seed-sm={smallSeed}
+	data-drift={drift}
+	data-speed={speed}
+	style={`--shape:${shape};--shape-sm:${smallShape}`}
+>
+</span>
+
+<style>
+	.beam {
+		position: absolute;
+		inset: 0;
+		display: block;
+		pointer-events: none;
+		clip-path: var(--shape);
+		will-change: clip-path, transform;
+	}
+
+	@media (max-width: 52rem) {
+		.beam {
+			clip-path: var(--shape-sm);
+		}
+	}
+
+	.t-orange {
+		background: var(--orange);
+	}
+
+	.t-deep {
+		background: var(--orange-deep);
+	}
+
+	.t-dim {
+		background: var(--orange-dim);
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		document.querySelectorAll<HTMLElement>("[data-d07-beam]").forEach(el => {
+			const small = window.matchMedia("(max-width: 52rem)").matches;
+			const shape = small ? el.dataset.shapeSm : el.dataset.shape;
+			const seed = small ? el.dataset.seedSm : el.dataset.seed;
+			const drift = Number(el.dataset.drift ?? 0);
+			const speed = Number(el.dataset.speed ?? 1.5);
+			const scene = el.parentElement ?? el;
+
+			if (seed && shape) {
+				gsap.fromTo(
+					el,
+					{ clipPath: seed },
+					{
+						clipPath: shape,
+						duration: speed,
+						ease: "power2.inOut",
+						scrollTrigger: { trigger: scene, start: "top 84%" }
+					}
+				);
+			}
+
+			if (drift) {
+				gsap.to(el, {
+					yPercent: drift,
+					ease: "none",
+					scrollTrigger: { trigger: scene, start: "top bottom", end: "bottom top", scrub: true }
+				});
+			}
+		});
+	});
+</script>

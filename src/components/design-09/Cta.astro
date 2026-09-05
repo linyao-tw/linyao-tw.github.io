@@ -1,0 +1,160 @@
+---
+import { brand, cta } from "../../lib/copy";
+import { waveRule } from "./geo";
+
+const arc = waveRule({
+	width: 1000,
+	base: 18,
+	layers: [
+		{ amp: 8, freq: 1.5, phase: 3.6 },
+		{ amp: 3.4, freq: 4.2, phase: 1.1 }
+	],
+	samples: 72
+});
+---
+
+<section class="cta" id="contact" aria-labelledby="d09-cta-h">
+	<div class="ground" aria-hidden="true"></div>
+
+	<svg class="deco" viewBox="0 -22 1000 320" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+		<use href="#d09-ridge-b"></use>
+	</svg>
+
+	<div class="wrap">
+		<h2 class="hl" id="d09-cta-h" data-headline={cta.headline}>
+			<span>{cta.headlineParts[0]}</span>
+			<span>{cta.headlineParts[1]}</span>
+		</h2>
+
+		<div class="col">
+			<div class="copy">
+				{cta.body.map(line => <p>{line}</p>)}
+			</div>
+
+			<a class="ask" href={`mailto:${brand.email}?subject=${encodeURIComponent("詢案 — LINYAO DIGITAL STUDIO")}`} data-d09-inquiry>
+				<span>{cta.button}</span>
+			</a>
+		</div>
+
+		<svg class="rule" viewBox="0 0 1000 36" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+			<path d={arc} vector-effect="non-scaling-stroke"></path>
+		</svg>
+
+		<p class="mail"><a href={`mailto:${brand.email}`}>{brand.email}</a></p>
+	</div>
+</section>
+
+<style>
+	.cta {
+		padding: clamp(10rem, 22vh, 17rem) 0 clamp(5rem, 12vh, 9rem);
+		color: var(--ink-black);
+	}
+
+	.ground {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: var(--orange);
+		clip-path: ellipse(92% 100% at 50% 100%);
+	}
+
+	.deco {
+		position: absolute;
+		inset: auto 0 0 0;
+		width: 100%;
+		height: 52%;
+		z-index: 0;
+		fill: none;
+		stroke: var(--ink-black);
+		opacity: 0.22;
+		pointer-events: none;
+	}
+
+	.wrap {
+		position: relative;
+		z-index: 2;
+		padding-inline: var(--pad);
+		display: grid;
+		gap: clamp(2.5rem, 7vh, 5rem);
+	}
+
+	.hl {
+		font-family: var(--font-serif);
+		font-size: clamp(2.4rem, 7.4vw, 6.6rem);
+		line-height: 1.3;
+		letter-spacing: 0.09em;
+	}
+
+	.hl span {
+		display: block;
+		width: max-content;
+		max-width: 100%;
+	}
+
+	.hl span:last-child {
+		margin-inline-start: clamp(1rem, 9vw, 10rem);
+	}
+
+	.col {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: clamp(2.5rem, 6vw, 5rem);
+	}
+
+	.copy p {
+		font-family: var(--font-serif);
+		font-size: clamp(1rem, 1.3vw, 1.3rem);
+		line-height: 2.25;
+		letter-spacing: 0.11em;
+		max-width: 32rem;
+	}
+
+	.ask {
+		display: grid;
+		place-items: center;
+		width: clamp(9.5rem, 17vw, 14.5rem);
+		aspect-ratio: 1;
+		border-radius: 50%;
+		border: 1px solid var(--ink-black);
+		font-family: var(--font-serif);
+		font-size: clamp(1.05rem, 1.5vw, 1.45rem);
+		letter-spacing: 0.14em;
+		text-align: center;
+		transition:
+			background-color 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
+			color 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
+			transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+	}
+
+	.ask:hover,
+	.ask:focus-visible {
+		background: var(--ink-black);
+		color: var(--orange);
+		transform: scale(1.05);
+	}
+
+	.rule {
+		width: 100%;
+		height: 2.25rem;
+		fill: none;
+		stroke: var(--ink-black);
+		stroke-width: 1;
+		opacity: 0.45;
+	}
+
+	.mail a {
+		font-size: var(--meta);
+		letter-spacing: 0.26em;
+		text-transform: uppercase;
+		border-bottom: 1px solid currentcolor;
+		padding-bottom: 0.2rem;
+	}
+
+	@media (max-width: 48rem) {
+		.col {
+			justify-content: flex-start;
+		}
+	}
+</style>

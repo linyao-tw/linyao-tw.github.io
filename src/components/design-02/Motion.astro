@@ -1,0 +1,155 @@
+---
+/**
+ * 02 — the whole page's motion, in one place, one gsap.context, one Lenis.
+ * Vocabulary: per-line mask reveals, scrub-linked xPercent on travelling type,
+ * one letter-spacing settle, hairline scaleX draws. Nothing else.
+ */
+---
+
+<script>
+	import { bindAnchorScroll, motion } from "../../lib/motion";
+
+	bindAnchorScroll();
+
+	motion(
+		({ gsap, ScrollTrigger }) => {
+			document.body.classList.add("d02-js");
+
+			/* ---------- hero: mask reveal + letter-spacing settle ---------- */
+			const heroLines = document.querySelectorAll("[data-d02-hero] .d02-li");
+			const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+
+			if (heroLines.length) {
+				tl.from(heroLines, { yPercent: 114, duration: 1.3, stagger: 0.085 });
+			}
+
+			document.querySelectorAll("[data-d02-track]").forEach((el, i) => {
+				const from = el.getAttribute("data-d02-track") || "0.4em";
+				tl.from(el, { letterSpacing: from, opacity: 0, duration: 1.5 }, 0.35 + i * 0.14);
+			});
+
+			/* ---------- every hand-broken headline: per-line masks --------- */
+			gsap.utils.toArray<HTMLElement>("[data-d02-lines]").forEach(block => {
+				const lines = block.querySelectorAll(".d02-li");
+				if (!lines.length) return;
+				gsap.from(lines, {
+					yPercent: 112,
+					duration: 1.05,
+					ease: "expo.out",
+					stagger: 0.085,
+					scrollTrigger: { trigger: block, start: "top 86%" }
+				});
+			});
+
+			/* ---------- hairline draws ------------------------------------- */
+			gsap.utils.toArray<HTMLElement>(".d02-rule").forEach(el => {
+				gsap.from(el, {
+					scaleX: 0,
+					ease: "none",
+					scrollTrigger: { trigger: el, start: "top 96%", end: "top 68%", scrub: true }
+				});
+			});
+
+			gsap.utils.toArray<HTMLElement>(".d02-strike").forEach(el => {
+				gsap.from(el, {
+					scaleX: 0,
+					ease: "none",
+					scrollTrigger: { trigger: el, start: "top 88%", end: "top 52%", scrub: true }
+				});
+			});
+
+			/* ---------- hero equation band: scrubbed xPercent -------------- */
+			const eqTrack = document.querySelector(".d02-eq-track");
+			if (eqTrack) {
+				gsap.fromTo(
+					eqTrack,
+					{ xPercent: 0 },
+					{
+						xPercent: -34,
+						ease: "none",
+						scrollTrigger: { trigger: ".d02-hero", start: "top top", end: "bottom top", scrub: 0.5 }
+					}
+				);
+			}
+
+			/* ---------- signature: one glyph, three crops, one travel ------ */
+			const run = document.querySelector<HTMLElement>(".d02-run");
+			if (run) {
+				const crops = Array.from(run.querySelectorAll<HTMLElement>(".d02-glyph-crop"));
+
+				const wide = window.matchMedia("(min-width: 62rem)");
+
+				const placeCrops = () => {
+					const rr = run.getBoundingClientRect();
+					crops.forEach(crop => {
+						if (!wide.matches) {
+							crop.style.top = "";
+							crop.style.height = "";
+							return;
+						}
+						const host = crop.parentElement;
+						if (!host) return;
+						const hr = host.getBoundingClientRect();
+						crop.style.top = `${rr.top - hr.top}px`;
+						crop.style.height = `${rr.height}px`;
+					});
+				};
+
+				placeCrops();
+				ScrollTrigger.addEventListener("refresh", placeCrops);
+
+				gsap.fromTo(
+					".d02-glyph-track",
+					{ xPercent: 17 },
+					{
+						xPercent: -17,
+						ease: "none",
+						scrollTrigger: { trigger: run, start: "top bottom", end: "bottom top", scrub: 0.6 }
+					}
+				);
+			}
+
+			/* ---------- service names: outline fills solid on entry -------- */
+			gsap.utils.toArray<HTMLElement>(".d02-fill").forEach(el => {
+				const row = el.closest("article") || el;
+				gsap.fromTo(
+					el,
+					{ clipPath: "inset(0% 100% 0% 0%)" },
+					{
+						clipPath: "inset(0% 0% 0% 0%)",
+						ease: "none",
+						scrollTrigger: { trigger: row, start: "top 84%", end: "top 34%", scrub: true }
+					}
+				);
+			});
+
+			/* ---------- capability bands: counter-scrolling ---------------- */
+			const mq = document.querySelector(".d02-mq");
+			if (mq) {
+				const range = { trigger: mq, start: "top bottom", end: "bottom top", scrub: 0.5 };
+				gsap.fromTo(".d02-band-a", { xPercent: -2 }, { xPercent: -26, ease: "none", scrollTrigger: { ...range } });
+				gsap.fromTo(".d02-band-b", { xPercent: -30 }, { xPercent: -4, ease: "none", scrollTrigger: { ...range } });
+			}
+
+			/* ---------- 01—05 horizontal type sequence --------------------- */
+			const mm = gsap.matchMedia();
+			mm.add("(min-width: 48rem)", () => {
+				const strip = document.querySelector(".d02-strip");
+				const proc = document.querySelector(".d02-proc");
+				if (!strip || !proc) return;
+				gsap.fromTo(
+					strip,
+					{ xPercent: 0 },
+					{
+						xPercent: -47,
+						ease: "none",
+						scrollTrigger: { trigger: proc, start: "top bottom", end: "bottom top", scrub: 0.55 }
+					}
+				);
+			});
+
+			ScrollTrigger.refresh();
+		},
+		{ smooth: true }
+	);
+</script>

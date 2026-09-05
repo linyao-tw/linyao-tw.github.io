@@ -1,0 +1,179 @@
+---
+import { manifesto } from "../../lib/copy";
+import { hRibbon, osc } from "./geo";
+
+const pass = hRibbon({
+	width: 1000,
+	samples: 80,
+	centre: t =>
+		osc(
+			t,
+			[
+				{ amp: 32, freq: 1.05, phase: 2.4 },
+				{ amp: 11, freq: 2.6, phase: 0.7 }
+			],
+			60
+		),
+	thickness: t => 27 - 10 * t + 6 * Math.sin(t * Math.PI * 2.2)
+});
+---
+
+<section class="man" id="manifesto" aria-labelledby="d09-man-h">
+	<div class="wrap">
+		<p class="side" aria-hidden="true"><span>E</span><span>MANIFESTO</span><span>觀點</span></p>
+
+		<div class="col">
+			<h2 class="hl" id="d09-man-h">
+				<span class="l l1">{manifesto.headlineParts[0]}</span>{" "}
+
+				<svg class="pass d09-pass" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+					<path class="pf" d={pass.fill}></path>
+					<path class="pe" d={pass.fill} vector-effect="non-scaling-stroke"></path>
+				</svg>
+
+				<span class="l l2">
+					<span class="ring" aria-hidden="true"></span>
+					<span class="chars">{manifesto.headlineParts[1]}</span>
+				</span>
+			</h2>
+
+			<div class="copy">
+				{manifesto.body.map(line => <p>{line}</p>)}
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.man {
+		min-height: 100svh;
+		display: grid;
+		align-content: center;
+		padding-block: clamp(7rem, 18vh, 14rem);
+	}
+
+	.wrap {
+		position: relative;
+		z-index: 2;
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: clamp(1.5rem, 4vw, 4.5rem);
+		padding-inline: var(--pad);
+	}
+
+	.side {
+		position: relative;
+		z-index: 3;
+		writing-mode: vertical-rl;
+		display: flex;
+		gap: 1.4rem;
+		align-items: center;
+		font-size: var(--meta);
+		letter-spacing: 0.32em;
+		color: var(--fg);
+	}
+
+	.side span:first-child {
+		color: var(--orange);
+	}
+
+	.col {
+		display: grid;
+		gap: clamp(3rem, 9vh, 7rem);
+	}
+
+	.hl {
+		position: relative;
+		isolation: isolate;
+		display: grid;
+		gap: clamp(3.5rem, 10vh, 8rem);
+		font-family: var(--font-serif);
+		font-size: clamp(2.7rem, 8.4vw, 7.6rem);
+		line-height: 1.2;
+		letter-spacing: 0.1em;
+	}
+
+	.l {
+		position: relative;
+		z-index: 1;
+		display: block;
+		width: max-content;
+		max-width: 100%;
+	}
+
+	.l2 {
+		position: relative;
+		isolation: isolate;
+		margin-inline-start: clamp(1rem, 11vw, 12rem);
+	}
+
+	.chars {
+		position: relative;
+	}
+
+	.ring {
+		position: absolute;
+		z-index: -1;
+		inset-inline-start: 2.42em;
+		top: 50%;
+		translate: 0 -50%;
+		width: 2.1em;
+		height: 2.1em;
+		border: 1px solid var(--line);
+		border-radius: 50%;
+	}
+
+	.pass {
+		position: absolute;
+		z-index: 0;
+		left: calc(var(--pad) * -1 - 15vw);
+		width: calc(100% + var(--pad) + 32vw);
+		top: 50%;
+		translate: 0 -50%;
+		height: clamp(4.5rem, 10vw, 9.5rem);
+		will-change: transform;
+	}
+
+	.pf {
+		fill: var(--orange);
+	}
+
+	.pe {
+		fill: none;
+		stroke: var(--ink-black);
+		stroke-width: 1;
+		opacity: 0.32;
+	}
+
+	.copy {
+		justify-self: start;
+		margin-inline-start: clamp(0rem, 5vw, 5rem);
+		max-width: 34rem;
+		display: grid;
+		gap: 0.15rem;
+		border-inline-start: 1px solid var(--line-soft);
+		padding-inline-start: clamp(1.25rem, 3vw, 2.5rem);
+	}
+
+	.copy p {
+		font-family: var(--font-serif);
+		font-size: clamp(1rem, 1.35vw, 1.4rem);
+		line-height: 2.3;
+		letter-spacing: 0.11em;
+	}
+
+	@media (max-width: 48rem) {
+		.wrap {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.side {
+			writing-mode: horizontal-tb;
+			gap: 1rem;
+		}
+
+		.hl {
+			letter-spacing: 0.06em;
+		}
+	}
+</style>

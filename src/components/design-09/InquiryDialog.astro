@@ -1,0 +1,326 @@
+---
+import { brand, cta, inquiryFields } from "../../lib/copy";
+---
+
+<dialog class="dlg" id="d09-inquiry" aria-labelledby="d09-dlg-h">
+	<div class="cap" aria-hidden="true"></div>
+
+	<div class="inner">
+		<svg class="deco" viewBox="-110 -100 220 200" aria-hidden="true" focusable="false"><use href="#d09-peak-c"></use></svg>
+
+		<div class="head">
+			<h2 id="d09-dlg-h">{cta.buttonLabel}</h2>
+			<p class="sub">{brand.nameZh}・{brand.nameEn}</p>
+			<button class="x" type="button" data-close>
+				<span class="visually-hidden">關閉表單</span>
+				<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+					<path d="M4 4 L20 20 M20 4 L4 20"></path>
+				</svg>
+			</button>
+		</div>
+
+		<form class="form" id="d09-form">
+			{
+				inquiryFields.map(f => (
+					<p class="field">
+						<label for={`d09-${f.name}`}>
+							{f.label}
+							{f.required && (
+								<span class="req" aria-hidden="true">
+									*
+								</span>
+							)}
+						</label>
+						<input id={`d09-${f.name}`} name={f.name} type={f.type} required={f.required} autocomplete={f.autocomplete} />
+					</p>
+				))
+			}
+
+			<p class="field wide">
+				<label for="d09-message">專案內容 / MESSAGE<span class="req" aria-hidden="true">*</span></label>
+				<textarea id="d09-message" name="message" rows="4" required></textarea>
+			</p>
+
+			<div class="foot">
+				<p class="note">送出後會開啟你的郵件軟體，寄件至 {brand.email}。</p>
+				<button class="send" type="submit"><span>送出詢問 ↗</span></button>
+			</div>
+
+			<p class="status" role="status" aria-live="polite"></p>
+		</form>
+	</div>
+</dialog>
+
+<style>
+	.dlg {
+		width: min(48rem, 100% - 2rem);
+		max-height: 88svh;
+		padding: 0;
+		margin: auto;
+		border: 0;
+		overflow: visible;
+		background: none;
+		color: var(--fg);
+	}
+
+	.dlg::backdrop {
+		background: rgb(23 23 22 / 0.66);
+	}
+
+	.cap {
+		height: clamp(2.5rem, 6vw, 4.5rem);
+		background: var(--wg);
+		clip-path: ellipse(66% 100% at 50% 100%);
+	}
+
+	.inner {
+		position: relative;
+		background: var(--wg);
+		border-block-end: 1px solid var(--line);
+		padding: 0 clamp(1.25rem, 4vw, 3rem) clamp(1.5rem, 4vw, 2.5rem);
+		max-height: calc(88svh - 4.5rem);
+		overflow: hidden auto;
+	}
+
+	.deco {
+		position: absolute;
+		width: 42%;
+		aspect-ratio: 1;
+		right: -12%;
+		top: -6%;
+		fill: none;
+		stroke: var(--line-faint);
+		pointer-events: none;
+	}
+
+	.head {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: start;
+		gap: 0.5rem 1rem;
+		padding-block: 0.5rem clamp(1.5rem, 4vw, 2.25rem);
+		border-bottom: 1px solid var(--line-soft);
+	}
+
+	.head h2 {
+		grid-column: 1;
+		grid-row: 1;
+		font-family: var(--font-serif);
+		font-size: clamp(1.7rem, 4vw, 2.9rem);
+		letter-spacing: 0.12em;
+		line-height: 1.2;
+	}
+
+	.sub {
+		grid-column: 1;
+		grid-row: 2;
+		font-size: var(--meta);
+		letter-spacing: 0.22em;
+		color: var(--ink-2);
+	}
+
+	.x {
+		grid-column: 2;
+		grid-row: 1 / span 2;
+		justify-self: end;
+		width: 2.9rem;
+		height: 2.9rem;
+		display: grid;
+		place-items: center;
+		border: 1px solid var(--line);
+		border-radius: 50%;
+	}
+
+	.x svg {
+		width: 1rem;
+		fill: none;
+		stroke: var(--fg);
+		stroke-width: 1.5;
+	}
+
+	.x:hover,
+	.x:focus-visible {
+		background: var(--orange);
+		border-color: var(--orange);
+	}
+
+	.form {
+		position: relative;
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: clamp(1.1rem, 2.6vw, 1.8rem);
+		padding-top: clamp(1.5rem, 4vw, 2.25rem);
+	}
+
+	.wide,
+	.foot,
+	.status {
+		grid-column: 1 / -1;
+	}
+
+	.field {
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	label {
+		font-size: 0.66rem;
+		letter-spacing: 0.24em;
+		color: var(--ink-2);
+	}
+
+	.req {
+		color: var(--orange);
+		margin-inline-start: 0.3rem;
+	}
+
+	input,
+	textarea {
+		width: 100%;
+		background: none;
+		border: 0;
+		border-bottom: 1px solid var(--line);
+		padding: 0.55rem 0.1rem;
+		font-family: var(--font-serif);
+		font-size: 1.05rem;
+		letter-spacing: 0.06em;
+		color: var(--fg);
+		border-radius: 0;
+	}
+
+	textarea {
+		border: 1px solid var(--line);
+		padding: 0.75rem;
+		resize: vertical;
+		min-height: 6.5rem;
+	}
+
+	input:focus,
+	textarea:focus {
+		outline: none;
+		border-color: var(--orange);
+	}
+
+	input:focus-visible,
+	textarea:focus-visible {
+		outline: 0.125rem solid var(--orange);
+		outline-offset: 0.2rem;
+	}
+
+	.foot {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.25rem 2rem;
+		margin-top: 0.5rem;
+	}
+
+	.note {
+		font-size: var(--meta);
+		letter-spacing: 0.08em;
+		color: var(--ink-2);
+		max-width: 26rem;
+	}
+
+	.send {
+		display: grid;
+		place-items: center;
+		width: 7.5rem;
+		aspect-ratio: 1;
+		border-radius: 50%;
+		background: var(--orange);
+		color: var(--ink-black);
+		font-family: var(--font-serif);
+		font-size: 1rem;
+		letter-spacing: 0.1em;
+		transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+	}
+
+	.send:hover,
+	.send:focus-visible {
+		transform: scale(1.06);
+	}
+
+	.status:empty {
+		display: none;
+	}
+
+	.status {
+		font-size: var(--meta);
+		letter-spacing: 0.14em;
+		color: var(--orange);
+	}
+
+	@media (max-width: 40rem) {
+		.form {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+</style>
+
+<script>
+	import { brand } from "../../lib/copy";
+
+	const dialog = document.querySelector<HTMLDialogElement>("#d09-inquiry");
+	const form = document.querySelector<HTMLFormElement>("#d09-form");
+
+	if (dialog && form) {
+		let opener: HTMLElement | null = null;
+
+		const open = (trigger: HTMLElement) => {
+			opener = trigger;
+			if (typeof dialog.showModal === "function") dialog.showModal();
+			else dialog.setAttribute("open", "");
+			dialog.querySelector<HTMLInputElement>("input")?.focus();
+		};
+
+		const close = () => {
+			dialog.close();
+		};
+
+		document.querySelectorAll<HTMLElement>("[data-d09-inquiry]").forEach(el => {
+			el.setAttribute("aria-haspopup", "dialog");
+			el.addEventListener("click", event => {
+				if (typeof dialog.showModal !== "function") return;
+				event.preventDefault();
+				open(el);
+			});
+		});
+
+		dialog.querySelectorAll<HTMLElement>("[data-close]").forEach(el => el.addEventListener("click", close));
+
+		dialog.addEventListener("click", event => {
+			if (event.target === dialog) close();
+		});
+
+		dialog.addEventListener("close", () => {
+			opener?.focus();
+			opener = null;
+		});
+
+		form.addEventListener("submit", event => {
+			event.preventDefault();
+			if (!form.reportValidity()) return;
+
+			const data = new FormData(form);
+			const get = (k: string) => String(data.get(k) ?? "").trim();
+			const lines = [
+				`姓名 / NAME: ${get("name")}`,
+				`信箱 / EMAIL: ${get("email")}`,
+				`公司 / COMPANY: ${get("company") || "—"}`,
+				`預算 / BUDGET: ${get("budget") || "—"}`,
+				"",
+				"專案內容 / MESSAGE:",
+				get("message")
+			];
+
+			const subject = `詢案 / INQUIRY — ${get("name") || brand.nameEn}`;
+			window.location.href = `mailto:${brand.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
+
+			const status = form.querySelector<HTMLElement>(".status");
+			if (status) status.textContent = `已開啟郵件軟體，寄件至 ${brand.email}。`;
+		});
+	}
+</script>

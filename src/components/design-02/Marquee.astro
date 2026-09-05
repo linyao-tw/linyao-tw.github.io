@@ -1,0 +1,127 @@
+---
+import { capabilities } from "../../lib/copy";
+
+const setA = capabilities.slice(0, 7);
+const setB = capabilities.slice(7);
+const reps = [0, 1, 2];
+---
+
+<section class="mq d02-mq" aria-labelledby="d02-mq-h">
+	<h2 class="side" id="d02-mq-h">CAPABILITIES</h2>
+
+	<ul class="sr visually-hidden">
+		{capabilities.map(c => <li>{c}</li>)}
+	</ul>
+
+	<div class="band band-a">
+		<div class="track d02-band-a" aria-hidden="true">
+			{
+				reps.map(() =>
+					setA.map(c => (
+						<span class="cell">
+							<span class="w">{c}</span>
+							<span class="dot" />
+						</span>
+					))
+				)
+			}
+		</div>
+	</div>
+
+	<div class="band band-b">
+		<div class="track d02-band-b" aria-hidden="true">
+			{
+				reps.map(() =>
+					setB.map(c => (
+						<span class="cell">
+							<span class="w">{c}</span>
+							<span class="slash">/</span>
+						</span>
+					))
+				)
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.mq {
+		position: relative;
+		padding-block: clamp(2.5rem, 8vh, 5rem);
+		border-block-start: var(--hairline) solid var(--rule);
+		overflow: clip;
+	}
+
+	.side {
+		padding-inline: var(--edge);
+		padding-block-end: 1.25rem;
+		font-family: var(--font-mono);
+		font-size: 0.58rem;
+		letter-spacing: 0.34em;
+		color: var(--accent-txt);
+	}
+
+	.band {
+		overflow: clip;
+	}
+
+	.band-a {
+		border-block: var(--hairline) solid var(--rule);
+		padding-block: clamp(0.35rem, 1.2vh, 0.7rem);
+	}
+
+	.band-b {
+		border-block-end: var(--hairline) solid var(--rule);
+		padding-block: clamp(0.4rem, 1.4vh, 0.85rem);
+	}
+
+	.track {
+		display: flex;
+		align-items: center;
+		width: max-content;
+		will-change: transform;
+	}
+
+	.cell {
+		display: inline-flex;
+		align-items: center;
+		gap: clamp(0.75rem, 2vw, 1.75rem);
+		padding-inline-end: clamp(0.75rem, 2vw, 1.75rem);
+		white-space: nowrap;
+	}
+
+	.band-a .w {
+		font-family: var(--font-grotesk);
+		font-weight: 800;
+		font-size: clamp(1.6rem, 5.4vw, 4.5rem);
+		letter-spacing: -0.035em;
+		line-height: 1;
+		color: var(--ink);
+	}
+
+	.band-a .cell:nth-child(3n) .w {
+		color: transparent;
+		-webkit-text-stroke: 1px var(--ink);
+	}
+
+	.dot {
+		width: 0.4rem;
+		height: 0.4rem;
+		background: var(--accent);
+		flex: none;
+	}
+
+	.band-b .w {
+		font-family: var(--font-mono);
+		font-weight: 400;
+		font-size: clamp(0.72rem, 1.5vw, 1.15rem);
+		letter-spacing: 0.28em;
+		color: var(--dim);
+	}
+
+	.slash {
+		font-family: var(--font-mono);
+		font-size: clamp(0.72rem, 1.5vw, 1.15rem);
+		color: var(--accent-txt);
+	}
+</style>

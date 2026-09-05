@@ -1,0 +1,229 @@
+---
+/**
+ * design-04 · sheet 09 — reply card
+ *
+ * A tear-off reply card drawn entirely with dashed rules: perforation across the
+ * head, printed address lines carrying real data, and the inquiry button as the
+ * only filled element on the sheet.
+ */
+import { brand, cta } from "../../lib/copy";
+import Plate from "./Plate.astro";
+---
+
+<Plate as="section" id="contact" labelledby="contact-h" plate="PL. 09 — REPLY" sheet="09/09" pad="xl">
+	<div class="wrap">
+		<div class="type">
+			<h2 id="contact-h">
+				{cta.headlineParts.map((part, i) => <span class:list={["ln", { ind: i === 1 }]}>{part}</span>)}
+			</h2>
+			<p class="body">{cta.body.map(line => <span class="l">{line}</span>)}</p>
+			<p class="mailto">
+				<span class="k" aria-hidden="true">DIRECT</span>
+				<a href={`mailto:${brand.email}`}>{brand.email}</a>
+			</p>
+		</div>
+
+		<div class="card">
+			<p class="perf" aria-hidden="true"><span>TEAR ALONG PERFORATION</span></p>
+
+			<div class="cardbody">
+				<div class="cardhead">
+					<p class="no">REPLY CARD — NO. 09</p>
+					<svg class="dots" viewBox="0 0 240 28" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false" data-reg>
+						<rect width="240" height="28" fill="url(#d04-dot-fine)"></rect>
+					</svg>
+				</div>
+
+				<dl class="lines">
+					<div><dt>ATTN</dt><dd>{brand.email}</dd></div>
+					<div><dt>SUBJECT</dt><dd>專案詢問 / PROJECT INQUIRY</dd></div>
+					<div><dt>SCOPE</dt><dd>{brand.disciplines}</dd></div>
+					<div><dt>REPLY</dt><dd>WITHIN 24 HRS</dd></div>
+				</dl>
+
+				<button class="send" type="button" data-d04-inquiry>
+					<span>{cta.buttonLabel}</span>
+					<span class="arw" aria-hidden="true">↗</span>
+				</button>
+
+				<p class="fine" aria-hidden="true">FORM 01 — 4 FIELDS + MESSAGE · NO DATA STORED</p>
+			</div>
+		</div>
+	</div>
+</Plate>
+
+<style>
+	.wrap {
+		display: grid;
+		gap: clamp(2.5rem, 6vw, 4.5rem);
+	}
+
+	h2 {
+		font-family: var(--font-cjk);
+		font-weight: 800;
+		font-size: clamp(2.1rem, 1.2rem + 4.6vw, 5.25rem);
+		line-height: 1.04;
+		letter-spacing: 0.01em;
+		color: var(--ink-black);
+	}
+
+	.ln {
+		display: block;
+	}
+
+	.body {
+		display: grid;
+		gap: 0.3rem;
+		max-width: 28rem;
+		margin-top: clamp(1.25rem, 3vw, 2rem);
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9rem, 0.86rem + 0.3vw, 1.05rem);
+		line-height: 1.9;
+		letter-spacing: 0.04em;
+		color: var(--ink);
+	}
+
+	.body .l {
+		display: block;
+	}
+
+	.mailto {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.5rem 0.9rem;
+		margin-top: clamp(1.25rem, 3vw, 2rem);
+		padding-top: 0.6rem;
+		border-top: 1px solid var(--rule);
+		font-family: var(--font-mono);
+		font-size: var(--mono-lg);
+		letter-spacing: 0.08em;
+	}
+
+	.mailto .k {
+		color: color-mix(in oklab, currentColor 45%, transparent);
+	}
+
+	.mailto a {
+		border-bottom: 1px solid var(--accent);
+	}
+
+	.mailto a:hover {
+		color: var(--accent);
+	}
+
+	/* ---- reply card ---------------------------------------------------- */
+	.card {
+		position: relative;
+	}
+
+	.perf {
+		position: relative;
+		border-top: 1px dashed var(--rule);
+		height: 0;
+	}
+
+	.perf span {
+		position: absolute;
+		top: -0.55rem;
+		left: 0;
+		padding-right: 0.6rem;
+		background: var(--paper-hi);
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: color-mix(in oklab, currentColor 45%, transparent);
+	}
+
+	.cardbody {
+		display: grid;
+		gap: clamp(1rem, 2.5vw, 1.5rem);
+		margin-top: 1.1rem;
+		padding: clamp(1.1rem, 3vw, 1.75rem);
+		border: 1px dashed var(--rule);
+	}
+
+	.cardhead {
+		display: grid;
+		gap: 0.6rem;
+	}
+
+	.no {
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: var(--accent-text);
+	}
+
+	.dots {
+		width: 100%;
+		height: 1.75rem;
+	}
+
+	.lines div {
+		display: grid;
+		grid-template-columns: 4.5rem minmax(0, 1fr);
+		gap: 0.75rem;
+		align-items: baseline;
+		padding-block: 0.6rem;
+		border-bottom: 1px dashed var(--rule-soft);
+	}
+
+	.lines dt {
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.1em;
+		color: color-mix(in oklab, currentColor 45%, transparent);
+	}
+
+	.lines dd {
+		font-family: var(--font-mono);
+		font-size: var(--mono-lg);
+		letter-spacing: 0.04em;
+		color: var(--ink-black);
+		overflow-wrap: anywhere;
+	}
+
+	.send {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		min-height: 3.25rem;
+		padding-inline: clamp(1rem, 3vw, 1.5rem);
+		background: var(--accent);
+		color: var(--ink-black);
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(1rem, 0.95rem + 0.4vw, 1.25rem);
+		letter-spacing: 0.14em;
+	}
+
+	.send:hover {
+		background: var(--ink-black);
+		color: var(--paper-hi);
+	}
+
+	.arw {
+		font-family: var(--font-mono);
+	}
+
+	.fine {
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.1em;
+		color: color-mix(in oklab, currentColor 42%, transparent);
+	}
+
+	@media (min-width: 60rem) {
+		.wrap {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 25rem);
+			column-gap: clamp(2.5rem, 6vw, 6rem);
+			align-items: start;
+		}
+
+		.ind {
+			padding-left: 4vw;
+		}
+	}
+</style>

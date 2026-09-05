@@ -1,0 +1,55 @@
+---
+/**
+ * The occluded sun-disc — the signature element of 05.
+ * One light, seen three times through the architecture. It sits behind the
+ * planes of its scene and its vertical position is driven by overall page
+ * scroll progress (see the page's motion script), so it reads as one disc
+ * rising through the whole building.
+ *
+ * Size and position are NOT set here: each scene declares --sun-size / --sun-x /
+ * --sun-y against its own `klass` so those values can be recomposed per
+ * breakpoint. (Inline styles would out-rank every media query.)
+ */
+interface Props {
+	/** hook the parent scene styles and the motion script target */
+	klass: string;
+	/** travel amplitude in % of its own diameter, applied by the scroll scrub */
+	drift?: number;
+	tone?: "solid" | "ring";
+}
+
+const { klass, drift = 12, tone = "solid" } = Astro.props;
+---
+
+<div class={`d05-sun ${klass}`} aria-hidden="true">
+	<div class="d05-sun-inner" data-sun-drift={String(drift)} data-tone={tone}></div>
+</div>
+
+<style>
+	.d05-sun {
+		--sun-size: 30svh;
+		--sun-x: 50%;
+		--sun-y: 50%;
+
+		position: absolute;
+		left: var(--sun-x);
+		top: var(--sun-y);
+		width: var(--sun-size);
+		height: var(--sun-size);
+		transform: translate(-50%, -50%);
+		pointer-events: none;
+	}
+
+	.d05-sun-inner {
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		background: var(--orange);
+		will-change: transform;
+	}
+
+	.d05-sun-inner[data-tone="ring"] {
+		background: none;
+		border: 0.375rem solid var(--orange);
+	}
+</style>

@@ -1,0 +1,101 @@
+---
+import { capabilities } from "../../lib/copy";
+
+const track = [...capabilities];
+---
+
+<section class="mq" aria-labelledby="d07-mq-h">
+	<h2 id="d07-mq-h" class="visually-hidden">能力範圍</h2>
+	<div class="band">
+		<div class="track">
+			<ul class="set">
+				{
+					track.map(entry => (
+						<li>
+							{entry}
+							<i aria-hidden="true" />
+						</li>
+					))
+				}
+			</ul>
+			<ul class="set" aria-hidden="true">
+				{
+					track.map(entry => (
+						<li>
+							{entry}
+							<i />
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+</section>
+
+<style>
+	.mq {
+		background: var(--d07-deep);
+		border-block: var(--hairline) solid var(--d07-line-soft);
+	}
+
+	.band {
+		overflow: clip;
+		padding-block: clamp(1.25rem, 3.2vh, 2rem);
+	}
+
+	.track {
+		display: flex;
+		width: max-content;
+		animation: d07-run 54s linear infinite;
+	}
+
+	.set {
+		display: flex;
+		align-items: center;
+	}
+
+	.set li {
+		display: flex;
+		align-items: center;
+		gap: clamp(1.25rem, 3vw, 2.5rem);
+		padding-right: clamp(1.25rem, 3vw, 2.5rem);
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.3em;
+		white-space: nowrap;
+		color: var(--d07-mute);
+	}
+
+	.set li i {
+		display: block;
+		width: 0.25rem;
+		height: 0.25rem;
+		background: var(--orange);
+	}
+
+	@keyframes d07-run {
+		to {
+			transform: translate3d(-50%, 0, 0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.track {
+			animation: none;
+			flex-wrap: wrap;
+			width: auto;
+		}
+
+		.set {
+			flex-wrap: wrap;
+		}
+
+		.set + .set {
+			display: none;
+		}
+
+		.band {
+			padding-inline: var(--d07-gutter);
+		}
+	}
+</style>

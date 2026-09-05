@@ -1,0 +1,150 @@
+---
+/**
+ * design-06 — MOTION SYSTEM
+ * Root tokens plus the handful of primitives that genuinely have to be shared
+ * across sections (dark-chapter inversion, running heads, stacking order).
+ * Every selector is prefixed with `body.d-06` so nothing leaks sideways.
+ */
+---
+
+<style is:global>
+	body.d-06 {
+		--bg: var(--warm-gray);
+
+		/* Contrast budget. Orange is ~3.2:1 on warm gray, so it is used as a
+		   GRAPHIC accent — rails, rules, marks, fills, large display figures —
+		   and never as small type on a light ground. Text tones: */
+		--fg: var(--ink); /* 7.2:1 on warm gray */
+		--fg-dim: var(--graphite); /* 5.3:1 on warm gray */
+		--fg-faint: var(--graphite); /* graphite is the floor: nothing lighter passes AA here */
+		--rule: color-mix(in oklab, var(--graphite) 26%, transparent);
+		--rule-hi: color-mix(in oklab, var(--graphite) 56%, transparent);
+		--accent: var(--orange);
+		--on-accent: var(--ink-black);
+
+		--rail-w: clamp(0.3125rem, 0.5vw, 0.5rem);
+		--bar-h: 3.5rem;
+		--edge: var(--gutter);
+
+		background: var(--warm-gray);
+		color: var(--fg);
+	}
+
+	/* --- the graphite chapter ---------------------------------------------
+	   Sections in the middle of the document invert their type. They paint
+	   their own graphite ground by default so the page is correct with no
+	   JavaScript and under prefers-reduced-motion; once the motion runtime
+	   actually starts (.d06-live) they go transparent and the single fixed
+	   backdrop tweens underneath them instead. */
+	body.d-06 .d06-dark {
+		--fg: var(--paper-hi);
+		--fg-dim: color-mix(in oklab, var(--paper) 76%, transparent); /* 7:1 on graphite */
+		--fg-faint: color-mix(in oklab, var(--paper) 60%, transparent); /* 5.3:1 */
+		--rule: color-mix(in oklab, var(--paper) 24%, transparent);
+		--rule-hi: color-mix(in oklab, var(--paper) 52%, transparent);
+		color: var(--fg);
+		background: var(--ink-deep);
+	}
+
+	body.d-06.d06-live .d06-dark {
+		background: transparent;
+	}
+
+	/* --- stacking: ground 0 · rail 1 · document 2 · header 30 · dialog top -- */
+	body.d-06 .d06-doc,
+	body.d-06 .d06-footer {
+		position: relative;
+		z-index: 2;
+	}
+
+	body.d-06.d06-locked {
+		overflow: hidden;
+	}
+
+	/* --- running head ------------------------------------------------------
+	   A full-measure notation rule carrying index + timing data. Deliberately
+	   NOT an eyebrow: it spans the measure, sits on a hairline, and reads left
+	   to right as a running head rather than stacking above a heading. */
+	body.d-06 .d06-run {
+		display: flex;
+		align-items: center;
+		gap: clamp(0.75rem, 2vw, 1.5rem);
+		border-top: var(--hairline) solid var(--rule-hi);
+		padding-top: 0.6rem;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--fg-dim);
+	}
+
+	body.d-06 .d06-run__i {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: var(--fg);
+		flex: none;
+	}
+
+	body.d-06 .d06-run__i::before {
+		content: "";
+		width: 0.4375rem;
+		height: 0.4375rem;
+		background: var(--accent);
+		flex: none;
+	}
+
+	body.d-06 .d06-run__l {
+		flex: 1 1 auto;
+		height: var(--hairline);
+		background: var(--rule);
+		min-width: 1.5rem;
+	}
+
+	body.d-06 .d06-run__t {
+		flex: none;
+	}
+
+	body.d-06 .d06-run__d {
+		flex: none;
+		color: var(--fg-faint);
+	}
+
+	@media (max-width: 30rem) {
+		body.d-06 .d06-run {
+			font-size: 0.625rem;
+			letter-spacing: 0.1em;
+		}
+		body.d-06 .d06-run__d {
+			display: none;
+		}
+	}
+
+	/* --- measure ----------------------------------------------------------
+	   Content keeps clear of the left gutter lane so the rail can live there
+	   as the scroll-progress margin rail without ever colliding with type. */
+	body.d-06 .d06-wrap {
+		padding-inline: calc(var(--edge) + 1.25rem) var(--edge);
+	}
+
+	@media (min-width: 64rem) {
+		body.d-06 .d06-wrap {
+			padding-inline: calc(var(--edge) + 2.5rem) var(--edge);
+		}
+	}
+
+	/* Latin technical strings — addresses, stacks, indices — must never take
+	   the CJK break-anywhere rule from global.css. */
+	body.d-06 [href^="mailto:"] {
+		overflow-wrap: normal;
+		word-break: normal;
+	}
+
+	/* --- clipped line-reveal rows ------------------------------------------
+	   The row clips; the inner span is what JS animates from. Nothing is ever
+	   hidden here, so the static page is complete. */
+	body.d-06 .d06-rowclip {
+		display: block;
+		overflow: clip;
+	}
+</style>

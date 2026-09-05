@@ -1,0 +1,93 @@
+---
+import { manifesto } from "../../lib/copy";
+---
+
+<section class="cred" aria-labelledby="d07-cred-h">
+	<div class="d07-shell">
+		<h2 id="d07-cred-h" class="visually-hidden">工作室實績</h2>
+		<p class="d07-run"><span>CREDIBILITY</span></p>
+
+		<dl class="figs">
+			{
+				manifesto.credibility.map(entry => (
+					<div class="fig" data-d07-reveal>
+						<dt class="n">{entry.figure}</dt>
+						<dd class="zh" lang="zh-Hant">
+							{entry.label}
+						</dd>
+						<dd class="en">{entry.en}</dd>
+					</div>
+				))
+			}
+		</dl>
+	</div>
+</section>
+
+<style>
+	.cred {
+		background: var(--d07-black);
+		padding-block: clamp(5rem, 14vh, 10rem) clamp(6rem, 18vh, 13rem);
+		border-top: var(--hairline) solid var(--d07-line-soft);
+	}
+
+	.figs {
+		display: grid;
+		grid-template-columns: 1.05fr 0.9fr 1.35fr;
+		gap: clamp(1.5rem, 4vw, 3.5rem);
+	}
+
+	.fig {
+		padding-top: clamp(1.25rem, 3.4vh, 2rem);
+		border-top: var(--hairline) solid var(--d07-line);
+	}
+
+	.fig::before {
+		content: "";
+		display: block;
+		width: var(--d07-slit);
+		height: 0.875rem;
+		margin-bottom: clamp(2rem, 6vh, 4rem);
+		background: var(--orange);
+	}
+
+	.n {
+		font-size: clamp(1.75rem, 4.6vw, 4rem);
+		font-weight: 300;
+		line-height: 1.05;
+		letter-spacing: 0.02em;
+		color: var(--d07-text);
+	}
+
+	.zh {
+		margin-top: clamp(1.25rem, 3.4vh, 2rem);
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		font-weight: 300;
+		line-height: 1.95;
+		letter-spacing: 0.11em;
+		color: var(--d07-mute);
+	}
+
+	.en {
+		margin-top: 0.5rem;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.24em;
+		color: var(--d07-dim);
+	}
+
+	@media (max-width: 60rem) {
+		.figs {
+			grid-template-columns: 1fr;
+			gap: 0;
+		}
+
+		.fig {
+			padding-block: clamp(1.5rem, 4vh, 2.25rem) clamp(2.5rem, 7vh, 4rem);
+		}
+
+		.fig::before {
+			margin-bottom: clamp(1rem, 3vh, 2rem);
+		}
+	}
+</style>

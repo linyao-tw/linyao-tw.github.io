@@ -1,0 +1,110 @@
+---
+/**
+ * design-04 · colophon strip
+ *
+ * One printed band, ink on the full trim. The capability set runs across it as a
+ * single continuous line with registration crosses between entries. This and the
+ * plate-registration snap are the only motion on the page.
+ */
+import { capabilities } from "../../lib/copy";
+import Plate from "./Plate.astro";
+---
+
+<Plate as="section" id="capabilities" labelledby="cap-h" plate="COLOPHON — CAPABILITY SET" tone="ink" pad="sm" clip>
+	<h2 id="cap-h" class="visually-hidden">能力範疇 CAPABILITIES</h2>
+
+	<div class="strip">
+		<div class="track">
+			{
+				[0, 1].map(copy => (
+					<ul class="run" aria-hidden={copy === 1 ? "true" : undefined}>
+						{capabilities.map(item => (
+							<li>
+								<svg class="x" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+									<circle cx="8" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1" />
+									<path d="M8 0v4M8 12v4M0 8h4M12 8h4" stroke="currentColor" stroke-width="1" />
+								</svg>
+								<span>{item}</span>
+							</li>
+						))}
+					</ul>
+				))
+			}
+		</div>
+	</div>
+
+	<p class="foot" aria-hidden="true"><span>14 ENTRIES</span><span class="r"></span><span>SET IN MONO / 0.16EM</span></p>
+</Plate>
+
+<style>
+	.strip {
+		margin-inline: calc(var(--plate-x) * -1);
+		border-block: 1px solid var(--rule-soft);
+		padding-block: clamp(0.65rem, 1.6vw, 1rem);
+		overflow: clip;
+	}
+
+	.track {
+		display: flex;
+		width: max-content;
+		animation: d04-marq 52s linear infinite;
+	}
+
+	.strip:hover .track {
+		animation-play-state: paused;
+	}
+
+	.run {
+		display: flex;
+		align-items: center;
+	}
+
+	.run li {
+		display: flex;
+		align-items: center;
+		gap: clamp(0.75rem, 1.6vw, 1.4rem);
+		padding-right: clamp(0.75rem, 1.6vw, 1.4rem);
+		font-family: var(--font-mono);
+		font-size: clamp(0.8rem, 0.7rem + 0.55vw, 1.15rem);
+		letter-spacing: var(--track);
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.x {
+		width: 0.75rem;
+		height: 0.75rem;
+		flex: none;
+		color: var(--accent);
+	}
+
+	@keyframes d04-marq {
+		to {
+			transform: translate3d(-50%, 0, 0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.track {
+			animation: none;
+			transform: none;
+		}
+	}
+
+	.foot {
+		display: flex;
+		align-items: center;
+		gap: 0.9rem;
+		margin-top: clamp(0.65rem, 1.6vw, 1rem);
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: color-mix(in oklab, currentColor 55%, transparent);
+	}
+
+	.foot .r {
+		flex: 1;
+		height: 1px;
+		background: var(--rule-faint);
+	}
+</style>

@@ -1,0 +1,340 @@
+---
+import { brand, hero } from "../../lib/copy";
+import SunDisc from "./SunDisc.astro";
+---
+
+<section class="hero" data-scene aria-labelledby="d05-hero-title">
+	<div class="scene" aria-hidden="true">
+		<SunDisc drift={14} klass="hero-sun" />
+
+		<div class="datum">
+			<span class="datum-line"></span>
+			<span class="d05-anno datum-tag">EL. +18.600</span>
+		</div>
+
+		<div class="plane column" data-plane data-par="-2.4"></div>
+		<div class="plane wedge" data-plane data-par="-4"></div>
+		<div class="plane mass" data-plane data-par="1.8"></div>
+
+		<div class="dimline">
+			<span class="d05-dim"></span>
+			<span class="d05-anno dim-tag">24 000</span>
+		</div>
+
+		<svg class="sectionmark" viewBox="0 0 120 34" fill="none" focusable="false">
+			<path d="M2 24 H104" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"></path>
+			<path d="M104 24 L94 19.5 V28.5 Z" fill="currentColor"></path>
+			<path d="M2 14 V34" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"></path>
+			<path d="M110 18 L114.5 8 L119 18 M111.6 14.6 H117.4" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"></path>
+		</svg>
+	</div>
+
+	<p class="eq d05-latin">{brand.equation}</p>
+
+	<p class="disciplines d05-anno">{brand.disciplines}</p>
+
+	<div class="copy" data-reveal>
+		<h1 id="d05-hero-title" class="d05-zh title">
+			{hero.headlineParts.map(part => <span>{part}</span>)}
+		</h1>
+		<p class="d05-anno d05-anno--paper caption">SECTION A&ndash;A &nbsp;/&nbsp; PLAZA</p>
+	</div>
+
+	<p class="cue d05-anno d05-anno--paper">{hero.scrollCue}</p>
+</section>
+
+<style>
+	.hero {
+		--sh: 100svh;
+		--ph: calc(var(--sh) + 2 * var(--ov));
+		--rx: 66vw; /* wedge: top x */
+		--cx: 30vw; /* leaning column: top x */
+		--cw: 2.75vw;
+		--mh: 42svh; /* ground mass height at the left edge */
+		--dya: calc(100vw * var(--tan-a)); /* 8° rise across the full width */
+		--dxb: calc(var(--ph) * var(--tan-b)); /* 22° run across the full plane height */
+
+		position: relative;
+		min-height: var(--sh);
+		overflow: clip;
+		isolation: isolate;
+	}
+
+	.scene {
+		position: absolute;
+		inset: 0;
+	}
+
+	.hero :global(.hero-sun) {
+		z-index: 1;
+		--sun-size: 34svh;
+		--sun-x: 50vw;
+		--sun-y: 36svh;
+	}
+
+	.plane {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: calc(-1 * var(--ov));
+		bottom: calc(-1 * var(--ov));
+		will-change: transform;
+	}
+
+	/* leaning column — 22° */
+	.column {
+		z-index: 2;
+		background: color-mix(in oklab, var(--warm-gray) 80%, var(--graphite));
+		clip-path: polygon(var(--cx) 0, calc(var(--cx) + var(--cw)) 0, calc(var(--cx) + var(--cw) - var(--dxb)) 100%, calc(var(--cx) - var(--dxb)) 100%);
+	}
+
+	/* the tall wedge that cuts the light — 22° */
+	.wedge {
+		z-index: 3;
+		background: var(--mass-deep);
+		clip-path: polygon(var(--rx) 0, 100% 0, 100% 100%, calc(var(--rx) - var(--dxb)) 100%);
+	}
+
+	/* the ground mass the headline stands on — 8° */
+	.mass {
+		z-index: 4;
+		background: var(--mass);
+		clip-path: polygon(0 calc(100% - var(--ov) - var(--mh)), 100% calc(100% - var(--ov) - var(--mh) - var(--dya)), 100% 100%, 0 100%);
+	}
+
+	.datum {
+		position: absolute;
+		left: 0;
+		right: 34vw;
+		top: 22svh;
+		z-index: 2;
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.datum-line {
+		flex: 1;
+		height: 1px;
+		background: var(--line-soft);
+	}
+
+	.datum-tag {
+		color: color-mix(in oklab, var(--graphite) 52%, transparent);
+	}
+
+	.dimline {
+		position: absolute;
+		left: var(--gutter);
+		width: 22vw;
+		top: 46svh;
+		z-index: 2;
+		display: grid;
+		gap: 0.4375rem;
+	}
+
+	.dim-tag {
+		color: color-mix(in oklab, var(--graphite) 60%, transparent);
+	}
+
+	.sectionmark {
+		position: absolute;
+		right: var(--gutter);
+		top: 30svh;
+		width: 7.5rem;
+		height: auto;
+		z-index: 5;
+		color: color-mix(in oklab, var(--paper) 50%, transparent);
+	}
+
+	.eq {
+		position: absolute;
+		left: var(--gutter);
+		top: clamp(5rem, 11svh, 8rem);
+		z-index: 6;
+		font-size: clamp(0.6875rem, 1vw, 0.875rem);
+		letter-spacing: 0.22em;
+		color: var(--graphite);
+	}
+
+	.disciplines {
+		position: absolute;
+		left: var(--gutter);
+		top: 29svh;
+		z-index: 6;
+		writing-mode: vertical-rl;
+		letter-spacing: 0.2em;
+		color: var(--graphite);
+	}
+
+	.copy {
+		position: absolute;
+		left: var(--gutter);
+		bottom: clamp(3.5rem, 9svh, 6.5rem);
+		z-index: 7;
+		max-width: min(36rem, 68vw);
+	}
+
+	.title {
+		font-size: clamp(1.5rem, 2.9vw, 2.625rem);
+		line-height: 1.72;
+		letter-spacing: 0.11em;
+		font-weight: 400;
+		color: var(--paper-hi);
+	}
+
+	.title span {
+		white-space: nowrap;
+	}
+
+	.title span:last-child {
+		padding-left: 3.25em;
+	}
+
+	.caption {
+		margin-top: 1.5rem;
+		padding-top: 0.75rem;
+		border-top: 1px solid var(--line-paper);
+		display: inline-block;
+	}
+
+	.cue {
+		position: absolute;
+		right: var(--gutter);
+		bottom: clamp(3.5rem, 9svh, 6.5rem);
+		z-index: 7;
+		letter-spacing: 0.2em;
+	}
+
+	/* ---------- 1024 ---------- */
+	@media (max-width: 64rem) {
+		.hero {
+			--rx: 76vw;
+			--cx: 34vw;
+			--mh: 40svh;
+		}
+
+		.hero :global(.hero-sun) {
+			--sun-size: 32svh;
+			--sun-x: 52vw;
+			--sun-y: 34svh;
+		}
+
+		.datum {
+			right: 26vw;
+		}
+
+		.sectionmark {
+			width: 6rem;
+			top: 26svh;
+		}
+	}
+
+	/* ---------- 768 ---------- */
+	@media (max-width: 48rem) {
+		.hero {
+			--rx: 86vw;
+			--cx: 26vw;
+			--cw: 3.5vw;
+			--mh: 44svh;
+		}
+
+		.hero :global(.hero-sun) {
+			--sun-size: 30svh;
+			--sun-x: 56vw;
+			--sun-y: 36svh;
+		}
+
+		.dimline {
+			width: 30vw;
+			top: 46svh;
+		}
+
+		.title {
+			font-size: clamp(1.5rem, 4.2vw, 2rem);
+		}
+
+		.title span:last-child {
+			padding-left: 2em;
+		}
+	}
+
+	/* ---------- 390 — recomposed: the wedge and the column are gone,
+	   the crop tightens, the light is pushed off the right edge ---------- */
+	@media (max-width: 30rem) {
+		.hero {
+			--mh: 54svh;
+		}
+
+		.column,
+		.wedge {
+			display: none;
+		}
+
+		.hero :global(.hero-sun) {
+			--sun-size: 30svh;
+			--sun-x: 74vw;
+			--sun-y: 27svh;
+		}
+
+		.datum {
+			right: 0;
+			top: 17svh;
+		}
+
+		.dimline {
+			display: none;
+		}
+
+		.sectionmark {
+			width: 4.5rem;
+			top: auto;
+			bottom: 1.75rem;
+			right: var(--gutter);
+			color: color-mix(in oklab, var(--paper) 44%, transparent);
+		}
+
+		.disciplines {
+			writing-mode: horizontal-tb;
+			top: 20svh;
+			letter-spacing: 0.2em;
+		}
+
+		.eq {
+			top: 4.75rem;
+			letter-spacing: 0.2em;
+		}
+
+		.copy {
+			bottom: 6.5rem;
+			max-width: calc(100vw - 2 * var(--gutter));
+			right: var(--gutter);
+		}
+
+		.title {
+			font-size: 1.5rem;
+			line-height: 1.68;
+		}
+
+		.title span:last-child {
+			padding-left: 2.5em;
+		}
+
+		.cue {
+			bottom: 3rem;
+			left: var(--gutter);
+			right: auto;
+		}
+	}
+
+	@media (max-height: 34rem) and (min-width: 30rem) {
+		.hero {
+			--mh: 46svh;
+		}
+
+		.disciplines,
+		.dimline {
+			display: none;
+		}
+	}
+</style>

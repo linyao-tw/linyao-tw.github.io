@@ -1,0 +1,260 @@
+---
+/**
+ * The signature element: a perspective corridor built from stacked rectangular
+ * planes receding toward an off-centre vanishing point, with an SVG line grid
+ * radiating from that same point. Used full-scale in the hero, at band scale
+ * as the divider before the manifesto, and again inside the CTA.
+ *
+ * The stage is decorative (aria-hidden). Real content goes into the default
+ * slot, which renders in front of the geometry — "the corridor's mouth".
+ */
+interface Props {
+	planes?: number;
+	variant?: "hero" | "band" | "cta";
+	/** vanishing point, in % of the stage box — drives both CSS and the SVG */
+	vpx?: number;
+	vpy?: number;
+	id?: string;
+}
+
+const { planes = 7, variant = "band", vpx = 44, vpy = 46, id } = Astro.props;
+
+const W = 200;
+const H = 120;
+const px = +((vpx / 100) * W).toFixed(2);
+const py = +((vpy / 100) * H).toFixed(2);
+
+const rays: [number, number][] = [
+	[0, 0],
+	[W, 0],
+	[0, H],
+	[W, H],
+	[0, H * 0.26],
+	[W, H * 0.26],
+	[0, H * 0.74],
+	[W, H * 0.74],
+	[px, 0],
+	[px, H]
+];
+
+const rules = [py, +(py * 0.42).toFixed(2), +(py + (H - py) * 0.62).toFixed(2)];
+
+/* label depths, in the fictional unit the whole page annotates with */
+const depths = [0, 120, 260, 420, 600, 800, 1020, 1260, 1520];
+const pad = (n: number) => String(n).padStart(4, "0");
+---
+
+<div class:list={["scene", variant]} data-scene id={id}>
+	<div class="stage" aria-hidden="true" style={`--vpx:${vpx}%;--vpy:${vpy}%`}>
+		<svg class="vanish" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
+			<g fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
+				{rays.map(([x, y]) => <line x1={px} y1={py} x2={+x.toFixed(2)} y2={+y.toFixed(2)} />)}
+			</g>
+			<g fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke" opacity="0.65">
+				{rules.map(y => <line x1="0" y1={y} x2={W} y2={y} />)}
+			</g>
+		</svg>
+
+		<div class="corridor" data-corridor>
+			{
+				Array.from({ length: planes }, (_, i) => (
+					<div class="plane" style={`--i:${i}`}>
+						<span class="zmark">{`z −${pad(depths[i] ?? 0)}`}</span>
+					</div>
+				))
+			}
+		</div>
+	</div>
+
+	<div class="mouth"><slot /></div>
+</div>
+
+<style>
+	.scene {
+		position: relative;
+		min-height: var(--scene-min, 0);
+		isolation: isolate;
+	}
+
+	.stage {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		overflow: clip;
+		perspective: var(--persp, 60rem);
+		perspective-origin: var(--vpx, 44%) var(--vpy, 46%);
+		color: color-mix(in oklab, var(--paper) 9%, transparent);
+	}
+
+	.vanish {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.corridor {
+		position: absolute;
+		inset: 0;
+		transform-style: preserve-3d;
+		will-change: transform;
+		transform: translate3d(0, 0, var(--scrub, 0rem)) rotateY(calc(var(--ptr-x, 0) * 1.5deg)) rotateX(calc(var(--ptr-y, 0) * -1.5deg));
+	}
+
+	.plane {
+		position: absolute;
+		inset: 0;
+		margin: auto;
+		width: var(--pw, min(76%, 62rem));
+		height: var(--ph, min(70%, 32rem));
+		border: 1px solid var(--edge-soft);
+		transform: translate3d(0, 0, calc(var(--i) * var(--zstep, -7rem)));
+	}
+
+	.plane::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border: var(--rim, 1.15rem) solid var(--wall);
+	}
+
+	/* one orange edge per plane, cycling sides; the fourth is fully edged */
+	.plane:nth-child(1) {
+		border-top-color: var(--orange);
+	}
+	.plane:nth-child(2) {
+		border-right-color: var(--orange-deep);
+	}
+	.plane:nth-child(3) {
+		border-bottom-color: var(--orange-deep);
+	}
+	.plane:nth-child(4) {
+		border-color: var(--orange);
+	}
+	.plane:nth-child(5) {
+		border-left-color: var(--orange-deep);
+	}
+	.plane:nth-child(6) {
+		border-top-color: var(--orange-deep);
+	}
+	.plane:nth-child(7) {
+		border-right-color: var(--orange-deep);
+	}
+
+	/* a clipped orange strip on one edge — depth read through colour placement */
+	.plane:nth-child(2)::after {
+		content: "";
+		position: absolute;
+		top: 12%;
+		bottom: 46%;
+		right: -1px;
+		width: 0.4rem;
+		background: var(--orange);
+	}
+
+	.zmark {
+		position: absolute;
+		left: 0;
+		top: -1.4rem;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.14em;
+		color: var(--on-stage-mute);
+		white-space: nowrap;
+	}
+
+	.plane:nth-child(n + 5) .zmark {
+		display: none;
+	}
+
+	/* the CTA carries its own § 06 readout — no need to double up */
+	.cta .zmark {
+		display: none;
+	}
+
+	.mouth {
+		position: relative;
+		z-index: 1;
+		min-height: var(--mouth-min, 0);
+	}
+
+	.mouth:empty {
+		display: none;
+	}
+
+	/* --- variants ---------------------------------------------------- */
+	.hero {
+		--persp: 62rem;
+		--pw: min(74%, 60rem);
+		--ph: min(64%, 32rem);
+		--zstep: -7.5rem;
+		--rim: 1.25rem;
+	}
+
+	.band {
+		--persp: 46rem;
+		--pw: min(72%, 44rem);
+		--ph: min(74%, 16rem);
+		--zstep: -5rem;
+		--rim: 0.85rem;
+	}
+
+	.cta {
+		--persp: 56rem;
+		--pw: min(74%, 52rem);
+		--ph: min(60%, 26rem);
+		--zstep: -6.5rem;
+		--rim: 1.1rem;
+	}
+
+	@media (max-width: 64rem) {
+		.hero {
+			--persp: 46rem;
+			--pw: 84%;
+			--ph: min(56%, 24rem);
+			--zstep: -5.5rem;
+			--rim: 1rem;
+		}
+		.cta {
+			--persp: 42rem;
+			--pw: 86%;
+			--ph: min(54%, 20rem);
+			--zstep: -5rem;
+			--rim: 0.9rem;
+		}
+	}
+
+	@media (max-width: 48rem) {
+		.hero {
+			--persp: 34rem;
+			--pw: 88%;
+			--ph: min(46%, 18rem);
+			--zstep: -4rem;
+			--rim: 0.75rem;
+		}
+		.band {
+			--persp: 30rem;
+			--pw: 82%;
+			--ph: min(70%, 10rem);
+			--zstep: -3.25rem;
+			--rim: 0.6rem;
+		}
+		.cta {
+			--persp: 30rem;
+			--pw: 90%;
+			--ph: min(50%, 14rem);
+			--zstep: -3.5rem;
+			--rim: 0.7rem;
+		}
+		/* the near plane's orange edge would cut the CTA headline on mobile */
+		.cta .plane:nth-child(1) {
+			border-top-color: var(--edge-soft);
+		}
+		.zmark {
+			font-size: 0.5625rem;
+		}
+		.plane:nth-child(n + 3) .zmark {
+			display: none;
+		}
+	}
+</style>

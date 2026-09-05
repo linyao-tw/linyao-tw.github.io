@@ -1,0 +1,243 @@
+---
+import { brand, cta } from "../../lib/copy";
+---
+
+<section class="cta" id="contact" aria-labelledby="d08-cta-h">
+	<div class="in d08-shell">
+		<p class="d08-head">
+			<span class="d08-coord">[07.00]</span>
+			<b>OPEN ROUTE — INQUIRY</b>
+			<i aria-hidden="true"></i>
+			<span>1 IN / 1 OUT</span>
+		</p>
+
+		<div class="grid">
+			<div class="left">
+				<h2 id="d08-cta-h">
+					{
+						cta.headlineParts.map((p, i) => (
+							<span class="ln" style={`--i:${i}`}>
+								{p}
+							</span>
+						))
+					}
+				</h2>
+				<p class="cp">{cta.body.map(l => <span class="cl">{l}</span>)}</p>
+			</div>
+
+			<div class="right">
+				<div class="mod">
+					<span class="mod-tag"><span class="d08-coord">[07.01]</span> ENTRY NODE</span>
+					<button class="go" type="button" data-d08-open-inquiry>
+						<span class="go-sq" aria-hidden="true"></span>
+						<span class="go-tx">{cta.button}</span>
+					</button>
+					<span class="mod-route" aria-hidden="true"></span>
+					<a class="mail" href={`mailto:${brand.email}`}>
+						<span class="mail-k">DIRECT</span>
+						<span class="mail-v">{brand.email}</span>
+					</a>
+				</div>
+
+				<dl class="spec">
+					<div><dt>PROTOCOL</dt><dd>EMAIL / FORM</dd></div>
+					<div><dt>RESPONSE</dt><dd>1—2 WORKING DAYS</dd></div>
+					<div><dt>SCOPE</dt><dd>BRAND · WEB · SYSTEM</dd></div>
+				</dl>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.cta {
+		padding-block: clamp(4rem, 11vw, 10rem);
+		border-top: 1px solid var(--rule);
+		overflow: clip;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+		gap: var(--mod);
+		padding-top: clamp(2rem, 5vw, 4.5rem);
+		align-items: start;
+	}
+
+	h2 {
+		font-family: var(--font-cjk);
+		font-weight: 600;
+		font-size: clamp(2rem, 5.6vw, 4.75rem);
+		line-height: 1.06;
+		letter-spacing: 0.01em;
+		display: grid;
+		justify-items: start;
+	}
+
+	.ln:nth-child(2) {
+		color: var(--accent);
+		padding-left: 1.2ch;
+	}
+
+	.cp {
+		margin-top: clamp(1.5rem, 3vw, 2.5rem);
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+		line-height: 2;
+		letter-spacing: 0.05em;
+		max-width: 40ch;
+		border-top: 1px solid var(--rule);
+		padding-top: clamp(1rem, 2vw, 1.75rem);
+	}
+
+	.cl {
+		display: block;
+	}
+
+	.mod {
+		border: 1px solid var(--fg);
+		padding: clamp(1.25rem, 2.4vw, 1.75rem);
+		display: grid;
+		gap: 1.1rem;
+	}
+
+	.mod-tag {
+		font-size: 0.625rem;
+		letter-spacing: 0.18em;
+		color: var(--dim);
+	}
+
+	.go {
+		display: flex;
+		align-items: center;
+		gap: 1.25ch;
+		width: 100%;
+		min-height: 3.5rem;
+		padding-inline: 1.25rem;
+		background: var(--ink-deep);
+		color: var(--paper-hi);
+		transition: background-color 0.16s linear;
+	}
+
+	.go-sq {
+		width: 0.625rem;
+		height: 0.625rem;
+		background: var(--accent);
+		transition:
+			transform 0.16s linear,
+			background-color 0.16s linear;
+	}
+
+	.go-tx {
+		font-family: var(--font-cjk);
+		font-size: 1.0625rem;
+		letter-spacing: 0.14em;
+	}
+
+	.go:hover,
+	.go:focus-visible {
+		background: var(--accent);
+	}
+
+	.go:hover .go-sq,
+	.go:focus-visible .go-sq {
+		background: var(--paper-hi);
+		transform: translateX(0.2rem);
+	}
+
+	.mod-route {
+		height: 1px;
+		background-image: repeating-linear-gradient(to right, var(--rule) 0 0.3rem, transparent 0.3rem 0.6rem);
+	}
+
+	.mail {
+		display: grid;
+		grid-template-columns: 8ch 1fr;
+		gap: 1ch;
+		align-items: baseline;
+		font-size: 0.8125rem;
+		letter-spacing: 0.08em;
+		min-height: 2.75rem;
+		align-content: center;
+	}
+
+	.mail-k {
+		font-size: 0.625rem;
+		letter-spacing: 0.18em;
+		color: var(--dim);
+	}
+
+	.mail-v {
+		border-bottom: 1px solid var(--rule);
+		justify-self: start;
+		transition:
+			color 0.14s linear,
+			border-color 0.14s linear;
+	}
+
+	.mail:hover .mail-v,
+	.mail:focus-visible .mail-v {
+		color: var(--accent-ink);
+		border-color: var(--accent-ink);
+	}
+
+	.spec {
+		margin-top: var(--s-6);
+		font-size: 0.6875rem;
+		letter-spacing: 0.12em;
+	}
+
+	.spec > div {
+		display: grid;
+		grid-template-columns: 10ch 1fr;
+		gap: 1ch;
+		border-top: 1px solid var(--rule-soft);
+		padding-block: 0.5rem;
+	}
+
+	.spec dt {
+		color: var(--dim);
+	}
+
+	@media (max-width: 68rem) {
+		.grid {
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--s-8);
+		}
+
+		.right {
+			max-width: 30rem;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		gsap.from(".cta .ln", {
+			yPercent: 70,
+			opacity: 0,
+			duration: 0.5,
+			stagger: 0.09,
+			ease: "power2.out",
+			scrollTrigger: { trigger: ".cta", start: "top 76%" }
+		});
+
+		gsap.from(".cta .mod", {
+			opacity: 0,
+			y: 16,
+			duration: 0.45,
+			ease: "power2.out",
+			scrollTrigger: { trigger: ".cta .mod", start: "top 88%" }
+		});
+
+		gsap.from(".cta .spec > div", {
+			opacity: 0,
+			duration: 0.3,
+			stagger: 0.07,
+			ease: "none",
+			scrollTrigger: { trigger: ".cta .spec", start: "top 92%" }
+		});
+	});
+</script>

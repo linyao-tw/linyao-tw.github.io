@@ -1,0 +1,143 @@
+---
+/**
+ * design-04 · colour plate bar
+ *
+ * The recurring separation band: three inks, ticked ruler, mono values.
+ * Used as a rhythm device between plates. `compact` drops the ruler and the
+ * running annotation for the tighter positions.
+ */
+
+interface Props {
+	compact?: boolean;
+	note?: string;
+	class?: string;
+}
+
+const { compact = false, note = "COLOUR PLATE / 3 SEPARATIONS — UNCOATED STOCK 120GSM", class: className } = Astro.props;
+
+const inks = [
+	{ name: "WARM GRAY", hex: "D3CCC1", css: "var(--warm-gray)", n: "K01" },
+	{ name: "GRAPHITE", hex: "4D4D4D", css: "var(--graphite)", n: "K02" },
+	{ name: "ORANGE RED", hex: "FE3300", css: "var(--orange)", n: "K03" }
+];
+---
+
+<div class:list={["bar", { compact }, className]}>
+	{!compact && <p class="note">{note}</p>}
+	{!compact && <div class="ruler" aria-hidden="true" />}
+
+	<ul class="inks">
+		{
+			inks.map((ink, i) => (
+				<li class="ink">
+					<span class="chip" style={`--chip: ${ink.css}`} data-reg={i === 2 ? "" : null} aria-hidden="true">
+						<span class="tick t1" />
+						<span class="tick t2" />
+					</span>
+					<span class="label">
+						<span class="n">{ink.n}</span>
+						<span class="nm">{ink.name}</span>
+						<span class="hex">{ink.hex}</span>
+					</span>
+				</li>
+			))
+		}
+	</ul>
+</div>
+
+<style>
+	.bar {
+		display: grid;
+		gap: 0.6rem;
+	}
+
+	.note {
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		text-transform: uppercase;
+		color: color-mix(in oklab, currentColor 62%, transparent);
+	}
+
+	.ruler {
+		height: 0.55rem;
+		background-image: repeating-linear-gradient(90deg, var(--rule) 0 1px, transparent 1px 2.5rem), repeating-linear-gradient(90deg, var(--rule-soft) 0 1px, transparent 1px 0.5rem);
+		background-size:
+			100% 0.55rem,
+			100% 0.28rem;
+		background-repeat: no-repeat;
+		background-position:
+			bottom left,
+			bottom left;
+		border-bottom: 1px solid var(--rule-soft);
+	}
+
+	.inks {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: clamp(0.75rem, 2vw, 2rem);
+	}
+
+	.ink {
+		display: grid;
+		gap: 0.45rem;
+	}
+
+	.chip {
+		position: relative;
+		display: block;
+		height: clamp(1.75rem, 3.4vw, 3.25rem);
+		background: var(--chip);
+		border: 1px solid var(--rule-soft);
+	}
+
+	.tick {
+		position: absolute;
+		bottom: -0.4rem;
+		width: 1px;
+		height: 0.4rem;
+		background: var(--rule);
+	}
+
+	.t1 {
+		left: 0;
+	}
+
+	.t2 {
+		right: 0;
+	}
+
+	.label {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.4rem;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.n {
+		color: var(--accent-text);
+	}
+
+	.nm {
+		color: color-mix(in oklab, currentColor 80%, transparent);
+	}
+
+	.hex {
+		margin-left: auto;
+		color: color-mix(in oklab, currentColor 55%, transparent);
+	}
+
+	@media (max-width: 32rem) {
+		.hex {
+			margin-left: 0;
+		}
+	}
+
+	.compact .chip {
+		height: 1.35rem;
+	}
+</style>

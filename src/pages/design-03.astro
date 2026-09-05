@@ -1,0 +1,33 @@
+---
+import Cta from "../components/design-03/Cta.astro";
+import Credibility from "../components/design-03/Credibility.astro";
+import Footer from "../components/design-03/Footer.astro";
+import Header from "../components/design-03/Header.astro";
+import Hero from "../components/design-03/Hero.astro";
+import InquiryDialog from "../components/design-03/InquiryDialog.astro";
+import Intro from "../components/design-03/Intro.astro";
+import Manifesto from "../components/design-03/Manifesto.astro";
+import Marquee from "../components/design-03/Marquee.astro";
+import Process from "../components/design-03/Process.astro";
+import Services from "../components/design-03/Services.astro";
+import Tokens from "../components/design-03/Tokens.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout title="麟曜數位工作室 LINYAO DIGITAL STUDIO — 003 SPATIAL / CSS 3D" bodyClass="d-03" themeColor="#171716">
+	<Tokens />
+	<a class="skip-link" href="#main">跳至主要內容</a>
+	<Header />
+	<main id="main">
+		<Hero />
+		<Intro />
+		<Services />
+		<Manifesto />
+		<Credibility />
+		<Process />
+		<Marquee />
+		<Cta />
+	</main>
+	<Footer />
+	<InquiryDialog />
+</SiteLayout>

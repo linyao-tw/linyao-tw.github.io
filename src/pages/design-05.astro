@@ -1,0 +1,146 @@
+---
+import Corridor from "../components/design-05/Corridor.astro";
+import Credibility from "../components/design-05/Credibility.astro";
+import Cta from "../components/design-05/Cta.astro";
+import Footer from "../components/design-05/Footer.astro";
+import Header from "../components/design-05/Header.astro";
+import Hero from "../components/design-05/Hero.astro";
+import InquiryDialog from "../components/design-05/InquiryDialog.astro";
+import Intro from "../components/design-05/Intro.astro";
+import Manifesto from "../components/design-05/Manifesto.astro";
+import Marquee from "../components/design-05/Marquee.astro";
+import Process from "../components/design-05/Process.astro";
+import ServiceBays from "../components/design-05/ServiceBays.astro";
+import Tokens from "../components/design-05/Tokens.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout
+	title="麟曜數位工作室 LINYAO DIGITAL STUDIO — 05 GEOMETRIC ARCHITECTURE"
+	description="麟曜數位工作室 LINYAO DIGITAL STUDIO — DESIGN × CODE × MOTION。創造令人驚艷的體驗。你敢想像，我們敢做出來。有想法？讓我們一起實現。品牌設計・網頁設計・系統開發。"
+	bodyClass="d-05"
+	themeColor="#d3ccc1"
+>
+	<script is:inline>
+		document.body.classList.add("d05-js");
+	</script>
+
+	<Tokens />
+
+	<a class="skip-link" href="#main">跳至主要內容</a>
+
+	<Header />
+
+	<main id="main">
+		<Hero />
+		<Intro />
+		<Corridor>
+			<ServiceBays />
+		</Corridor>
+		<Manifesto />
+		<Credibility />
+		<Process />
+		<Marquee />
+		<Cta />
+	</main>
+
+	<Footer />
+	<InquiryDialog />
+</SiteLayout>
+
+<script>
+	import { motion, prefersReducedMotion } from "../lib/motion";
+
+	/* Slow, heavy, scrub-linked. Every from-state is authored in JS so the page
+	   is complete and readable with JavaScript disabled or motion reduced. */
+	motion(
+		({ gsap, ScrollTrigger, lenis }) => {
+			/* modal / full-screen menu takes the viewport */
+			window.addEventListener("d05:lock", () => lenis?.stop());
+			window.addEventListener("d05:unlock", () => lenis?.start());
+
+			/* anchors, offset for the fixed datum bar */
+			document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(a => {
+				a.addEventListener("click", event => {
+					const id = a.getAttribute("href");
+					if (!id || id === "#") return;
+					const target = document.querySelector<HTMLElement>(id);
+					if (!target) return;
+					event.preventDefault();
+					if (lenis) lenis.scrollTo(target, { offset: -56 });
+					else target.scrollIntoView({ behavior: "smooth" });
+				});
+			});
+
+			/* 1 — ONE LIGHT. Three views of the same disc, all driven by total page
+		   progress, so it reads as a sun climbing behind the whole building. */
+			gsap.utils.toArray<HTMLElement>(".d05-sun-inner").forEach(el => {
+				const drift = Number(el.dataset.sunDrift) || 12;
+				gsap.fromTo(
+					el,
+					{ yPercent: drift },
+					{
+						yPercent: -drift,
+						ease: "none",
+						scrollTrigger: { trigger: document.documentElement, start: "top top", end: "bottom bottom", scrub: 1.4 }
+					}
+				);
+			});
+
+			/* 2 — the planes drift against each other by a few percent */
+			gsap.utils.toArray<HTMLElement>("[data-plane], [data-ring]").forEach(el => {
+				const par = Number(el.dataset.par);
+				if (!par) return;
+				const scene = el.closest<HTMLElement>("[data-scene]") ?? el.parentElement;
+				if (!scene) return;
+				gsap.fromTo(
+					el,
+					{ yPercent: par },
+					{
+						yPercent: -par,
+						ease: "none",
+						scrollTrigger: { trigger: scene, start: "top bottom", end: "bottom top", scrub: true }
+					}
+				);
+			});
+
+			/* 3 — slow reveals, never a bounce */
+			gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach(el => {
+				gsap.from(el, {
+					yPercent: 6,
+					opacity: 0,
+					duration: 1.2,
+					ease: "power2.out",
+					scrollTrigger: { trigger: el, start: "top 88%" }
+				});
+			});
+
+			/* 4 — volumes rise off their ground line */
+			const rise = (selector: string) => {
+				const items = gsap.utils.toArray<HTMLElement>(selector);
+				if (!items.length) return;
+				gsap.from(items, {
+					scaleY: 0.72,
+					opacity: 0,
+					transformOrigin: "50% 100%",
+					duration: 1.35,
+					ease: "power3.out",
+					stagger: 0.11,
+					scrollTrigger: { trigger: items[0].closest("section") ?? items[0], start: "top 78%" }
+				});
+			};
+
+			rise("[data-bay]");
+			rise("[data-mass]");
+
+			ScrollTrigger.refresh();
+		},
+		{ smooth: true }
+	);
+
+	/* With reduced motion the runtime above never runs — anchors still need to
+	   work, and the native jump honours scroll-margin-top. */
+	if (prefersReducedMotion()) {
+		document.documentElement.style.scrollBehavior = "auto";
+	}
+</script>

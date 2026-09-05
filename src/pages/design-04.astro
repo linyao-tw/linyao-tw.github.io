@@ -1,0 +1,42 @@
+---
+import Cta from "../components/design-04/Cta.astro";
+import Credibility from "../components/design-04/Credibility.astro";
+import Footer from "../components/design-04/Footer.astro";
+import Header from "../components/design-04/Header.astro";
+import Hero from "../components/design-04/Hero.astro";
+import InquiryDialog from "../components/design-04/InquiryDialog.astro";
+import Intro from "../components/design-04/Intro.astro";
+import Manifesto from "../components/design-04/Manifesto.astro";
+import Marquee from "../components/design-04/Marquee.astro";
+import Paper from "../components/design-04/Paper.astro";
+import Process from "../components/design-04/Process.astro";
+import ServicePlate from "../components/design-04/ServicePlate.astro";
+import Services from "../components/design-04/Services.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { services } from "../lib/copy";
+
+const plates = [
+	{ id: "plate-web", sheet: "04/09", plate: "PL. 04 — WEB DEVELOPMENT", fig: "FIG. 02 — WEB DEVELOPMENT / RING SCHEMATIC · Ø 240", flip: false, tone: "hi" as const },
+	{ id: "plate-system", sheet: "05/09", plate: "PL. 05 — SYSTEM DEVELOPMENT", fig: "FIG. 03 — SYSTEM DEVELOPMENT / LAYER REGISTRATION", flip: true, tone: "paper" as const },
+	{ id: "plate-creative", sheet: "06/09", plate: "PL. 06 — CREATIVE DEVELOPMENT", fig: "FIG. 04 — CREATIVE DEVELOPMENT / PHASE PLATE", flip: false, tone: "hi" as const }
+];
+---
+
+<SiteLayout title="麟曜數位工作室 LINYAO DIGITAL STUDIO — 004 Print / Poster System" bodyClass="d-04" themeColor="#f2efe9">
+	<a class="skip-link" href="#main">跳至主要內容</a>
+	<Paper />
+	<Header />
+	<main id="main">
+		<Hero />
+		<Intro />
+		<Services />
+		{plates.map((p, i) => <ServicePlate item={services.items[i]} id={p.id} sheet={p.sheet} plate={p.plate} fig={p.fig} flip={p.flip} tone={p.tone} />)}
+		<Manifesto />
+		<Credibility />
+		<Process />
+		<Marquee />
+		<Cta />
+	</main>
+	<Footer />
+	<InquiryDialog />
+</SiteLayout>

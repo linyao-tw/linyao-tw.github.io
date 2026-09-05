@@ -1,0 +1,105 @@
+---
+/**
+ * design-10 root tokens + the strict 12-column substrate.
+ * The ONLY global style block in this version. Every selector is prefixed with
+ * `body.d-10` so nothing can leak into the other nine directions.
+ */
+---
+
+<style is:global>
+	body.d-10 {
+		/* --- ground ---------------------------------------------------- */
+		--d10-paper: var(--warm-gray);
+		--d10-paper-hi: var(--paper-hi);
+		--d10-paper-lo: var(--paper-lo);
+		--d10-ink: var(--ink);
+		--d10-ink-deep: var(--ink-deep);
+		--d10-void: var(--ink-black);
+		--d10-accent: var(--orange);
+
+		--bg: var(--d10-paper);
+		--fg: var(--d10-ink);
+
+		/* --- the substrate --------------------------------------------- */
+		--d10-gl: clamp(1.125rem, 4.4vw, 3.75rem);
+		--d10-gr: clamp(1.125rem, 4.4vw, 3.75rem);
+		--d10-gap: clamp(0.375rem, 1.05vw, 1.125rem);
+		--d10-rail: 0rem;
+		--d10-bar: 3.25rem;
+
+		--d10-rule: color-mix(in oklab, var(--d10-ink) 34%, transparent);
+		--d10-faint: color-mix(in oklab, var(--d10-ink) 14%, transparent);
+		--d10-quiet: color-mix(in oklab, var(--d10-ink) 88%, transparent);
+		/* orange is display-only on paper; small marks fall back to ink */
+		--d10-mark: var(--d10-ink);
+
+		--d10-chrome: var(--d10-ink-deep);
+		--d10-chrome-fg: var(--d10-paper);
+
+		background: var(--bg);
+		color: var(--fg);
+	}
+
+	/* the fixed index owns the right margin from laptop up */
+	@media (min-width: 64em) {
+		body.d-10 {
+			--d10-rail: 4.75rem;
+			--d10-gr: calc(4.75rem + clamp(1.5rem, 3.4vw, 4.5rem));
+			--d10-bar: 0rem;
+		}
+	}
+
+	@media (min-width: 90em) {
+		body.d-10 {
+			--d10-rail: 5.5rem;
+			--d10-gr: calc(5.5rem + clamp(2.5rem, 4vw, 6rem));
+		}
+	}
+
+	/* --- 12 columns. Every off-grid placement is derived from these. ---- */
+	body.d-10 .g12 {
+		display: grid;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		column-gap: var(--d10-gap);
+		padding-left: var(--d10-gl);
+		padding-right: var(--d10-gr);
+	}
+
+	/* inverted movements — full-bleed graphite/near-black */
+	body.d-10 .inv {
+		background: var(--d10-void);
+		color: var(--d10-paper);
+		--d10-rule: color-mix(in oklab, var(--d10-paper) 30%, transparent);
+		--d10-faint: color-mix(in oklab, var(--d10-paper) 13%, transparent);
+		--d10-quiet: color-mix(in oklab, var(--d10-paper) 80%, transparent);
+		--d10-mark: var(--d10-accent);
+	}
+
+	/* crop wrapper — oversized type never reaches the document scroller */
+	body.d-10 .crop {
+		overflow: clip;
+	}
+
+	/* mono annotation voice: index, HUD, coordinates, stacks. Never the body. */
+	body.d-10 .note {
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		line-height: 1.4;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+	}
+
+	body.d-10 main {
+		padding-top: var(--d10-bar);
+	}
+
+	body.d-10 .skip-link {
+		z-index: 400;
+	}
+
+	/* full-screen menu scroll lock */
+	body.d-10.is-locked {
+		overflow: hidden;
+		touch-action: none;
+	}
+</style>

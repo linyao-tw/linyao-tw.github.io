@@ -1,0 +1,159 @@
+---
+import { capabilities } from "../../lib/copy";
+
+const rowA = capabilities.slice(0, 7);
+const rowB = capabilities.slice(7);
+---
+
+<section id="capabilities" class="d06-mq d06-dark" aria-labelledby="mq-h">
+	<h2 id="mq-h" class="visually-hidden">能力範疇 CAPABILITIES</h2>
+
+	<div class="mq__head d06-wrap">
+		<div class="d06-run">
+			<span class="d06-run__i">SECTION 07 / 09</span>
+			<span class="d06-run__l"></span>
+			<span class="d06-run__d">RAIL 03 · TRANSIT</span>
+			<span class="d06-run__t">CAPABILITIES</span>
+		</div>
+	</div>
+
+	<div class="mq__rows">
+		<div class="mq__row mq__row--a" aria-hidden="true">
+			<div class="mq__inner">
+				<div class="mq__set">
+					{rowA.map(c => <span class="mq__w">{c}</span>)}
+				</div>
+				<div class="mq__set">
+					{rowA.map(c => <span class="mq__w">{c}</span>)}
+				</div>
+			</div>
+		</div>
+
+		<div class="mq__row mq__row--b" aria-hidden="true">
+			<div class="mq__inner">
+				<div class="mq__set">
+					{rowB.map(c => <span class="mq__w">{c}</span>)}
+				</div>
+				<div class="mq__set">
+					{rowB.map(c => <span class="mq__w">{c}</span>)}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<ul class="visually-hidden">
+		{capabilities.map(c => <li>{c}</li>)}
+	</ul>
+</section>
+
+<style>
+	.d06-mq {
+		position: relative;
+		min-height: 62svh;
+		display: grid;
+		/* the rows are max-content wide by design; pin the track so the
+		   running head above them stays the width of the viewport */
+		grid-template-columns: minmax(0, 1fr);
+		align-content: center;
+		gap: clamp(2.5rem, 8vh, 5rem);
+		padding-block: clamp(3rem, 9vh, 5.5rem);
+		overflow: clip;
+	}
+
+	.mq__rows {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: clamp(2.75rem, 9vh, 6rem);
+		min-width: 0;
+	}
+
+	.mq__row {
+		overflow: clip;
+	}
+
+	.mq__inner {
+		display: flex;
+		width: max-content;
+	}
+
+	.mq__set {
+		display: flex;
+		flex: none;
+		align-items: center;
+	}
+
+	.mq__w {
+		display: inline-flex;
+		align-items: center;
+		font-family: var(--font-mono);
+		font-size: clamp(1.5rem, 5vw, 3.75rem);
+		letter-spacing: 0.02em;
+		line-height: 1.1;
+		white-space: nowrap;
+		padding-inline: clamp(0.9rem, 2.5vw, 2rem);
+		color: var(--fg);
+	}
+
+	.mq__w::after {
+		content: "";
+		display: block;
+		width: 0.4375rem;
+		height: 0.4375rem;
+		background: var(--orange);
+		margin-left: clamp(0.9rem, 2.5vw, 2rem);
+	}
+
+	.mq__row--b .mq__w {
+		color: var(--fg-dim);
+		font-size: clamp(1.125rem, 3.4vw, 2.5rem);
+	}
+
+	.mq__row--b .mq__w::after {
+		background: color-mix(in oklab, var(--paper) 34%, transparent);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.mq__row--a .mq__inner {
+			animation: d06-mq 34s linear infinite;
+		}
+		.mq__row--b .mq__inner {
+			animation: d06-mq 44s linear infinite reverse;
+		}
+	}
+
+	@keyframes d06-mq {
+		from {
+			transform: translate3d(0, 0, 0);
+		}
+		to {
+			transform: translate3d(-50%, 0, 0);
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		/* scroll adds a small offset on top of the constant drift — the rows
+		   react to the reader rather than performing on their own */
+		gsap.fromTo(
+			".mq__row--a",
+			{ x: "3vw" },
+			{
+				x: "-3vw",
+				ease: "none",
+				scrollTrigger: { trigger: "#capabilities", start: "top bottom", end: "bottom top", scrub: 0.6 }
+			}
+		);
+		gsap.fromTo(
+			".mq__row--b",
+			{ x: "-3vw" },
+			{
+				x: "3vw",
+				ease: "none",
+				scrollTrigger: { trigger: "#capabilities", start: "top bottom", end: "bottom top", scrub: 0.6 }
+			}
+		);
+	});
+</script>

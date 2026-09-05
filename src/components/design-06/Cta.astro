@@ -1,0 +1,227 @@
+---
+import { brand, cta } from "../../lib/copy";
+---
+
+<section id="contact" class="d06-cta" aria-labelledby="cta-h">
+	<div class="d06-cta__stage">
+		<div class="cta__in d06-wrap">
+			<div class="d06-run">
+				<span class="d06-run__i">SECTION 08 / 09</span>
+				<span class="d06-run__l"></span>
+				<span class="d06-run__d">RAIL 05 · UNDERLINE</span>
+				<span class="d06-run__t">CONTACT</span>
+			</div>
+
+			<div class="cta__mid">
+				<h2 id="cta-h" class="d06-cta__head">
+					<span class="d06-rowclip"><span class="cta__part">{cta.headlineParts[0]}</span></span>
+					<span class="d06-rowclip"><span class="cta__part">{cta.headlineParts[1]}</span></span>
+				</h2>
+
+				<div class="cta__foot">
+					<div class="cta__body">
+						{cta.body.map(line => <p>{line}</p>)}
+					</div>
+
+					<div class="cta__act">
+						<button class="cta__btn" type="button" data-inquiry-open>
+							<span class="cta__btn-l">{cta.buttonLabel}</span>
+							<span class="cta__btn-a" aria-hidden="true">↗</span>
+						</button>
+						<a class="cta__mail" href={`mailto:${brand.email}`}>{brand.email}</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.d06-cta {
+		position: relative;
+		min-height: 190svh;
+	}
+
+	.d06-cta__stage {
+		position: sticky;
+		top: 0;
+		height: 100svh;
+		display: grid;
+		align-content: center;
+		overflow: clip;
+	}
+
+	.cta__in {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		gap: clamp(2rem, 7vh, 4rem);
+		width: 100%;
+		padding-block: clamp(2.5rem, 8vh, 4.5rem);
+	}
+
+	.cta__mid {
+		display: grid;
+		gap: clamp(1.75rem, 5vh, 3rem);
+	}
+
+	.d06-cta__head {
+		justify-self: start;
+		max-width: 100%;
+		font-size: clamp(2rem, 7.5vw, 5.5rem);
+		line-height: 1.06;
+		letter-spacing: -0.012em;
+		font-weight: 600;
+		margin-bottom: 0.5rem;
+	}
+
+	.cta__part {
+		display: block;
+		will-change: transform;
+	}
+
+	.cta__foot {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: clamp(1.5rem, 5vw, 4rem);
+		align-items: end;
+		border-top: var(--hairline) solid var(--rule);
+		padding-top: clamp(1rem, 3vh, 1.75rem);
+	}
+
+	.cta__body {
+		display: grid;
+		gap: 0.2rem;
+		max-width: 21em;
+	}
+
+	.cta__body p {
+		font-size: clamp(0.875rem, 1.15vw, 1.0625rem);
+		line-height: 1.9;
+		color: var(--fg-dim);
+	}
+
+	.cta__body p:last-child {
+		color: var(--fg);
+	}
+
+	.cta__act {
+		display: grid;
+		justify-items: end;
+		gap: 0.9rem;
+	}
+
+	.cta__btn {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.9rem;
+		min-height: 3.25rem;
+		padding: 0.85rem clamp(1.25rem, 3vw, 2.25rem);
+		border: 0.125rem solid var(--orange);
+		color: var(--fg);
+		font-family: var(--font-mono);
+		font-size: clamp(0.875rem, 1.3vw, 1.125rem);
+		letter-spacing: 0.16em;
+		overflow: clip;
+	}
+
+	.cta__btn > * {
+		position: relative;
+		z-index: 1;
+	}
+
+	.cta__btn::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: var(--orange);
+		transform: translateY(101%);
+		transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.cta__btn:hover::before,
+	.cta__btn:focus-visible::before {
+		transform: translateY(0);
+	}
+
+	.cta__btn:hover,
+	.cta__btn:focus-visible {
+		color: var(--on-accent);
+	}
+
+	.cta__btn-a {
+		font-size: 1.125em;
+	}
+
+	.cta__mail {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.12em;
+		color: var(--fg-dim);
+		border-bottom: var(--hairline) solid var(--rule);
+		padding-block: 0.35rem;
+	}
+
+	.cta__mail:hover,
+	.cta__mail:focus-visible {
+		color: var(--fg);
+		border-bottom-color: var(--orange);
+		border-bottom-width: 0.125rem;
+	}
+
+	@media (max-width: 63.99rem) {
+		.cta__foot {
+			grid-template-columns: minmax(0, 1fr);
+			align-items: start;
+		}
+		.cta__act {
+			justify-items: start;
+		}
+	}
+
+	@media (max-height: 38rem) {
+		.d06-cta {
+			min-height: 0;
+		}
+		.d06-cta__stage {
+			position: static;
+			height: auto;
+			min-height: 100svh;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		/* junction wipe 02 of 02 */
+		gsap.fromTo(
+			".cta__in",
+			{ clipPath: "inset(0% 100% 0% 0%)" },
+			{
+				clipPath: "inset(0% 0% 0% 0%)",
+				ease: "power2.inOut",
+				scrollTrigger: { trigger: "#contact", start: "top 78%", end: "top 18%", scrub: 0.4 }
+			}
+		);
+
+		gsap.from(".cta__part", {
+			yPercent: 112,
+			duration: 1,
+			ease: "power3.out",
+			stagger: 0.08,
+			scrollTrigger: { trigger: "#contact", start: "top 45%" }
+		});
+
+		gsap.from(".cta__body p, .cta__act > *", {
+			opacity: 0,
+			y: "1rem",
+			duration: 0.8,
+			ease: "power2.out",
+			stagger: 0.07,
+			scrollTrigger: { trigger: "#contact", start: "top 35%" }
+		});
+	});
+</script>

@@ -1,0 +1,49 @@
+---
+import Credibility from "../components/design-08/Credibility.astro";
+import Cta from "../components/design-08/Cta.astro";
+import Footer from "../components/design-08/Footer.astro";
+import GridField from "../components/design-08/GridField.astro";
+import Header from "../components/design-08/Header.astro";
+import Hero from "../components/design-08/Hero.astro";
+import InquiryDialog from "../components/design-08/InquiryDialog.astro";
+import Intro from "../components/design-08/Intro.astro";
+import Manifesto from "../components/design-08/Manifesto.astro";
+import Marquee from "../components/design-08/Marquee.astro";
+import Process from "../components/design-08/Process.astro";
+import ServiceModule from "../components/design-08/ServiceModule.astro";
+import ServicesIndex from "../components/design-08/ServicesIndex.astro";
+import Tokens from "../components/design-08/Tokens.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { services } from "../lib/copy";
+
+const variants = ["comb", "loop", "tree"] as const;
+---
+
+<SiteLayout
+	title="麟曜數位工作室 LINYAO DIGITAL STUDIO — 08 SYSTEM / CODE / GRID"
+	description="創造令人驚艷的體驗 — 麟曜數位工作室 LINYAO DIGITAL STUDIO。DESIGN × CODE × MOTION。品牌設計・網頁設計・系統開發。"
+	bodyClass="d-08"
+	themeColor="#f2efe9"
+>
+	<Tokens />
+	<a class="skip-link" href="#main">跳至主要內容</a>
+	<GridField />
+	<Header />
+
+	<main id="main">
+		<Hero />
+		<Intro />
+		<ServicesIndex />
+
+		{services.items.map((s, i) => <ServiceModule index={s.index} en={s.en} zh={s.zh} position={s.position} body={s.body} stack={s.stack} variant={variants[i]} coord={`03.0${i + 1}`} />)}
+
+		<Manifesto />
+		<Credibility />
+		<Process />
+		<Marquee />
+		<Cta />
+	</main>
+
+	<Footer />
+	<InquiryDialog />
+</SiteLayout>

@@ -1,0 +1,206 @@
+---
+import { brand, hero } from "../../lib/copy";
+import GridField from "./GridField.astro";
+---
+
+<section id="hero" class="hero crop" aria-labelledby="hero-h" data-d10-section>
+	<GridField />
+
+	{
+		/* Extreme crop: the headline leaves the viewport on the left, the right
+	    and the bottom. The wrapper clips it — the document never scrolls sideways. */
+	}
+	<h1 id="hero-h" class="hl" aria-label={hero.headline}>
+		<span class="hl__a" aria-hidden="true">{hero.headlineParts[0]}</span><span class="hl__b" aria-hidden="true">{hero.headlineParts[1]}</span><span class="hl__c" aria-hidden="true">
+			{hero.headlineParts[2]}
+		</span>
+	</h1>
+
+	<p class="eq">{brand.equation}</p>
+
+	<p class="coord note" aria-hidden="true">COL 01—12 / MOVEMENT 01 OF 09</p>
+
+	<div class="lock">
+		<span class="lock__zh">{brand.nameZh}</span>
+		<span class="lock__en">{brand.nameEn}</span>
+		<span class="lock__disc">{brand.disciplines}</span>
+	</div>
+
+	<span class="bar" aria-hidden="true"></span>
+
+	<a class="cue" href="#intro">
+		<span class="cue__t">{hero.scrollCue}</span>
+	</a>
+</section>
+
+<style>
+	.hero {
+		position: relative;
+		min-height: 100vh;
+		min-height: calc(100svh - var(--d10-bar));
+		isolation: isolate;
+	}
+
+	/* --- the three cropped lines ------------------------------------- */
+	.hl {
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		line-height: 0.76;
+		letter-spacing: -0.02em;
+		color: var(--d10-ink);
+	}
+
+	.hl span {
+		position: absolute;
+		display: block;
+		white-space: nowrap;
+	}
+
+	/* the three sizes are bounded by BOTH axes so the crop keeps its
+	   proportions on a short laptop as well as a tall phone */
+	.hl__a {
+		top: 7%;
+		left: calc(var(--d10-gl) - 0.42em);
+		font-size: clamp(5rem, min(38vw, 34vh), 22rem);
+	}
+
+	.hl__b {
+		top: 43%;
+		right: var(--d10-gr);
+		font-size: clamp(1.75rem, min(11vw, 11vh), 7rem);
+		letter-spacing: 0.02em;
+		color: var(--d10-accent);
+	}
+
+	.hl__c {
+		bottom: -0.08em;
+		right: calc(var(--d10-gr) - 0.6em);
+		font-size: clamp(6rem, min(48vw, 40vh), 30rem);
+	}
+
+	/* --- annotation layer -------------------------------------------- */
+	.eq {
+		position: absolute;
+		z-index: 3;
+		top: 34%;
+		left: var(--d10-gl);
+		font-family: var(--font-mono);
+		font-size: clamp(0.6875rem, 1.5vw, 1rem);
+		letter-spacing: 0.26em;
+		color: var(--d10-ink);
+		border-left: 0.1875rem solid var(--d10-accent);
+		padding-left: 0.625rem;
+	}
+
+	.coord {
+		position: absolute;
+		z-index: 3;
+		top: 26%;
+		right: var(--d10-gr);
+		text-align: right;
+		color: var(--d10-quiet);
+	}
+
+	.lock {
+		position: absolute;
+		z-index: 3;
+		top: 52%;
+		left: var(--d10-gl);
+		display: grid;
+		gap: 0.1875rem;
+	}
+
+	.lock__zh {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.875rem, 1.6vw, 1.0625rem);
+		font-weight: 700;
+		letter-spacing: 0.3em;
+	}
+
+	.lock__en {
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.34em;
+		color: var(--d10-quiet);
+	}
+
+	.lock__disc {
+		font-family: var(--font-cjk);
+		font-size: 0.6875rem;
+		letter-spacing: 0.24em;
+		color: var(--d10-quiet);
+		padding-top: 0.375rem;
+		border-top: var(--hairline) solid var(--d10-rule);
+		max-width: 18rem;
+	}
+
+	/* an orange column marker locked to the 9th grid line */
+	.bar {
+		position: absolute;
+		z-index: 1;
+		top: 0;
+		left: 58.333%;
+		width: 0.375rem;
+		height: 34%;
+		background: var(--d10-accent);
+	}
+
+	.cue {
+		position: absolute;
+		z-index: 4;
+		left: calc(var(--d10-gl) - 0.25rem);
+		bottom: 1.25rem;
+		writing-mode: vertical-rl;
+		display: inline-flex;
+		align-items: center;
+		min-width: 2.75rem;
+		justify-content: flex-end;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.28em;
+		color: var(--d10-ink);
+	}
+
+	.cue__t {
+		border-left: var(--hairline) solid var(--d10-rule);
+		padding-left: 0.5rem;
+	}
+
+	.cue:hover .cue__t,
+	.cue:focus-visible .cue__t {
+		color: var(--d10-accent);
+		border-left-color: var(--d10-accent);
+	}
+
+	/* --- desktop recomposition ---------------------------------------- */
+	@media (min-width: 64em) {
+		.hl__a {
+			top: 12%;
+		}
+
+		.hl__b {
+			top: 50%;
+		}
+
+		.eq {
+			top: 44%;
+		}
+
+		.coord {
+			top: 24%;
+		}
+
+		.lock {
+			top: auto;
+			bottom: 5rem;
+			left: calc(var(--d10-gl) + 4.25rem);
+		}
+
+		.bar {
+			height: 26%;
+		}
+	}
+</style>

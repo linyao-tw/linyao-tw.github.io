@@ -1,0 +1,257 @@
+---
+import { brand, hero } from "../../lib/copy";
+import { waveRule } from "./geo";
+
+const eqParts = brand.equation.split(" × ");
+
+const rule = waveRule({
+	width: 1000,
+	base: 20,
+	layers: [
+		{ amp: 9, freq: 1.7, phase: 0.4 },
+		{ amp: 3.6, freq: 4.6, phase: 2.3 }
+	],
+	samples: 72
+});
+---
+
+<section class="hero" aria-labelledby="d09-hero-h">
+	<div class="wrap">
+		<div class="top">
+			<p class="disciplines">{brand.disciplines}</p>
+			<p class="coord" aria-hidden="true"><span>N 25.0330</span><span>E 121.5654</span><span>TAIPEI</span></p>
+		</div>
+
+		<h1 class="hl" id="d09-hero-h" data-headline={hero.headline}>
+			<span class="l a">{hero.headlineParts[0]}</span>
+			<span class="l b">{hero.headlineParts[1]}</span>
+			<span class="l c">
+				<span class="disc d09-disc" aria-hidden="true"></span>
+				<span class="ring" aria-hidden="true"></span>
+				<span class="chars">{hero.headlineParts[2]}</span>
+			</span>
+		</h1>
+
+		<div class="bot">
+			<p class="eq" data-eq={brand.equation}>
+				{
+					eqParts.map((part, i) => (
+						<span>
+							{i > 0 ? "× " : ""}
+							{part}
+						</span>
+					))
+				}
+			</p>
+			<a class="cue" href="#intro">
+				<span class="cue-t">{hero.scrollCue}</span>
+				<svg class="cue-l" viewBox="0 0 12 64" aria-hidden="true" focusable="false">
+					<path d="M6,0 C10,16 2,28 6,42 C8,50 6,58 6,64" vector-effect="non-scaling-stroke"></path>
+				</svg>
+			</a>
+		</div>
+	</div>
+
+	<svg class="deco" viewBox="-110 -100 220 200" aria-hidden="true" focusable="false"><use href="#d09-peak-c"></use></svg>
+
+	<svg class="rule" viewBox="0 0 1000 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+		<path d={rule} vector-effect="non-scaling-stroke"></path>
+	</svg>
+</section>
+
+<style>
+	.hero {
+		min-height: 100svh;
+		display: grid;
+		align-content: stretch;
+		padding: clamp(9rem, 15vh, 11.5rem) 0 clamp(4.5rem, 9vh, 7rem);
+	}
+
+	.wrap {
+		position: relative;
+		z-index: 2;
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		gap: clamp(2rem, 5vh, 4rem);
+		padding-inline: var(--pad);
+		width: 100%;
+	}
+
+	.top {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem 2rem;
+		border-top: 1px solid var(--line-soft);
+		padding-top: 0.9rem;
+	}
+
+	.disciplines {
+		font-family: var(--font-serif);
+		font-size: clamp(0.9rem, 1.15vw, 1.15rem);
+		letter-spacing: 0.24em;
+		color: var(--fg);
+	}
+
+	.coord {
+		display: flex;
+		gap: 1.1rem;
+		font-size: var(--meta);
+		letter-spacing: 0.2em;
+		color: var(--fg);
+	}
+
+	.hl {
+		align-self: center;
+		font-family: var(--font-serif);
+		font-size: var(--dsp-1);
+		line-height: 1.26;
+		letter-spacing: 0.05em;
+		color: var(--fg);
+	}
+
+	.l {
+		display: block;
+		width: max-content;
+		max-width: 100%;
+	}
+
+	.b {
+		margin-inline-start: clamp(0.5rem, 7vw, 8rem);
+	}
+
+	.c {
+		position: relative;
+		isolation: isolate;
+		margin-inline-start: clamp(0.25rem, 3vw, 3.5rem);
+	}
+
+	.chars {
+		position: relative;
+	}
+
+	.disc,
+	.ring {
+		position: absolute;
+		top: 50%;
+		border-radius: 50%;
+		z-index: -1;
+	}
+
+	.disc {
+		inset-inline-start: -0.3em;
+		width: 1.44em;
+		height: 1.44em;
+		background: var(--orange);
+		translate: 0 -50%;
+		transform-origin: 50% 50%;
+	}
+
+	.ring {
+		inset-inline-start: 0.62em;
+		width: 1.9em;
+		height: 1.9em;
+		translate: 0 -50%;
+		border: 1px solid var(--line);
+	}
+
+	.bot {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 2rem;
+	}
+
+	.eq {
+		font-family: var(--font-serif);
+		font-size: clamp(1.05rem, 2.1vw, 2rem);
+		letter-spacing: 0.3em;
+		line-height: 1.32;
+		color: var(--fg);
+	}
+
+	.eq span {
+		display: block;
+	}
+
+	.eq span:nth-child(2) {
+		margin-inline-start: 0.9em;
+	}
+
+	.eq span:nth-child(3) {
+		margin-inline-start: 1.8em;
+	}
+
+	.cue {
+		display: grid;
+		justify-items: end;
+		gap: 0.75rem;
+		min-height: 2.75rem;
+	}
+
+	.cue-t {
+		font-size: var(--meta);
+		letter-spacing: 0.26em;
+		color: var(--fg);
+	}
+
+	.cue-l {
+		width: 0.75rem;
+		height: 4rem;
+		fill: none;
+		stroke: var(--orange);
+		stroke-width: 1.5;
+	}
+
+	.cue:hover .cue-t,
+	.cue:focus-visible .cue-t {
+		color: var(--orange);
+	}
+
+	.deco {
+		position: absolute;
+		width: 26%;
+		aspect-ratio: 1;
+		left: -6%;
+		bottom: 6%;
+		z-index: 0;
+		fill: none;
+		stroke: var(--line-soft);
+		pointer-events: none;
+	}
+
+	.rule {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: clamp(1rem, 3vh, 2rem);
+		width: 100%;
+		height: 2.5rem;
+		z-index: 1;
+		fill: none;
+		stroke: var(--line-soft);
+		stroke-width: 1;
+		pointer-events: none;
+	}
+
+	@media (max-width: 48rem) {
+		.hl {
+			letter-spacing: 0.03em;
+		}
+
+		.cue {
+			justify-items: start;
+		}
+
+		.cue-l {
+			height: 2.75rem;
+		}
+
+		.deco {
+			width: 52%;
+			left: -18%;
+		}
+	}
+</style>

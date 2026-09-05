@@ -1,0 +1,346 @@
+---
+import Beam from "./Beam.astro";
+
+interface Props {
+	item: {
+		index: string;
+		en: string;
+		zh: string;
+		position: string;
+		body: readonly string[];
+		stack: readonly string[];
+	};
+	variant: 1 | 2 | 3;
+}
+
+const { item, variant } = Astro.props;
+const id = `service-${item.index}`;
+const headingId = `${id}-h`;
+
+/** each service gets its own angle of light */
+const beams = {
+	1: { shape: "polygon(0% 5%, 100% 25%, 100% 34%, 0% 14%)", seed: "polygon(0% 5%, 0% 5%, 0% 14%, 0% 14%)", drift: -5 },
+	2: { shape: "polygon(0% 100%, 100% 74%, 100% 80%, 0% 106%)", seed: "polygon(0% 100%, 0% 100%, 0% 106%, 0% 106%)", drift: 6 },
+	3: { shape: "polygon(78% 0%, 89% 0%, 67% 100%, 56% 100%)", seed: "polygon(78% 0%, 89% 0%, 89% 0%, 78% 0%)", drift: -4 }
+} as const;
+
+const beam = beams[variant];
+---
+
+<section class:list={["svc", `v${variant}`]} id={id} aria-labelledby={headingId}>
+	<div class="panel">
+		<div class="scene" aria-hidden="true">
+			<span class="slab"></span>
+			<Beam shape={beam.shape} seed={beam.seed} drift={beam.drift} speed={1.6} />
+			<span class="edge"></span>
+		</div>
+
+		<div class="body d07-shell">
+			<p class="num" aria-hidden="true">{item.index}</p>
+
+			<div class="col">
+				<p class="d07-run"><span>SERVICE {item.index}</span></p>
+				<h2 id={headingId} class="hl">
+					<span class="zh" lang="zh-Hant">{item.zh}</span>
+					<span class="en">{item.en}</span>
+				</h2>
+				<p class="pos" lang="zh-Hant">{item.position}</p>
+				<div class="prose" lang="zh-Hant">
+					{item.body.map(line => <p>{line}</p>)}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<ul class="stack d07-shell">
+		{item.stack.map(entry => <li>{entry}</li>)}
+	</ul>
+
+	<div class="void-run" aria-hidden="true"></div>
+</section>
+
+<style>
+	.svc {
+		--sr: var(--d07-line-soft);
+		--st: var(--d07-text);
+		--sm: var(--d07-mute);
+		--sd: var(--d07-dim);
+		position: relative;
+	}
+
+	.v1 {
+		background: var(--d07-black);
+	}
+
+	.v2 {
+		background: var(--d07-graphite);
+		--sr: color-mix(in oklab, var(--void) 38%, transparent);
+		--sm: var(--d07-text);
+		--sd: var(--d07-text);
+	}
+
+	.v3 {
+		background: var(--d07-void);
+	}
+
+	.panel {
+		position: relative;
+		min-height: clamp(34rem, 84svh, 54rem);
+		padding-block: clamp(4.5rem, 13vh, 10rem);
+		overflow: clip;
+		isolation: isolate;
+	}
+
+	.scene {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		overflow: clip;
+	}
+
+	.slab {
+		position: absolute;
+		display: block;
+	}
+
+	.v1 .slab {
+		top: 0;
+		right: 0;
+		width: 42%;
+		height: 58%;
+		background: var(--d07-graphite);
+	}
+
+	.v2 .slab {
+		top: 0;
+		bottom: 0;
+		left: 0;
+		width: 34%;
+		background: var(--d07-black);
+	}
+
+	.v3 .slab {
+		left: 0;
+		bottom: 0;
+		width: 62%;
+		height: 38%;
+		background: var(--d07-graphite);
+	}
+
+	.edge {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: var(--d07-gutter);
+		width: var(--hairline);
+		background: var(--sr);
+	}
+
+	.v2 .edge {
+		left: auto;
+		right: var(--d07-gutter);
+	}
+
+	.body {
+		position: relative;
+		z-index: 1;
+		display: grid;
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		column-gap: clamp(0.75rem, 1.6vw, 1.5rem);
+		row-gap: clamp(2rem, 8vh, 6rem);
+		align-content: start;
+	}
+
+	.v1 .body,
+	.v3 .body {
+		min-height: clamp(21rem, 56svh, 37rem);
+		align-content: space-between;
+	}
+
+	.num {
+		grid-row: 1;
+		font-size: clamp(4.5rem, 13vw, 12rem);
+		font-weight: 300;
+		line-height: 0.8;
+		letter-spacing: 0.02em;
+		color: var(--d07-ghost);
+	}
+
+	.v1 .num {
+		grid-column: 9 / 13;
+		justify-self: end;
+		color: color-mix(in oklab, var(--void) 62%, transparent);
+	}
+
+	.v2 .num {
+		grid-column: 1 / 5;
+		color: color-mix(in oklab, var(--warm-gray) 24%, transparent);
+	}
+
+	.v3 .num {
+		grid-row: 2;
+		grid-column: 9 / 13;
+		justify-self: end;
+		align-self: end;
+	}
+
+	.col {
+		max-width: 30rem;
+	}
+
+	.v1 .col {
+		grid-row: 2;
+		grid-column: 1 / 7;
+	}
+
+	.v2 .col {
+		grid-row: 1;
+		grid-column: 7 / 13;
+	}
+
+	.v3 .col {
+		grid-row: 1;
+		grid-column: 1 / 7;
+	}
+
+	.col .d07-run {
+		margin-bottom: clamp(1.75rem, 5vh, 3rem);
+		color: var(--sd);
+	}
+
+	.hl .zh {
+		display: block;
+		font-family: var(--font-cjk);
+		font-size: clamp(2rem, 4.6vw, 3.5rem);
+		font-weight: 400;
+		line-height: 1.7;
+		letter-spacing: 0.16em;
+		margin-right: -0.16em;
+		color: var(--st);
+	}
+
+	.hl .en {
+		display: block;
+		margin-top: clamp(0.5rem, 1.6vh, 1rem);
+		font-size: clamp(0.9375rem, 1.7vw, 1.375rem);
+		font-weight: 300;
+		line-height: 1.5;
+		letter-spacing: 0.34em;
+		margin-right: -0.34em;
+		color: var(--sm);
+	}
+
+	.pos {
+		margin-top: clamp(1.5rem, 4vh, 2.5rem);
+		padding-top: clamp(1rem, 2.6vh, 1.5rem);
+		border-top: var(--hairline) solid var(--sr);
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.16em;
+		color: var(--sd);
+	}
+
+	.prose {
+		margin-top: clamp(1.5rem, 4vh, 2.25rem);
+		font-family: var(--font-cjk);
+		font-size: clamp(0.875rem, 1.05vw, 1rem);
+		font-weight: 300;
+		line-height: 2.05;
+		letter-spacing: 0.08em;
+		color: var(--sm);
+	}
+
+	.stack {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex-wrap: wrap;
+		border-top: var(--hairline) solid var(--sr);
+	}
+
+	.stack li {
+		flex: 1 1 auto;
+		padding: clamp(0.9rem, 2.4vh, 1.5rem) clamp(0.75rem, 2vw, 2rem);
+		border-left: var(--hairline) solid var(--sr);
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		white-space: nowrap;
+		color: var(--sd);
+	}
+
+	.stack li:first-child {
+		border-left: 0;
+		padding-left: 0;
+	}
+
+	.void-run {
+		height: clamp(5rem, 13vh, 10rem);
+		background: var(--d07-void);
+	}
+
+	@media (max-width: 64rem) {
+		.v1 .col,
+		.v2 .col,
+		.v3 .col {
+			grid-column: 1 / 10;
+		}
+
+		.v1 .num,
+		.v2 .num,
+		.v3 .num {
+			grid-column: 10 / 13;
+			grid-row: 1;
+			justify-self: end;
+			align-self: start;
+		}
+
+		.v1 .col,
+		.v3 .col {
+			grid-row: 2;
+		}
+
+		.v2 .col {
+			grid-row: 2;
+		}
+	}
+
+	@media (max-width: 40rem) {
+		.v1 .slab {
+			width: 56%;
+			height: 34%;
+		}
+
+		.v2 .slab {
+			width: 46%;
+		}
+
+		.v3 .slab {
+			width: 78%;
+			height: 30%;
+		}
+
+		.body {
+			row-gap: clamp(1.5rem, 5vh, 3rem);
+		}
+
+		.v1 .col,
+		.v2 .col,
+		.v3 .col {
+			grid-column: 1 / 13;
+		}
+
+		.v1 .num,
+		.v2 .num,
+		.v3 .num {
+			grid-column: 1 / 13;
+			justify-self: start;
+		}
+
+		.stack li {
+			flex: 0 0 auto;
+			padding-inline: 0.875rem;
+		}
+	}
+</style>

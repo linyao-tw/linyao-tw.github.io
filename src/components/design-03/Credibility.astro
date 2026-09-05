@@ -1,0 +1,160 @@
+---
+import { manifesto } from "../../lib/copy";
+---
+
+<section class="cred" aria-labelledby="d03-cred-h">
+	<div class="wrap">
+		<h2 id="d03-cred-h">
+			<span class="idx" aria-hidden="true">§ 04</span>
+			<span class="ttl">CREDIBILITY</span>
+		</h2>
+
+		<dl class="rows">
+			{
+				manifesto.credibility.map((c, i) => (
+					<div class="row" data-cred-row>
+						<dt class="fig" data-size={i}>
+							{c.figure}
+						</dt>
+						<dd class="zh">{c.label}</dd>
+						<dd class="en">{c.en}</dd>
+					</div>
+				))
+			}
+		</dl>
+	</div>
+</section>
+
+<style>
+	.cred {
+		background: var(--doc-hi);
+		color: var(--fg);
+		padding-block: clamp(3.5rem, 10vh, 7rem);
+		border-top: 1px solid var(--doc-rule);
+	}
+
+	.wrap {
+		display: grid;
+		grid-template-columns: 9rem minmax(0, 1fr);
+		gap: clamp(1.25rem, 3vw, 3rem);
+		padding-inline: var(--gutter);
+	}
+
+	h2 {
+		display: grid;
+		gap: 0.5rem;
+		align-content: start;
+		font-family: var(--font-mono);
+		font-size: var(--mark);
+		letter-spacing: 0.2em;
+	}
+
+	h2 .idx {
+		color: var(--orange-dim);
+	}
+
+	h2 .ttl {
+		color: color-mix(in oklab, var(--graphite) 70%, transparent);
+	}
+
+	.rows {
+		border-top: 1px solid var(--graphite);
+	}
+
+	.row {
+		display: grid;
+		grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
+		align-items: baseline;
+		gap: clamp(0.75rem, 2.5vw, 2.5rem);
+		padding-block: clamp(1.1rem, 2.6vh, 1.9rem);
+		border-bottom: 1px solid var(--doc-rule);
+	}
+
+	.fig {
+		font-family: var(--font-grotesk);
+		font-weight: 600;
+		line-height: 0.92;
+		letter-spacing: -0.02em;
+		color: var(--graphite);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.fig[data-size="0"] {
+		font-size: clamp(3rem, 8vw, 6.5rem);
+		color: var(--orange);
+	}
+
+	.fig[data-size="1"] {
+		font-size: clamp(1.8rem, 4.4vw, 3.4rem);
+		letter-spacing: 0.02em;
+	}
+
+	.fig[data-size="2"] {
+		font-size: clamp(1.15rem, 2.9vw, 2.2rem);
+		letter-spacing: 0.06em;
+	}
+
+	.zh {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.875rem, 1.15vw, 1rem);
+		line-height: 1.9;
+		letter-spacing: 0.1em;
+		color: var(--ink);
+	}
+
+	.en {
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.2em;
+		color: color-mix(in oklab, var(--graphite) 62%, transparent);
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	@media (max-width: 64rem) {
+		.wrap {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		h2 {
+			grid-auto-flow: column;
+			justify-content: start;
+			gap: 1.25rem;
+			padding-bottom: 0.75rem;
+		}
+	}
+
+	@media (max-width: 48rem) {
+		.row {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.4rem;
+		}
+		.en {
+			text-align: left;
+			white-space: normal;
+		}
+		.fig[data-size="0"] {
+			font-size: clamp(3rem, 20vw, 5rem);
+		}
+		.fig[data-size="1"] {
+			font-size: clamp(1.75rem, 11vw, 2.5rem);
+		}
+		.fig[data-size="2"] {
+			font-size: clamp(1.15rem, 7vw, 1.6rem);
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		gsap.from("[data-cred-row]", {
+			opacity: 0,
+			y: 16,
+			duration: 0.65,
+			ease: "power2.out",
+			stagger: 0.09,
+			scrollTrigger: { trigger: ".cred", start: "top 82%" }
+		});
+	});
+</script>

@@ -1,0 +1,135 @@
+---
+/**
+ * design-08 — SYSTEM / CODE / GRID
+ * The one permitted global block. Every selector is prefixed with body.d-08
+ * so nothing can leak into another art director's version.
+ */
+---
+
+<style is:global>
+	body.d-08 {
+		/* module — the whole page snaps to this */
+		--mod: 4rem;
+		--pad: var(--mod);
+
+		--bg: var(--paper-hi);
+		--fg: var(--ink-deep);
+		--accent: var(--orange);
+
+		--tick: color-mix(in oklab, var(--graphite) 11%, transparent);
+		--tick-col: color-mix(in oklab, var(--graphite) 24%, transparent);
+		--rule: color-mix(in oklab, var(--graphite) 44%, transparent);
+		--rule-soft: color-mix(in oklab, var(--graphite) 24%, transparent);
+		--dim: color-mix(in oklab, var(--ink-deep) 72%, transparent);
+		--dimmer: color-mix(in oklab, var(--ink-deep) 38%, transparent);
+		/* darker derived tone of Orange Red — the only orange used for small text */
+		--accent-ink: #a52706;
+
+		--grid-image:
+			repeating-linear-gradient(to right, var(--tick) 0 1px, transparent 1px var(--mod)), repeating-linear-gradient(to bottom, var(--tick) 0 1px, transparent 1px var(--mod)),
+			repeating-linear-gradient(to right, var(--tick-col) 0 1px, transparent 1px calc(var(--mod) * 4));
+
+		background: var(--paper-hi);
+		color: var(--fg);
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		line-height: 1.5;
+		font-variant-ligatures: none;
+		font-kerning: none;
+	}
+
+	body.d-08 ::selection {
+		background: var(--orange);
+		color: var(--paper-hi);
+	}
+
+	body.d-08 [id] {
+		scroll-margin-top: calc(var(--mod) * 1.6);
+	}
+
+	/* ---- layer order: fixed drafting grid sits under every band ---- */
+	body.d-08 > header,
+	body.d-08 > main,
+	body.d-08 > footer {
+		position: relative;
+		z-index: 1;
+	}
+
+	/* ---- shared spec-block furniture ------------------------------- */
+	body.d-08 .d08-shell {
+		padding-inline: var(--pad);
+	}
+
+	body.d-08 .d08-head {
+		display: grid;
+		grid-template-columns: max-content max-content 1fr max-content;
+		align-items: center;
+		column-gap: 1.5ch;
+		border-top: 1px solid var(--rule);
+		padding-block: 0.55rem 0;
+		font-size: 0.6875rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--dim);
+	}
+
+	body.d-08 .d08-head b {
+		font-weight: 500;
+		color: var(--fg);
+	}
+
+	body.d-08 .d08-head i {
+		font-style: normal;
+		height: 1px;
+		background: repeating-linear-gradient(to right, var(--rule-soft) 0 0.25rem, transparent 0.25rem 0.5rem);
+	}
+
+	body.d-08 .d08-coord {
+		font-variant-numeric: tabular-nums;
+		letter-spacing: 0.04em;
+		white-space: nowrap;
+		color: var(--accent-ink);
+	}
+
+	body.d-08 .d08-band {
+		position: relative;
+		isolation: isolate;
+		background: var(--paper);
+	}
+
+	body.d-08 .d08-band::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background-image: var(--grid-image);
+		pointer-events: none;
+	}
+
+	@media (max-width: 64rem) {
+		body.d-08 {
+			--mod: 3rem;
+		}
+	}
+
+	@media (max-width: 48rem) {
+		body.d-08 {
+			--mod: 2.5rem;
+			--pad: var(--mod);
+		}
+
+		body.d-08 .d08-head {
+			grid-template-columns: max-content 1fr;
+			row-gap: 0.15rem;
+			font-size: 0.625rem;
+		}
+
+		body.d-08 .d08-head i {
+			display: none;
+		}
+
+		body.d-08 .d08-head > *:last-child {
+			grid-column: 1 / -1;
+		}
+	}
+</style>

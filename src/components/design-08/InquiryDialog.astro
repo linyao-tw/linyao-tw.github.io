@@ -1,0 +1,345 @@
+---
+import { brand, cta, inquiryFields } from "../../lib/copy";
+---
+
+<dialog class="dlg" id="d08-inquiry" aria-labelledby="d08-dlg-h">
+	<form class="sheet" id="d08-inq-form">
+		<header class="dlg-head">
+			<p class="dlg-id">
+				<span class="d08-coord">[07.01]</span> INQUIRY MODULE
+			</p>
+			<button class="x" type="button" data-d08-close aria-label="關閉詢案表單">
+				<span aria-hidden="true">✕</span>
+			</button>
+		</header>
+
+		<h2 id="d08-dlg-h">{cta.buttonLabel}<span class="h-en">— PROJECT INQUIRY</span></h2>
+		<p class="lead">{brand.disciplines}</p>
+
+		<div class="fields">
+			{
+				inquiryFields.map((f, i) => (
+					<p class="f">
+						<label for={`d08-${f.name}`}>
+							<span class="f-ix">[F.0{i + 1}]</span>
+							<span class="f-lb">{f.label}</span>
+							{f.required && (
+								<span class="f-rq" aria-hidden="true">
+									*
+								</span>
+							)}
+						</label>
+						<input id={`d08-${f.name}`} name={f.name} type={f.type} required={f.required} autocomplete={f.autocomplete} placeholder="—" />
+					</p>
+				))
+			}
+
+			<p class="f f-full">
+				<label for="d08-message">
+					<span class="f-ix">[F.05]</span>
+					<span class="f-lb">專案內容 / MESSAGE</span>
+					<span class="f-rq" aria-hidden="true">*</span>
+				</label>
+				<textarea id="d08-message" name="message" rows="5" required placeholder="—"></textarea>
+			</p>
+		</div>
+
+		<footer class="dlg-foot">
+			<p class="hint" id="d08-inq-status" role="status">送出後將以 <b>{brand.email}</b> 開啟郵件草稿。</p>
+			<button class="send" type="submit">
+				<span class="send-sq" aria-hidden="true"></span>SEND ↗
+			</button>
+		</footer>
+	</form>
+</dialog>
+
+<style>
+	.dlg {
+		width: min(58rem, calc(100vw - 2rem));
+		max-width: none;
+		max-height: min(90svh, 56rem);
+		padding: 0;
+		border: 1px solid var(--ink-deep);
+		background: var(--paper-hi);
+		background-image: var(--grid-image);
+		color: var(--fg);
+		font-family: var(--font-mono);
+		overflow: auto;
+	}
+
+	.dlg::backdrop {
+		background: rgb(14 14 13 / 0.72);
+	}
+
+	.sheet {
+		padding: clamp(1.25rem, 3vw, 2.5rem);
+		display: grid;
+		gap: clamp(1rem, 2vw, 1.5rem);
+	}
+
+	.dlg-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--s-4);
+		border-bottom: 1px solid var(--rule);
+		padding-bottom: 0.6rem;
+	}
+
+	.dlg-id {
+		font-size: 0.6875rem;
+		letter-spacing: 0.18em;
+		color: var(--dim);
+	}
+
+	.x {
+		width: 2.75rem;
+		height: 2.75rem;
+		display: grid;
+		place-items: center;
+		font-size: 0.875rem;
+		color: var(--fg);
+		transition: color 0.14s linear;
+	}
+
+	.x:hover,
+	.x:focus-visible {
+		color: var(--accent-ink);
+	}
+
+	h2 {
+		font-family: var(--font-cjk);
+		font-weight: 600;
+		font-size: clamp(1.5rem, 3.4vw, 2.25rem);
+		letter-spacing: 0.12em;
+		line-height: 1.2;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 1ch;
+	}
+
+	.h-en {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.2em;
+		color: var(--accent-ink);
+	}
+
+	.lead {
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		letter-spacing: 0.14em;
+		color: var(--dim);
+		margin-top: -0.75rem;
+	}
+
+	.fields {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: clamp(0.75rem, 2vw, 1.5rem);
+	}
+
+	.f-full {
+		grid-column: 1 / -1;
+	}
+
+	.f {
+		display: grid;
+		gap: 0.35rem;
+	}
+
+	label {
+		display: flex;
+		align-items: baseline;
+		gap: 1ch;
+		font-size: 0.625rem;
+		letter-spacing: 0.16em;
+		color: var(--dim);
+	}
+
+	.f-ix {
+		color: var(--accent-ink);
+	}
+
+	.f-lb {
+		color: var(--fg);
+	}
+
+	.f-rq {
+		color: var(--accent-ink);
+	}
+
+	input,
+	textarea {
+		width: 100%;
+		min-height: 2.75rem;
+		padding: 0.55rem 0.15rem;
+		background: transparent;
+		border: 0;
+		border-bottom: 1px solid var(--rule);
+		font-family: var(--font-mono);
+		font-size: 0.9375rem;
+		letter-spacing: 0.04em;
+		color: var(--fg);
+		border-radius: 0;
+		transition: border-color 0.14s linear;
+	}
+
+	textarea {
+		resize: vertical;
+		line-height: 1.7;
+		font-family: var(--font-cjk);
+	}
+
+	input:focus,
+	textarea:focus {
+		border-bottom-color: var(--accent);
+	}
+
+	input::placeholder,
+	textarea::placeholder {
+		color: var(--dimmer);
+	}
+
+	input:user-invalid,
+	textarea:user-invalid {
+		border-bottom-color: var(--accent);
+	}
+
+	.dlg-foot {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) max-content;
+		align-items: center;
+		gap: var(--s-4);
+		border-top: 1px solid var(--rule);
+		padding-top: clamp(0.9rem, 2vw, 1.25rem);
+	}
+
+	.hint {
+		font-family: var(--font-cjk);
+		font-size: 0.75rem;
+		letter-spacing: 0.06em;
+		color: var(--dim);
+	}
+
+	.hint b {
+		font-family: var(--font-mono);
+		font-weight: 400;
+		color: var(--fg);
+	}
+
+	.send {
+		display: flex;
+		align-items: center;
+		gap: 1.25ch;
+		min-height: 3rem;
+		padding-inline: 1.5rem;
+		background: var(--ink-deep);
+		color: var(--paper-hi);
+		font-size: 0.8125rem;
+		letter-spacing: 0.2em;
+		transition: background-color 0.16s linear;
+	}
+
+	.send-sq {
+		width: 0.5rem;
+		height: 0.5rem;
+		background: var(--accent);
+	}
+
+	.send:hover,
+	.send:focus-visible {
+		background: var(--accent);
+	}
+
+	.send:hover .send-sq,
+	.send:focus-visible .send-sq {
+		background: var(--paper-hi);
+	}
+
+	@media (max-width: 48rem) {
+		.dlg {
+			width: 100vw;
+			max-width: 100vw;
+			max-height: 100svh;
+			height: 100svh;
+			border: 0;
+		}
+
+		.fields {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.dlg-foot {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.send {
+			width: 100%;
+			justify-content: center;
+		}
+	}
+</style>
+
+<script>
+	import { brand } from "../../lib/copy";
+
+	const dlg = document.querySelector<HTMLDialogElement>("#d08-inquiry");
+	const form = document.querySelector<HTMLFormElement>("#d08-inq-form");
+	const status = document.querySelector<HTMLElement>("#d08-inq-status");
+
+	if (dlg && form && status) {
+		let opener: HTMLElement | null = null;
+		const baseHint = status.innerHTML;
+
+		const open = (trigger: HTMLElement) => {
+			opener = trigger;
+			status.innerHTML = baseHint;
+			dlg.showModal();
+			document.documentElement.style.overflow = "hidden";
+			dlg.querySelector<HTMLInputElement>("input")?.focus();
+		};
+
+		document.querySelectorAll<HTMLElement>("[data-d08-open-inquiry]").forEach(btn => {
+			btn.addEventListener("click", () => open(btn));
+		});
+
+		dlg.querySelectorAll<HTMLButtonElement>("[data-d08-close]").forEach(btn => {
+			btn.addEventListener("click", () => dlg.close());
+		});
+
+		dlg.addEventListener("click", event => {
+			if (event.target === dlg) dlg.close();
+		});
+
+		dlg.addEventListener("close", () => {
+			document.documentElement.style.overflow = "";
+			opener?.focus();
+		});
+
+		form.addEventListener("submit", event => {
+			event.preventDefault();
+			if (!form.reportValidity()) return;
+
+			const data = new FormData(form);
+			const get = (k: string) => String(data.get(k) ?? "").trim();
+
+			const lines = [
+				`姓名 NAME      : ${get("name")}`,
+				`信箱 EMAIL     : ${get("email")}`,
+				`公司 COMPANY   : ${get("company") || "—"}`,
+				`預算 BUDGET    : ${get("budget") || "—"}`,
+				"",
+				"專案內容 MESSAGE",
+				"----------------",
+				get("message")
+			];
+
+			const href = `mailto:${brand.email}` + `?subject=${encodeURIComponent(`[INQUIRY] ${get("name")} — LINYAO DIGITAL STUDIO`)}` + `&body=${encodeURIComponent(lines.join("\n"))}`;
+
+			status.textContent = "ROUTE OPEN — 已開啟郵件草稿，若未自動開啟請直接寄至 " + brand.email;
+			window.location.href = href;
+		});
+	}
+</script>

@@ -1,0 +1,140 @@
+---
+import { manifesto } from "../../lib/copy";
+---
+
+<section class="cred" id="evidence" aria-labelledby="cred-title">
+	<div class="d01-shell cred-head">
+		<p class="d01-runhead">
+			<b>05</b>
+			<span>Record</span>
+		</p>
+		<h2 class="cred-title" id="cred-title">
+			<span class="cred-en">EVIDENCE</span>
+			<span class="cred-zh">實績與肯定</span>
+		</h2>
+	</div>
+
+	<div class="d01-shell cred-body">
+		<span class="d01-rule d01-rule--mid cred-rule-top d01-draw" aria-hidden="true"></span>
+
+		<dl class="cred-figures">
+			{
+				manifesto.credibility.map(item => (
+					<div class="fig">
+						<dt class="fig-figure">{item.figure}</dt>
+						<dd class="fig-caption">
+							<span class="fig-en d01-label">{item.en}</span>
+							<span class="fig-zh">{item.label}</span>
+						</dd>
+					</div>
+				))
+			}
+		</dl>
+	</div>
+</section>
+
+<style>
+	.cred {
+		border-bottom: 1px solid var(--rule-hair);
+	}
+	.cred-head {
+		padding-block: clamp(3.5rem, 10vh, 7rem) clamp(2rem, 5vh, 3.5rem);
+		align-items: start;
+	}
+	.cred-title {
+		grid-column: 2 / 13;
+		display: flex;
+		align-items: baseline;
+		gap: clamp(1rem, 3vw, 2.5rem);
+		flex-wrap: wrap;
+	}
+	.cred-en {
+		font-size: var(--display-4);
+		font-weight: 700;
+		letter-spacing: -0.03em;
+		text-transform: uppercase;
+		color: var(--ink-display);
+	}
+	.cred-zh {
+		font-size: clamp(0.9375rem, 1.3vw, 1.125rem);
+		font-weight: 500;
+		letter-spacing: 0.12em;
+		color: var(--graphite);
+	}
+
+	.cred-body {
+		padding-bottom: clamp(3.5rem, 10vh, 7rem);
+	}
+	.cred-rule-top {
+		grid-column: 1 / -1;
+		--rule-c: var(--graphite);
+		margin-bottom: clamp(1.5rem, 4vh, 2.75rem);
+	}
+
+	.cred-figures {
+		grid-column: 1 / -1;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		column-gap: var(--col-gap);
+		align-items: end;
+	}
+	.fig {
+		display: flex;
+		flex-direction: column;
+	}
+	/* the three figures hang from one shared baseline */
+	.fig-figure {
+		font-size: clamp(2.25rem, 6.4vw, 6rem);
+		font-weight: 700;
+		line-height: 0.82;
+		letter-spacing: -0.05em;
+		text-transform: uppercase;
+		font-variant-numeric: lining-nums;
+		color: var(--ink-display);
+		padding-bottom: 1.125rem;
+	}
+	.fig:nth-child(2) .fig-figure,
+	.fig:nth-child(3) .fig-figure {
+		font-size: clamp(1.5rem, 4.4vw, 4.25rem);
+	}
+	.fig-caption {
+		border-top: 1px solid var(--rule-hair);
+		padding-top: 0.875rem;
+		display: grid;
+		gap: 0.5rem;
+	}
+	.fig-en {
+		color: var(--graphite);
+		font-weight: 700;
+	}
+	.fig-zh {
+		font-size: var(--small);
+		line-height: 1.7;
+		color: var(--graphite);
+	}
+	.fig:nth-child(2) .fig-caption,
+	.fig:nth-child(3) .fig-caption {
+		border-top-width: 1px;
+	}
+
+	@media (max-width: 60rem) {
+		.cred-title {
+			grid-column: 1 / -1;
+		}
+	}
+
+	@media (max-width: 40rem) {
+		.cred-figures {
+			grid-template-columns: minmax(0, 1fr);
+			row-gap: 2rem;
+			align-items: start;
+		}
+		.fig-figure {
+			padding-bottom: 0.75rem;
+		}
+		.fig:nth-child(2) .fig-figure,
+		.fig:nth-child(3) .fig-figure {
+			font-size: clamp(1.75rem, 9vw, 3rem);
+		}
+	}
+</style>

@@ -1,0 +1,464 @@
+---
+import { services } from "../../lib/copy";
+
+const stage = [
+	{ tz: -3, ry: 9, tag: "z −048" },
+	{ tz: -10, ry: -11, tag: "z −160" },
+	{ tz: -17, ry: 13, tag: "z −272" }
+];
+---
+
+<section class="services" id="services" aria-labelledby="d03-services-h">
+	<div class="head">
+		<p class="coord" aria-hidden="true">§ 02 <span>/ SERVICES</span></p>
+		<h2 id="d03-services-h">{services.lead}</h2>
+		<p class="hint" aria-hidden="true">DEPTH MAP — 3 PLANES / PERSPECTIVE 90</p>
+	</div>
+
+	<div class="depthstage">
+		<svg class="rail" viewBox="0 0 40 400" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+			<g fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
+				<line x1="20" y1="0" x2="20" y2="400"></line>
+				<line x1="8" y1="60" x2="32" y2="60"></line>
+				<line x1="8" y1="200" x2="32" y2="200"></line>
+				<line x1="8" y1="340" x2="32" y2="340"></line>
+				<line x1="14" y1="130" x2="26" y2="130"></line>
+				<line x1="14" y1="270" x2="26" y2="270"></line>
+			</g>
+		</svg>
+
+		<div class="inner">
+			{
+				services.items.map((item, i) => (
+					<article class="slab" style={`--tz:${stage[i].tz}rem; --ry:${stage[i].ry}deg`} data-slab data-ry={stage[i].ry} data-tz={stage[i].tz}>
+						<span class="edge-tag" aria-hidden="true">{`PLANE 0${i + 1} · ${stage[i].tag}`}</span>
+
+						<div class="body">
+							<p class="num" aria-hidden="true">
+								{item.index}
+							</p>
+							<h3>
+								<span class="en">{item.en}</span>
+								<span class="zh">{item.zh}</span>
+							</h3>
+							<p class="pos">{item.position}</p>
+							<div class="txt">
+								{item.body.map(line => (
+									<p>{line}</p>
+								))}
+							</div>
+						</div>
+
+						<ul class="stack" aria-label={`${item.en} 技術範圍`}>
+							{item.stack.map(s => (
+								<li>{s}</li>
+							))}
+						</ul>
+					</article>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.services {
+		position: relative;
+		background: var(--stage-mid);
+		color: var(--on-stage);
+		overflow: clip;
+		padding: clamp(4rem, 11vh, 8rem) 0 clamp(5rem, 13vh, 9rem);
+	}
+
+	.head {
+		display: grid;
+		grid-template-columns: 5rem minmax(0, 1fr) auto;
+		gap: clamp(1rem, 3vw, 2.5rem);
+		align-items: end;
+		padding-inline: var(--gutter);
+		padding-bottom: clamp(2.5rem, 7vh, 5rem);
+		border-bottom: 1px solid var(--edge-soft);
+	}
+
+	.coord {
+		font-family: var(--font-mono);
+		font-size: var(--mark);
+		letter-spacing: 0.14em;
+		color: var(--orange);
+		writing-mode: vertical-rl;
+		white-space: nowrap;
+		justify-self: start;
+	}
+
+	.coord span {
+		color: var(--on-stage-mute);
+	}
+
+	h2 {
+		font-family: var(--font-cjk);
+		font-weight: 400;
+		font-size: clamp(1.05rem, 2.1vw, 1.6rem);
+		line-height: 2;
+		letter-spacing: 0.08em;
+		color: var(--on-stage-hi);
+		max-width: 32ch;
+		text-wrap: balance;
+	}
+
+	.hint {
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.18em;
+		color: var(--on-stage-mute);
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	.depthstage {
+		position: relative;
+		display: grid;
+		grid-template-columns: 5rem minmax(0, 1fr);
+		gap: clamp(1rem, 3vw, 2.5rem);
+		padding-inline: var(--gutter);
+		padding-top: clamp(3rem, 8vh, 5.5rem);
+		perspective: 90rem;
+		perspective-origin: 50% 42%;
+	}
+
+	.rail {
+		width: 2.5rem;
+		height: 100%;
+		color: var(--edge-soft);
+		justify-self: center;
+	}
+
+	.inner {
+		transform-style: preserve-3d;
+		display: grid;
+		gap: clamp(3rem, 8vh, 6.5rem);
+	}
+
+	.slab {
+		position: relative;
+		background: color-mix(in oklab, var(--void) 46%, transparent);
+		border: 1px solid var(--edge-soft);
+		padding: clamp(1.75rem, 3.4vw, 3rem) clamp(1.5rem, 3vw, 2.75rem) 0;
+		will-change: transform;
+		transform: translate3d(0, 0, var(--tz, 0rem)) rotateY(calc(var(--ry, 0deg) + var(--ptr-x, 0) * 1.2deg)) rotateX(calc(var(--ptr-y, 0) * -0.8deg));
+	}
+
+	.slab:nth-child(1) {
+		width: min(100%, 46rem);
+		justify-self: start;
+		border-left: 1px solid var(--orange);
+		transform-origin: 0% 50%;
+	}
+
+	.slab:nth-child(2) {
+		width: min(100%, 42rem);
+		justify-self: end;
+		border-top: 1px solid var(--orange);
+		transform-origin: 100% 50%;
+	}
+
+	.slab:nth-child(3) {
+		width: min(100%, 44rem);
+		justify-self: center;
+		border-right: 1px solid var(--orange);
+		transform-origin: 50% 50%;
+	}
+
+	.slab:nth-child(3)::after {
+		content: "";
+		position: absolute;
+		right: -1px;
+		top: 0;
+		width: 0.5rem;
+		height: 30%;
+		background: var(--orange);
+		clip-path: polygon(0 0, 100% 0, 100% 100%, 0 82%);
+	}
+
+	.edge-tag {
+		position: absolute;
+		top: 0;
+		left: -1px;
+		writing-mode: vertical-rl;
+		font-family: var(--font-mono);
+		font-size: 0.5625rem;
+		letter-spacing: 0.18em;
+		color: var(--on-stage-mute);
+		padding: 0.75rem 0.35rem;
+		border-left: 1px solid var(--edge-soft);
+		white-space: nowrap;
+	}
+
+	.slab:nth-child(2) .edge-tag {
+		left: auto;
+		right: -1px;
+		border-left: 0;
+		border-right: 1px solid var(--edge-soft);
+	}
+
+	.body {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 0.9rem;
+		padding-left: 2rem;
+		padding-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
+	}
+
+	.num {
+		font-family: var(--font-mono);
+		font-size: clamp(2.25rem, 5vw, 3.75rem);
+		line-height: 1;
+		letter-spacing: -0.02em;
+		color: var(--orange);
+	}
+
+	h3 {
+		display: grid;
+		gap: 0.45rem;
+	}
+
+	h3 .en {
+		font-family: var(--font-grotesk);
+		font-weight: 600;
+		font-size: clamp(1.35rem, 3vw, 2.15rem);
+		line-height: 1.05;
+		letter-spacing: 0.02em;
+		color: var(--on-stage-hi);
+	}
+
+	h3 .zh {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9375rem, 1.5vw, 1.125rem);
+		letter-spacing: 0.32em;
+		color: var(--on-stage-dim);
+	}
+
+	.pos {
+		display: flex;
+		align-items: center;
+		gap: 0.7rem;
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		letter-spacing: 0.14em;
+		color: var(--on-stage-hi);
+		padding-top: 0.15rem;
+	}
+
+	.pos::before {
+		content: "";
+		width: 1.5rem;
+		height: 1px;
+		background: var(--orange);
+		flex: none;
+	}
+
+	.txt p {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.875rem, 1.05vw, 0.9375rem);
+		line-height: 2.05;
+		letter-spacing: 0.05em;
+		color: var(--on-stage-dim);
+	}
+
+	/* --- 01: numeral in the margin, text to the right ------------------ */
+	.slab:nth-child(1) .body {
+		grid-template-columns: auto minmax(0, 1fr);
+		column-gap: clamp(1.25rem, 3vw, 2.5rem);
+		align-items: start;
+	}
+	.slab:nth-child(1) .num {
+		grid-row: 1 / span 3;
+	}
+
+	/* --- 02: right-aligned, mirrored -------------------------------- */
+	.slab:nth-child(2) .body {
+		padding-left: 0;
+		padding-right: 2rem;
+		text-align: right;
+		justify-items: end;
+	}
+
+	.slab:nth-child(2) .pos {
+		flex-direction: row-reverse;
+	}
+	.slab:nth-child(2) h3 {
+		justify-items: end;
+	}
+	.slab:nth-child(2) .txt p {
+		max-width: 40ch;
+	}
+
+	/* --- 03: title and numeral on one line, narrow text column ------- */
+	.slab:nth-child(3) .body {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.slab:nth-child(3) .num {
+		font-size: clamp(1.25rem, 2vw, 1.5rem);
+		letter-spacing: 0.2em;
+	}
+	.slab:nth-child(3) .txt {
+		max-width: 34ch;
+		margin-left: auto;
+	}
+
+	/* --- the stack list runs along the slab's leading edge ----------- */
+	.stack {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 1.1rem;
+		border-top: 1px solid var(--orange-dim);
+		padding: 0.7rem 0 0.75rem 2rem;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.16em;
+		color: var(--on-stage-mute);
+		text-transform: uppercase;
+	}
+
+	.stack li {
+		display: flex;
+		align-items: center;
+		gap: 1.1rem;
+	}
+
+	.stack li + li::before {
+		content: "";
+		width: 1px;
+		height: 0.7rem;
+		background: var(--edge-soft);
+	}
+
+	.slab:nth-child(2) .stack {
+		justify-content: flex-end;
+		padding-left: 0;
+		padding-right: 2rem;
+	}
+
+	@media (max-width: 64rem) {
+		.head {
+			grid-template-columns: 3.5rem minmax(0, 1fr);
+		}
+		.hint {
+			grid-column: 2;
+			text-align: left;
+			padding-top: 1rem;
+		}
+		.depthstage {
+			grid-template-columns: 3.5rem minmax(0, 1fr);
+			perspective: 70rem;
+		}
+		.slab:nth-child(1),
+		.slab:nth-child(2),
+		.slab:nth-child(3) {
+			width: 100%;
+		}
+	}
+
+	@media (max-width: 48rem) {
+		.services {
+			padding-top: clamp(3rem, 8vh, 5rem);
+		}
+		.head {
+			grid-template-columns: 2.5rem minmax(0, 1fr);
+		}
+		.depthstage {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.hint {
+			grid-column: 2;
+		}
+		.rail {
+			display: none;
+		}
+		.depthstage {
+			perspective: none;
+		}
+		.inner {
+			gap: 1.75rem;
+		}
+		.slab {
+			transform: none;
+			will-change: auto;
+			padding: 1.5rem 1.25rem 0;
+		}
+		.body {
+			padding-left: 1.75rem;
+			padding-right: 0;
+			text-align: left;
+			justify-items: start;
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.slab:nth-child(1) .body {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.slab:nth-child(1) .num {
+			grid-row: auto;
+		}
+		.slab:nth-child(2) .body {
+			padding-left: 1.75rem;
+			padding-right: 0;
+			text-align: left;
+			justify-items: start;
+		}
+		.slab:nth-child(2) h3 {
+			justify-items: start;
+		}
+		.slab:nth-child(3) .txt {
+			margin-left: 0;
+		}
+		.slab:nth-child(2) .stack {
+			justify-content: flex-start;
+			padding-left: 1.75rem;
+			padding-right: 0;
+		}
+		.slab:nth-child(2) .pos {
+			flex-direction: row;
+		}
+		.stack {
+			padding-left: 1.75rem;
+		}
+		.edge-tag {
+			padding: 0.5rem 0.3rem;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap, ScrollTrigger }) => {
+		const slabs = Array.from(document.querySelectorAll<HTMLElement>("[data-slab]"));
+		const flat = window.matchMedia("(max-width: 48rem)");
+
+		slabs.forEach(slab => {
+			const ry = Number(slab.dataset.ry ?? 0);
+			const tz = Number(slab.dataset.tz ?? 0);
+
+			/* each slab turns to face the reader as it enters the viewport */
+			ScrollTrigger.create({
+				trigger: slab,
+				start: "top 92%",
+				end: "top 38%",
+				onUpdate: self => {
+					if (flat.matches) return;
+					const p = self.progress;
+					slab.style.setProperty("--ry", (ry * (1 - p)).toFixed(2) + "deg");
+					slab.style.setProperty("--tz", (tz * (1 - p * 0.62)).toFixed(2) + "rem");
+				}
+			});
+
+			gsap.from(slab.querySelectorAll(".num, h3, .pos, .txt p, .stack li"), {
+				opacity: 0,
+				y: 12,
+				duration: 0.6,
+				ease: "power2.out",
+				stagger: 0.04,
+				scrollTrigger: { trigger: slab, start: "top 85%" }
+			});
+		});
+	});
+</script>

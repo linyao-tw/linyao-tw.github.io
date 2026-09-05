@@ -1,0 +1,96 @@
+---
+import { capabilities } from "../../lib/copy";
+---
+
+<section class="frieze" aria-label="能力範疇 CAPABILITIES">
+	<div class="rail">
+		<div class="track">
+			<ul class="run">
+				{capabilities.map(cap => <li class="d05-anno">{cap}</li>)}
+			</ul>
+			<ul class="run" aria-hidden="true">
+				{capabilities.map(cap => <li class="d05-anno">{cap}</li>)}
+			</ul>
+		</div>
+		<div class="ticks" aria-hidden="true"></div>
+	</div>
+</section>
+
+<style>
+	.frieze {
+		border-top: 1px solid var(--line);
+		background: var(--bg);
+		padding: clamp(1.5rem, 4svh, 2.75rem) 0;
+	}
+
+	.rail {
+		position: relative;
+		background: var(--mass-black);
+		overflow: clip;
+		padding: 1.0625rem 0 0;
+		height: 4.25rem;
+	}
+
+	.track {
+		display: flex;
+		width: max-content;
+		animation: d05-frieze 52s linear infinite;
+		will-change: transform;
+	}
+
+	.run {
+		display: flex;
+		align-items: center;
+		flex: none;
+	}
+
+	.run li {
+		color: color-mix(in oklab, var(--paper) 82%, transparent);
+		letter-spacing: 0.2em;
+		padding: 0 1.5rem;
+		display: flex;
+		align-items: center;
+	}
+
+	.run li::after {
+		content: "";
+		width: 0.3125rem;
+		height: 0.3125rem;
+		background: var(--orange);
+		margin-left: 3rem;
+	}
+
+	/* a measured scale along the bottom of the frieze */
+	.ticks {
+		position: absolute;
+		inset: auto 0 0;
+		height: 0.9375rem;
+		border-top: 1px solid color-mix(in oklab, var(--paper) 24%, transparent);
+		background: repeating-linear-gradient(to right, color-mix(in oklab, var(--paper) 30%, transparent) 0 1px, transparent 1px 1.25rem);
+	}
+
+	@keyframes d05-frieze {
+		to {
+			transform: translateX(-50%);
+		}
+	}
+
+	@media (max-width: 48rem) {
+		.rail {
+			height: 3.75rem;
+			padding-top: 0.875rem;
+		}
+
+		.run li {
+			padding: 0 1rem;
+		}
+
+		.run li::after {
+			margin-left: 2rem;
+		}
+
+		.track {
+			animation-duration: 40s;
+		}
+	}
+</style>

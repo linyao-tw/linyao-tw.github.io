@@ -1,0 +1,358 @@
+---
+import { brand, cta, inquiryFields } from "../../lib/copy";
+---
+
+<dialog class="dlg" id="d10-inquiry" aria-labelledby="dlg-h" data-inquiry-dialog>
+	<div class="dlg__panel">
+		<div class="dlg__head">
+			<p class="dlg__run note" aria-hidden="true">INQUIRY / 詢案表單</p>
+			<h2 id="dlg-h" class="dlg__h">{cta.buttonLabel}</h2>
+			<button class="dlg__x" type="button" data-inquiry-close>
+				<span aria-hidden="true">✕</span>
+				<span class="visually-hidden">關閉詢案表單</span>
+			</button>
+		</div>
+
+		<form class="dlg__form" data-inquiry-form novalidate>
+			<div class="dlg__fields">
+				{
+					inquiryFields.map((f, i) => (
+						<p class="dlg__f">
+							<label for={`d10-${f.name}`}>
+								<span class="dlg__i" aria-hidden="true">
+									{String(i + 1).padStart(2, "0")}
+								</span>
+								{f.label}
+								{f.required && (
+									<span class="dlg__req" aria-hidden="true">
+										*
+									</span>
+								)}
+							</label>
+							<input id={`d10-${f.name}`} name={f.name} type={f.type} required={f.required} autocomplete={f.autocomplete} />
+						</p>
+					))
+				}
+
+				<p class="dlg__f dlg__f--wide">
+					<label for="d10-message">
+						<span class="dlg__i" aria-hidden="true">05</span>
+						專案內容 / MESSAGE
+						<span class="dlg__req" aria-hidden="true">*</span>
+					</label>
+					<textarea id="d10-message" name="message" rows="5" required></textarea>
+				</p>
+			</div>
+
+			<p class="dlg__err" role="alert" data-inquiry-error hidden></p>
+
+			<div class="dlg__foot">
+				<button class="dlg__go" type="submit">{cta.button}</button>
+				<a class="dlg__mail note" href={`mailto:${brand.email}`}>{brand.email}</a>
+			</div>
+
+			<p class="dlg__fine note">送出後會以你的郵件軟體開啟一封寫好的信件 — 內容不會經過第三方伺服器。</p>
+		</form>
+	</div>
+</dialog>
+
+<style>
+	.dlg {
+		position: fixed;
+		inset: 0;
+		width: 100%;
+		max-width: none;
+		max-height: none;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: var(--d10-paper);
+		overflow: hidden;
+	}
+
+	.dlg::backdrop {
+		background: color-mix(in oklab, var(--void) 78%, transparent);
+	}
+
+	.dlg[open] {
+		display: grid;
+		justify-items: end;
+		align-items: stretch;
+	}
+
+	.dlg__panel {
+		width: min(100%, 44rem);
+		height: 100%;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		touch-action: pan-y;
+		background: var(--d10-void);
+		border-left: 0.4375rem solid var(--d10-accent);
+		padding: clamp(1.25rem, 4vw, 3rem) clamp(1.25rem, 4vw, 3.5rem) clamp(2rem, 5vw, 3.5rem);
+		clip-path: inset(0 0 0 0);
+	}
+
+	.dlg__head {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		align-items: start;
+		gap: 0.5rem 1rem;
+		border-bottom: var(--hairline) solid color-mix(in oklab, var(--d10-paper) 24%, transparent);
+		padding-bottom: 1rem;
+	}
+
+	.dlg__run {
+		grid-column: 1;
+		color: var(--d10-accent);
+	}
+
+	.dlg__h {
+		grid-column: 1;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(1.75rem, 6vw, 3.25rem);
+		line-height: 1;
+		letter-spacing: -0.02em;
+		color: var(--paper-hi);
+	}
+
+	.dlg__x {
+		grid-row: 1 / 3;
+		grid-column: 2;
+		width: 2.75rem;
+		height: 2.75rem;
+		display: grid;
+		place-items: center;
+		color: var(--d10-paper);
+		border: var(--hairline) solid color-mix(in oklab, var(--d10-paper) 34%, transparent);
+	}
+
+	.dlg__x:hover,
+	.dlg__x:focus-visible {
+		background: var(--d10-accent);
+		color: var(--d10-void);
+		border-color: var(--d10-accent);
+	}
+
+	.dlg__form {
+		margin-top: clamp(1.25rem, 3vw, 2rem);
+	}
+
+	.dlg__fields {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: clamp(1rem, 2.4vw, 1.75rem);
+	}
+
+	.dlg__f {
+		display: grid;
+		gap: 0.4375rem;
+	}
+
+	.dlg__f--wide {
+		grid-column: 1 / -1;
+	}
+
+	.dlg__f label {
+		display: flex;
+		align-items: baseline;
+		gap: 0.5rem;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: color-mix(in oklab, var(--d10-paper) 78%, transparent);
+	}
+
+	.dlg__i {
+		color: var(--d10-accent);
+	}
+
+	.dlg__req {
+		color: var(--d10-accent);
+	}
+
+	.dlg__f input,
+	.dlg__f textarea {
+		width: 100%;
+		min-height: 2.75rem;
+		background: transparent;
+		color: var(--paper-hi);
+		border: 0;
+		border-bottom: var(--hairline) solid color-mix(in oklab, var(--d10-paper) 40%, transparent);
+		padding: 0.5rem 0.25rem;
+		font-family: var(--font-cjk);
+		font-size: 1rem;
+		letter-spacing: 0.04em;
+		border-radius: 0;
+	}
+
+	.dlg__f textarea {
+		resize: vertical;
+		line-height: 1.8;
+	}
+
+	.dlg__f input:focus,
+	.dlg__f textarea:focus {
+		border-bottom-color: var(--d10-accent);
+	}
+
+	.dlg__err {
+		margin-top: 1rem;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.1em;
+		color: var(--paper-hi);
+		background: var(--orange-deep);
+		padding: 0.625rem 0.75rem;
+	}
+
+	.dlg__err[hidden] {
+		display: none;
+	}
+
+	.dlg__foot {
+		margin-top: clamp(1.5rem, 3.5vw, 2.5rem);
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 1rem 1.75rem;
+	}
+
+	.dlg__go {
+		min-height: 3.25rem;
+		padding-inline: clamp(1.5rem, 4vw, 2.5rem);
+		background: var(--d10-accent);
+		color: var(--d10-void);
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: 1.0625rem;
+		letter-spacing: 0.16em;
+		transition: background 0.2s ease;
+	}
+
+	.dlg__go:hover,
+	.dlg__go:focus-visible {
+		background: var(--orange-deep);
+	}
+
+	.dlg__mail {
+		color: color-mix(in oklab, var(--d10-paper) 72%, transparent);
+		text-transform: none;
+		letter-spacing: 0.12em;
+		min-height: 2.75rem;
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.dlg__fine {
+		margin-top: 1.25rem;
+		color: color-mix(in oklab, var(--d10-paper) 68%, transparent);
+		letter-spacing: 0.08em;
+		text-transform: none;
+		line-height: 1.7;
+	}
+
+	@media (max-width: 47.99em) {
+		.dlg__fields {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.dlg__panel {
+			width: 100%;
+			border-left: 0;
+			border-top: 0.4375rem solid var(--d10-accent);
+		}
+	}
+</style>
+
+<script>
+	import { brand } from "../../lib/copy";
+
+	const dialog = document.querySelector<HTMLDialogElement>("[data-inquiry-dialog]");
+	const form = document.querySelector<HTMLFormElement>("[data-inquiry-form]");
+	const errorBox = document.querySelector<HTMLElement>("[data-inquiry-error]");
+
+	if (dialog && form && typeof dialog.showModal === "function") {
+		let invoker: HTMLElement | null = null;
+
+		const open = (trigger: HTMLElement | null) => {
+			invoker = trigger;
+			dialog.showModal();
+			document.body.classList.add("is-locked");
+			document.dispatchEvent(new CustomEvent("d10:lock"));
+			const firstField = dialog.querySelector<HTMLElement>("input, textarea");
+			firstField?.focus();
+		};
+
+		const close = () => {
+			if (dialog.open) dialog.close();
+		};
+
+		// every trigger is a real mailto: link, so it still works without JS
+		document.querySelectorAll<HTMLElement>("[data-inquiry-open]").forEach(el => {
+			el.addEventListener("click", event => {
+				event.preventDefault();
+				open(el);
+			});
+		});
+
+		dialog.querySelectorAll<HTMLElement>("[data-inquiry-close]").forEach(el => el.addEventListener("click", close));
+
+		// backdrop click — the dialog element itself fills the viewport,
+		// the panel is the inner box
+		dialog.addEventListener("click", event => {
+			const panel = dialog.querySelector(".dlg__panel");
+			if (panel && event.target instanceof Node && !panel.contains(event.target)) close();
+		});
+
+		// native `cancel` covers Esc; restore focus and page scrolling here
+		dialog.addEventListener("close", () => {
+			document.body.classList.remove("is-locked");
+			document.dispatchEvent(new CustomEvent("d10:unlock"));
+			invoker?.focus();
+			invoker = null;
+		});
+
+		form.addEventListener("submit", event => {
+			event.preventDefault();
+			const data = new FormData(form);
+			const missing: string[] = [];
+
+			form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("[required]").forEach(field => {
+				const value = String(data.get(field.name) ?? "").trim();
+				if (!value) missing.push(field.id);
+				if (field.type === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) missing.push(field.id);
+			});
+
+			if (missing.length) {
+				if (errorBox) {
+					errorBox.textContent = "請完整填寫姓名、有效信箱與專案內容。";
+					errorBox.hidden = false;
+				}
+				document.getElementById(missing[0])?.focus();
+				return;
+			}
+
+			if (errorBox) errorBox.hidden = true;
+
+			const lines = [
+				`姓名 / NAME: ${data.get("name") ?? ""}`,
+				`信箱 / EMAIL: ${data.get("email") ?? ""}`,
+				`公司・單位 / COMPANY: ${data.get("company") ?? ""}`,
+				`預算範圍 / BUDGET: ${data.get("budget") ?? ""}`,
+				"",
+				"專案內容 / MESSAGE:",
+				String(data.get("message") ?? ""),
+				"",
+				"— 來自 LINYAO DIGITAL STUDIO 詢案表單"
+			];
+
+			const href = `mailto:${brand.email}?subject=${encodeURIComponent(`詢案 — ${data.get("name") ?? ""}`)}&body=${encodeURIComponent(lines.join("\n"))}`;
+			window.location.href = href;
+			close();
+		});
+	}
+</script>

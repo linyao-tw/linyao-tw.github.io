@@ -1,0 +1,137 @@
+---
+/**
+ * design-03 — SPATIAL / CSS 3D
+ * Root tokens for `body.d-03` + the single rAF pointer loop that drives every
+ * 3D stage on the page. Nothing here writes transforms directly: the loop only
+ * caches a lerped pointer position into two custom properties which the stages
+ * read inside their own `transform`.
+ */
+---
+
+<style is:global>
+	body.d-03 {
+		--bg: var(--paper);
+		--fg: var(--ink);
+		background: var(--paper);
+
+		/* stage grounds — the "dim spatial" side of the page */
+		--stage-near: var(--ink-black);
+		--stage-mid: var(--ink-deep);
+		--stage-far: var(--void);
+
+		/* document grounds — the reading side of the page */
+		--doc: var(--paper);
+		--doc-hi: var(--paper-hi);
+
+		/* type on stage */
+		--on-stage: var(--paper);
+		--on-stage-hi: var(--paper-hi);
+		--on-stage-dim: color-mix(in oklab, var(--paper) 58%, transparent);
+		--on-stage-mute: color-mix(in oklab, var(--paper) 36%, transparent);
+
+		/* geometry */
+		--edge: color-mix(in oklab, var(--paper) 30%, transparent);
+		--edge-soft: color-mix(in oklab, var(--paper) 15%, transparent);
+		--wall: color-mix(in oklab, var(--void) 62%, transparent);
+		--doc-rule: color-mix(in oklab, var(--graphite) 26%, transparent);
+		--doc-rule-hi: color-mix(in oklab, var(--graphite) 52%, transparent);
+
+		--mark: 0.6875rem;
+		--hdr-h: 3.25rem;
+		--gutter: clamp(1.25rem, 4.5vw, 5rem);
+
+		/* cached pointer, −1 … 1, written by the loop below */
+		--ptr-x: 0;
+		--ptr-y: 0;
+	}
+
+	body.d-03 main > section {
+		scroll-margin-top: 5rem;
+	}
+
+	body.d-03 .d03-mono {
+		font-family: var(--font-mono);
+		font-size: var(--mark);
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		line-height: 1.4;
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(
+		({ lenis }) => {
+			/* ---- in-page anchors, offset for the fixed instrument bar ---- */
+			document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(a => {
+				a.addEventListener("click", event => {
+					const id = a.getAttribute("href");
+					if (!id || id === "#") return;
+					const target = document.querySelector<HTMLElement>(id);
+					if (!target) return;
+					event.preventDefault();
+					if (lenis) lenis.scrollTo(target, { offset: -52 });
+					else target.scrollIntoView({ behavior: "smooth" });
+				});
+			});
+
+			/* ---- one pointer loop for the whole page --------------------- */
+			if (window.matchMedia("(pointer: coarse)").matches) return;
+
+			const root = document.body;
+			let tx = 0;
+			let ty = 0;
+			let cx = 0;
+			let cy = 0;
+			let running = false;
+			let frame = 0;
+
+			const tick = () => {
+				cx += (tx - cx) * 0.075;
+				cy += (ty - cy) * 0.075;
+				root.style.setProperty("--ptr-x", cx.toFixed(4));
+				root.style.setProperty("--ptr-y", cy.toFixed(4));
+				if (Math.abs(tx - cx) < 0.001 && Math.abs(ty - cy) < 0.001) {
+					running = false;
+					return;
+				}
+				frame = requestAnimationFrame(tick);
+			};
+
+			const start = () => {
+				if (running) return;
+				running = true;
+				frame = requestAnimationFrame(tick);
+			};
+
+			const onMove = (event: PointerEvent) => {
+				if (event.pointerType === "touch") return;
+				tx = (event.clientX / window.innerWidth) * 2 - 1;
+				ty = (event.clientY / window.innerHeight) * 2 - 1;
+				start();
+			};
+
+			const recentre = () => {
+				tx = 0;
+				ty = 0;
+				start();
+			};
+
+			window.addEventListener("pointermove", onMove, { passive: true });
+			document.addEventListener("pointerleave", recentre);
+			window.addEventListener("blur", recentre);
+			window.addEventListener(
+				"pagehide",
+				() => {
+					cancelAnimationFrame(frame);
+					window.removeEventListener("pointermove", onMove);
+					document.removeEventListener("pointerleave", recentre);
+					window.removeEventListener("blur", recentre);
+				},
+				{ once: true }
+			);
+		},
+		{ smooth: true }
+	);
+</script>

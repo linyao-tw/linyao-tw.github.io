@@ -1,0 +1,159 @@
+---
+import { services } from "../../lib/copy";
+import ServiceBand from "./ServiceBand.astro";
+import { waveRule } from "./geo";
+
+const rule = waveRule({
+	width: 1000,
+	base: 18,
+	layers: [
+		{ amp: 10, freq: 1.3, phase: 1.7 },
+		{ amp: 4, freq: 3.8, phase: 4.4 }
+	],
+	samples: 72
+});
+
+const indents = ["0rem", "clamp(1rem, 5vw, 5.5rem)", "clamp(0.5rem, 2.2vw, 2.5rem)"];
+---
+
+<section class="svc" id="services" aria-labelledby="d09-svc-h">
+	<div class="lead">
+		<p class="side" aria-hidden="true"><span>D</span><span>SERVICES</span><span>服務範疇</span></p>
+
+		<div class="leadcol">
+			<h2 class="lead-h" id="d09-svc-h">{services.lead}</h2>
+
+			<svg class="rule" viewBox="0 0 1000 36" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+				<path d={rule} vector-effect="non-scaling-stroke"></path>
+			</svg>
+
+			<ol class="pos">
+				{
+					services.items.map((s, i) => (
+						<li style={`--in:${indents[i]}`}>
+							<span class="n">{s.index}</span>
+							<span class="e">{s.en}</span>
+							<span class="p">＝{s.position}</span>
+						</li>
+					))
+				}
+			</ol>
+		</div>
+	</div>
+
+	<ServiceBand item={services.items[0]} variant={1} />
+	<ServiceBand item={services.items[1]} variant={2} />
+	<ServiceBand item={services.items[2]} variant={3} />
+</section>
+
+<style>
+	.svc {
+		padding-block: clamp(4rem, 10vh, 8rem) 0;
+	}
+
+	.lead {
+		position: relative;
+		z-index: 2;
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: clamp(1.5rem, 4vw, 4.5rem);
+		padding: 0 var(--pad) clamp(4rem, 10vh, 8rem);
+	}
+
+	.side {
+		writing-mode: vertical-rl;
+		display: flex;
+		gap: 1.4rem;
+		align-items: center;
+		font-size: var(--meta);
+		letter-spacing: 0.32em;
+		color: var(--ink-2);
+	}
+
+	.side span:first-child {
+		color: var(--orange);
+	}
+
+	.leadcol {
+		display: grid;
+		gap: clamp(1.5rem, 4vh, 3rem);
+	}
+
+	.lead-h {
+		font-family: var(--font-serif);
+		font-size: var(--dsp-3);
+		line-height: 1.75;
+		letter-spacing: 0.1em;
+		max-width: 26ch;
+		text-wrap: balance;
+	}
+
+	.rule {
+		width: 100%;
+		height: 2.25rem;
+		fill: none;
+		stroke: var(--line-soft);
+		stroke-width: 1;
+	}
+
+	/* the dense typographic band — three rows, tight leading, arced indents */
+	.pos {
+		display: grid;
+		border-top: 1px solid var(--line);
+	}
+
+	.pos li {
+		margin-inline-start: var(--in);
+		display: grid;
+		grid-template-columns: 3.25rem minmax(0, auto) minmax(0, 1fr);
+		align-items: baseline;
+		gap: 0 clamp(0.75rem, 2vw, 2rem);
+		padding-block: clamp(0.65rem, 1.6vh, 1.15rem);
+		border-bottom: 1px solid var(--line-soft);
+	}
+
+	.pos .n {
+		font-family: var(--font-serif);
+		font-size: 1.05rem;
+		letter-spacing: 0.06em;
+		color: var(--orange);
+	}
+
+	.pos .e {
+		font-size: clamp(0.8rem, 1.5vw, 1.35rem);
+		letter-spacing: 0.24em;
+		line-height: 1.2;
+		font-weight: 500;
+	}
+
+	.pos .p {
+		font-family: var(--font-serif);
+		font-size: clamp(0.85rem, 1.05vw, 1.05rem);
+		letter-spacing: 0.09em;
+		color: var(--fg);
+		justify-self: end;
+		text-align: end;
+	}
+
+	@media (max-width: 48rem) {
+		.lead {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.side {
+			writing-mode: horizontal-tb;
+			gap: 1rem;
+		}
+
+		.pos li {
+			grid-template-columns: 2.5rem minmax(0, 1fr);
+			gap: 0.3rem 0.75rem;
+		}
+
+		.pos .p {
+			grid-column: 2;
+			justify-self: start;
+			text-align: start;
+		}
+	}
+</style>

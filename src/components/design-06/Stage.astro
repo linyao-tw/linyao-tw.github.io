@@ -1,0 +1,601 @@
+---
+/**
+ * The stage: one fixed backdrop plane whose colour is tweened by scroll, and
+ * ONE orange rail — a single <line> — that changes role as the document moves.
+ *
+ *   01 DIAGONAL   enters across the hero
+ *   02 MARGIN     settles into the left margin as the progress rail
+ *   03 TRACK      rotates horizontal, becomes the track of the pinned services
+ *   04 TIMELINE   turns vertical again and draws between process steps 01–05
+ *   05 UNDERLINE  lies down under the CTA headline
+ *
+ * All of that choreography lives here so the rail is genuinely one object with
+ * one state, rather than five look-alike bars handed between components.
+ */
+const total = "09";
+---
+
+<div class="d06-ground" aria-hidden="true"></div>
+<div class="d06-wipe d06-wipe--dark" aria-hidden="true"></div>
+<div class="d06-wipe d06-wipe--light" aria-hidden="true"></div>
+
+<svg class="d06-rail" aria-hidden="true" focusable="false">
+	<line class="d06-rail__bar" x1="-2%" y1="93%" x2="102%" y2="9%"></line>
+</svg>
+
+<div class="d06-marker" aria-hidden="true">
+	<span class="d06-marker__n">01</span>
+	<span class="d06-marker__t">/ 03</span>
+</div>
+
+<div class="d06-meter" aria-hidden="true">
+	<span class="d06-meter__i">SECTION 01 / {total}</span>
+	<span class="d06-meter__n">HERO</span>
+	<span class="d06-meter__r">RAIL 01 DIAGONAL</span>
+	<span class="d06-meter__p">000%</span>
+</div>
+
+<style>
+	/* the single painted plane — everything above it is transparent */
+	.d06-ground {
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		background: var(--warm-gray);
+		pointer-events: none;
+	}
+
+	/* The two junction wipes. They live down here with the ground rather than
+	   inside their sections, because a section-level opaque plane would paint
+	   over the rail and break the one thing this page is about: continuity.
+	   They sweep bottom-up (the direction the section is arriving from), then
+	   fade once the ground tween underneath has caught up to the same colour. */
+	.d06-wipe {
+		display: none;
+	}
+
+	:global(body.d-06.d06-live) .d06-wipe {
+		display: block;
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	.d06-wipe--dark {
+		background: var(--ink-deep);
+	}
+
+	.d06-wipe--light {
+		background: var(--warm-gray);
+	}
+
+	/* Rail — absolute over the hero by default (JS off: one static diagonal),
+	   promoted to a fixed viewport layer once the runtime is live. */
+	.d06-rail {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100vh;
+		z-index: 1;
+		pointer-events: none;
+		overflow: visible;
+	}
+
+	:global(body.d-06.d06-live) .d06-rail {
+		position: fixed;
+		inset: 0;
+		height: 100%;
+	}
+
+	.d06-rail__bar {
+		stroke: var(--orange);
+		stroke-width: var(--rail-w);
+		stroke-linecap: butt;
+	}
+
+	/* marker + meter are instrumentation: only shown when the runtime is live */
+	.d06-marker,
+	.d06-meter {
+		display: none;
+	}
+
+	:global(body.d-06.d06-live) .d06-marker {
+		display: flex;
+		position: fixed;
+		top: 0;
+		left: 0;
+		margin-top: -2.4rem;
+		z-index: 22;
+		align-items: baseline;
+		gap: 0.35rem;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.12em;
+		color: var(--orange);
+		pointer-events: none;
+		opacity: 0;
+		white-space: nowrap;
+	}
+
+	.d06-marker__n {
+		font-size: 1.125rem;
+		letter-spacing: 0.02em;
+	}
+
+	.d06-marker__t {
+		opacity: 0.6;
+	}
+
+	:global(body.d-06.d06-live) .d06-meter {
+		display: grid;
+		grid-auto-flow: column;
+		align-items: center;
+		gap: 1rem;
+		position: fixed;
+		right: var(--edge);
+		bottom: 1.1rem;
+		z-index: 22;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--graphite);
+		pointer-events: none;
+	}
+
+	:global(body.d-06.d06-live) .d06-meter.is-inverted {
+		color: color-mix(in oklab, var(--paper) 72%, transparent);
+	}
+
+	.d06-meter__i {
+		color: var(--orange);
+	}
+
+	.d06-meter__p {
+		border-left: var(--hairline) solid currentColor;
+		padding-left: 1rem;
+	}
+
+	@media (max-width: 47.99rem) {
+		:global(body.d-06.d06-live) .d06-meter {
+			gap: 0.6rem;
+			font-size: 0.5625rem;
+			letter-spacing: 0.08em;
+			right: auto;
+			left: var(--edge);
+			bottom: 0.9rem;
+		}
+		.d06-meter__n,
+		.d06-meter__r {
+			display: none;
+		}
+	}
+</style>
+
+<script>
+	import { motion, motionAt } from "../../lib/motion";
+
+	type Geo = { x1: number; y1: number; x2: number; y2: number };
+
+	const SECTIONS: [string, string, string][] = [
+		["hero", "HERO", "01 DIAGONAL"],
+		["intro", "INTRO", "02 MARGIN"],
+		["services", "SERVICES", "03 TRACK"],
+		["credibility", "RECORD", "02 MARGIN"],
+		["manifesto", "MANIFESTO", "02 MARGIN"],
+		["process", "PROCESS", "04 TIMELINE"],
+		["capabilities", "CAPABILITIES", "03 TRACK"],
+		["contact", "CONTACT", "05 UNDERLINE"],
+		["colophon", "COLOPHON", "05 UNDERLINE"]
+	];
+
+	/* ---- shared rail state (both motion() and motionAt() write to it) ---- */
+	const R = { x1: 0, y1: 0, x2: 0, y2: 0, o: 1 };
+	let bar: SVGLineElement | null = null;
+
+	let W = 0;
+	let H = 0;
+	let G = 0;
+	let trackY = 0;
+	let procX = 0;
+	let dotY: number[] = [];
+	let ctaU: Geo = { x1: 0, y1: 0, x2: 0, y2: 0 };
+
+	const wide = () => window.matchMedia("(min-width: 64rem)").matches;
+
+	function render() {
+		if (!bar) return;
+		bar.setAttribute("x1", String(R.x1));
+		bar.setAttribute("y1", String(R.y1));
+		bar.setAttribute("x2", String(R.x2));
+		bar.setAttribute("y2", String(R.y2));
+		bar.style.opacity = String(R.o);
+	}
+
+	function measure() {
+		W = window.innerWidth;
+		H = window.innerHeight;
+		const rf = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+		G = Math.min(Math.max(W * 0.04, 1.25 * rf), 4.5 * rf);
+
+		const pin = document.querySelector<HTMLElement>(".d06-svc__pin");
+		const mark = document.querySelector<HTMLElement>(".d06-svc__mark");
+		trackY = H * 0.62;
+		if (pin && mark) {
+			const t = mark.getBoundingClientRect().top - pin.getBoundingClientRect().top;
+			if (t > 0) trackY = t;
+		}
+		trackY = Math.min(Math.max(trackY, H * 0.2), H * 0.86);
+
+		const dots = Array.from(document.querySelectorAll<HTMLElement>(".d06-pr__dot"));
+		const stage = document.querySelector<HTMLElement>(".d06-pr__stage");
+		if (dots.length > 1 && stage) {
+			const st = stage.getBoundingClientRect().top;
+			dotY = dots.map(d => {
+				const r = d.getBoundingClientRect();
+				return r.top - st + r.height / 2;
+			});
+			const r0 = dots[0].getBoundingClientRect();
+			procX = r0.left + r0.width / 2;
+		} else {
+			dotY = [H * 0.3, H * 0.72];
+			procX = G;
+		}
+
+		const cs = document.querySelector<HTMLElement>(".d06-cta__stage");
+		const ch = document.querySelector<HTMLElement>(".d06-cta__head");
+		if (cs && ch) {
+			const s = cs.getBoundingClientRect();
+			const h = ch.getBoundingClientRect();
+			const y = h.bottom - s.top + rf * 0.7;
+			ctaU = { x1: h.left, y1: y, x2: h.right, y2: y };
+		} else {
+			ctaU = { x1: G, y1: H * 0.6, x2: W - G, y2: H * 0.6 };
+		}
+	}
+
+	const S = {
+		diagonal: (): Geo => ({ x1: -0.05 * W, y1: 0.95 * H, x2: 1.05 * W, y2: 0.13 * H }),
+		margin: (): Geo => ({ x1: G, y1: 0.08 * H, x2: G, y2: 0.92 * H }),
+		track: (): Geo => ({ x1: G, y1: trackY, x2: W - G, y2: trackY }),
+		timelineTop: (): Geo => ({ x1: procX, y1: dotY[0], x2: procX, y2: dotY[0] }),
+		timelineFull: (): Geo => ({ x1: procX, y1: dotY[0], x2: procX, y2: dotY[dotY.length - 1] }),
+		transit: (): Geo => ({ x1: G, y1: 0.56 * H, x2: W - G, y2: 0.56 * H }),
+		underline: (): Geo => ctaU
+	};
+
+	/* =====================================================================
+	   Master: ground colour, rail phases, instrumentation.
+	   ===================================================================== */
+	motion(
+		({ gsap, ScrollTrigger, lenis }) => {
+			document.body.classList.add("d06-live");
+
+			bar = document.querySelector<SVGLineElement>(".d06-rail__bar");
+			const ground = document.querySelector<HTMLElement>(".d06-ground");
+			const meterI = document.querySelector<HTMLElement>(".d06-meter__i");
+			const meterN = document.querySelector<HTMLElement>(".d06-meter__n");
+			const meterR = document.querySelector<HTMLElement>(".d06-meter__r");
+			const meterP = document.querySelector<HTMLElement>(".d06-meter__p");
+
+			/* menu / dialog ask the shared Lenis instance to stand down */
+			const onLock = (e: Event) => {
+				const locked = (e as CustomEvent<{ locked: boolean }>).detail?.locked;
+				if (locked) lenis?.stop();
+				else lenis?.start();
+			};
+			window.addEventListener("d06:lock", onLock);
+
+			if (!bar || !ground) return;
+
+			measure();
+			ScrollTrigger.addEventListener("refreshInit", measure);
+			ScrollTrigger.addEventListener("refresh", measure);
+			window.addEventListener(
+				"pagehide",
+				() => {
+					ScrollTrigger.removeEventListener("refreshInit", measure);
+					ScrollTrigger.removeEventListener("refresh", measure);
+					window.removeEventListener("d06:lock", onLock);
+				},
+				{ once: true }
+			);
+
+			Object.assign(R, S.diagonal());
+			render();
+
+			/* 01 — the rail draws itself in across the hero (paint only) */
+			if (window.scrollY < 4) {
+				const d = S.diagonal();
+				const len = Math.hypot(d.x2 - d.x1, d.y2 - d.y1) * 1.02;
+				const line = bar;
+				line.style.strokeDasharray = String(len);
+				gsap.fromTo(
+					line,
+					{ strokeDashoffset: len },
+					{
+						strokeDashoffset: 0,
+						duration: 1.2,
+						ease: "power3.inOut",
+						delay: 0.15,
+						onComplete: () => {
+							line.style.strokeDasharray = "";
+							line.style.strokeDashoffset = "";
+						}
+					}
+				);
+			}
+
+			/* --- phase boundaries ---------------------------------------------
+		   Empty ScrollTriggers used purely as measuring sticks: each one keeps
+		   its .start/.end in absolute scroll pixels and re-solves them on every
+		   refresh, pins included. The rail is then a pure function of scroll
+		   position — one writer, no tween ordering to get wrong. */
+			const mark = (trigger: string, start: string, end: string) => ScrollTrigger.create({ trigger, start, end });
+
+			const bHero = mark("#hero", "top top", "bottom 35%");
+			const bSvc = document.querySelector(".d06-svc__pin") ? mark(".d06-svc__pin", "top bottom", "top top") : null;
+			const bCred = mark("#credibility", "top bottom", "top 45%");
+			const bProc = mark("#process", "top bottom", "top top");
+			const bDraw = mark("#process", "top top", "bottom bottom");
+			const bCap = mark("#capabilities", "top bottom", "top 55%");
+			const bCta = mark("#contact", "top bottom", "top top");
+			const bOut = mark("#contact", "bottom bottom", "bottom 62%");
+
+			const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
+			const at = (st: { start: number; end: number }, y: number) => (st.end === st.start ? 1 : clamp01((y - st.start) / (st.end - st.start)));
+
+			const mix = (a: Geo, b: Geo, t: number): Geo => ({
+				x1: a.x1 + (b.x1 - a.x1) * t,
+				y1: a.y1 + (b.y1 - a.y1) * t,
+				x2: a.x2 + (b.x2 - a.x2) * t,
+				y2: a.y2 + (b.y2 - a.y2) * t
+			});
+
+			const steps = Array.from(document.querySelectorAll<HTMLElement>(".d06-pr__step"));
+			let lastDrawn = -1;
+
+			const solve = (y: number): Geo => {
+				/* 01 diagonal → 02 margin */
+				if (y <= bHero.end) return mix(S.diagonal(), S.margin(), at(bHero, y));
+
+				/* below 64rem the sequence is a plain vertical stack and the rail
+			   simply stays in the margin — the same query that gates the pin */
+				const horizontal = bSvc !== null && wide();
+
+				/* 02 margin → 03 track → hold, while the services sequence is pinned */
+				if (horizontal && bSvc) {
+					if (y < bSvc.start) return S.margin();
+					if (y <= bSvc.end) return mix(S.margin(), S.track(), at(bSvc, y));
+				}
+				const beforeCred = horizontal ? S.track() : S.margin();
+				if (y < bCred.start) return beforeCred;
+
+				/* 03 track → 02 margin, entering the graphite chapter */
+				if (y <= bCred.end) return mix(beforeCred, S.margin(), at(bCred, y));
+				if (y < bProc.start) return S.margin();
+
+				/* 02 margin → 04 timeline column */
+				if (y <= bProc.end) return mix(S.margin(), S.timelineTop(), at(bProc, y));
+
+				/* 04 — the rail draws down between the five steps as they activate.
+			   The process stage is position:sticky, so every dot keeps a constant
+			   viewport y for the length of the section: no per-frame layout reads. */
+				if (y <= bDraw.end) {
+					const t = clamp01((at(bDraw, y) - 0.04) / 0.7);
+					const head = dotY[0] + (dotY[dotY.length - 1] - dotY[0]) * t;
+					if (head !== lastDrawn) {
+						lastDrawn = head;
+						for (let i = 0; i < steps.length; i++) {
+							steps[i].classList.toggle("is-on", head >= (dotY[i] ?? Infinity) - 1);
+						}
+					}
+					return { x1: procX, y1: dotY[0], x2: procX, y2: head };
+				}
+				if (steps.length > 0 && lastDrawn !== Infinity) {
+					lastDrawn = Infinity;
+					steps.forEach(st => st.classList.add("is-on"));
+				}
+
+				/* 04 timeline → horizontal transit across the marquee */
+				if (y <= bCap.end) return mix(S.timelineFull(), S.transit(), at(bCap, y));
+				if (y < bCta.start) return S.transit();
+
+				/* → 05 underline: locks onto the CTA headline while its stage sticks */
+				if (y <= bCta.end) return mix(S.transit(), S.underline(), at(bCta, y));
+				return S.underline();
+			};
+
+			ScrollTrigger.create({
+				start: 0,
+				end: "max",
+				onUpdate: self => {
+					const y = self.scroll();
+					Object.assign(R, solve(y));
+					R.o = y <= bOut.start ? 1 : 1 - at(bOut, y);
+					render();
+				}
+			});
+
+			/* --- junction wipes (2 of the 9 section joins, deliberately not all) --
+		   A viewport-fixed plane whose clip-path edge is scrub-locked to the
+		   arriving section's top edge, so the outgoing section never sits on
+		   the incoming ground: contrast holds at every single frame. The plane
+		   then fades once the ground tween underneath has reached the same
+		   colour, which is what leaves the ground doing the real work. */
+			const junction = (sel: string, trigger: string, ground: string) => {
+				gsap.fromTo(
+					sel,
+					{ clipPath: "inset(100% 0% 0% 0%)" },
+					{
+						clipPath: "inset(0% 0% 0% 0%)",
+						ease: "none",
+						scrollTrigger: { trigger, start: "top bottom", end: "top top", scrub: true }
+					}
+				);
+				gsap.fromTo(
+					ground,
+					{ opacity: 1 },
+					{
+						opacity: 0,
+						ease: "none",
+						immediateRender: false,
+						scrollTrigger: { trigger, start: "top top-=55%", end: "top top-=110%", scrub: 0.3 }
+					}
+				);
+			};
+
+			junction(".d06-wipe--dark", "#credibility", ".d06-wipe--dark");
+			junction(".d06-wipe--light", "#contact", ".d06-wipe--light");
+
+			/* --- ground: warm gray → graphite → warm gray ----------------------
+		   Tweened while the junction plane already covers the viewport, so the
+		   cross-fade itself is never visible behind live type. */
+			gsap.fromTo(
+				ground,
+				{ backgroundColor: "#d3ccc1" },
+				{
+					backgroundColor: "#262626",
+					ease: "none",
+					scrollTrigger: { trigger: "#credibility", start: "top top", end: "top top-=50%", scrub: 0.3 }
+				}
+			);
+			gsap.fromTo(
+				ground,
+				{ backgroundColor: "#262626" },
+				{
+					backgroundColor: "#d3ccc1",
+					ease: "none",
+					immediateRender: false,
+					scrollTrigger: { trigger: "#contact", start: "top top", end: "top top-=50%", scrub: 0.3 }
+				}
+			);
+
+			/* Header and meter invert when the wipe edge — which is locked to the
+		   arriving section's top — passes each of them. They sit at opposite
+		   ends of the viewport, so they flip at different moments. */
+			const header = document.querySelector(".d06-header");
+			if (header) {
+				ScrollTrigger.create({
+					trigger: "#credibility",
+					start: "top 3%",
+					endTrigger: "#contact",
+					end: "top 3%",
+					toggleClass: { targets: [header], className: "is-inverted" }
+				});
+			}
+			const meter = document.querySelector(".d06-meter");
+			if (meter) {
+				ScrollTrigger.create({
+					trigger: "#credibility",
+					start: "top 97%",
+					endTrigger: "#contact",
+					end: "top 97%",
+					toggleClass: { targets: [meter], className: "is-inverted" }
+				});
+			}
+
+			/* --- instrumentation ---------------------------------------------- */
+			const total = String(SECTIONS.length).padStart(2, "0");
+			SECTIONS.forEach(([id, name, role], i) => {
+				if (!document.getElementById(id)) return;
+				ScrollTrigger.create({
+					trigger: "#" + id,
+					start: "top 55%",
+					end: "bottom 55%",
+					onToggle: self => {
+						if (!self.isActive) return;
+						if (meterI) meterI.textContent = "SECTION " + String(i + 1).padStart(2, "0") + " / " + total;
+						if (meterN) meterN.textContent = name;
+						if (meterR) meterR.textContent = "RAIL " + role;
+					}
+				});
+			});
+
+			ScrollTrigger.create({
+				start: 0,
+				end: "max",
+				onUpdate: self => {
+					if (meterP) meterP.textContent = String(Math.round(self.progress * 100)).padStart(3, "0") + "%";
+				}
+			});
+
+			/* pins change document height — re-measure once layout has settled so
+		   nothing below them (the footer included) ends up mis-triggered */
+			const refresh = () => ScrollTrigger.refresh();
+			window.addEventListener("load", refresh, { once: true });
+			if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh).catch(() => {});
+			requestAnimationFrame(() => requestAnimationFrame(refresh));
+		},
+		{ smooth: true }
+	);
+
+	/* =====================================================================
+	   03 TRACK — the pinned horizontal services sequence, desktop only.
+	   The vertical stack is the CSS default; the timeline is what applies the
+	   horizontal layout, and gsap.matchMedia reverts those inline styles the
+	   moment the query stops matching.
+	   ===================================================================== */
+	motionAt("(min-width: 64rem)", ({ gsap }) => {
+		const pin = document.querySelector<HTMLElement>(".d06-svc__pin");
+		const track = document.querySelector<HTMLElement>(".d06-svc__track");
+		const panels = gsap.utils.toArray<HTMLElement>(".d06-svc__panel");
+		const marker = document.querySelector<HTMLElement>(".d06-marker");
+		const markerN = document.querySelector<HTMLElement>(".d06-marker__n");
+		if (!pin || !track || panels.length === 0) return;
+
+		gsap.set(track, {
+			display: "flex",
+			flexDirection: "row",
+			flexWrap: "nowrap",
+			gap: 0,
+			height: "100%",
+			width: panels.length * 100 + "vw"
+		});
+		gsap.set(panels, {
+			width: "100vw",
+			height: "100%",
+			flex: "none",
+			borderTop: "none",
+			borderLeft: "var(--hairline) solid var(--rule-hi)"
+		});
+		gsap.set(pin, { height: "100vh" });
+		if (marker) gsap.set(marker, { xPercent: -50, autoAlpha: 0 });
+
+		const dist = () => (panels.length - 1) * window.innerWidth;
+		let shown = -1;
+
+		const tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: pin,
+				start: "top top",
+				end: () => "+=" + dist(),
+				pin: true,
+				pinSpacing: true,
+				anticipatePin: 1,
+				/* both pins add document height, so they must be measured before
+				   every trigger that sits below them — otherwise everything
+				   downstream keeps its pre-pin scroll positions forever */
+				refreshPriority: 20,
+				scrub: 0.55,
+				invalidateOnRefresh: true,
+				onToggle: self => {
+					if (marker) gsap.to(marker, { autoAlpha: self.isActive ? 1 : 0, duration: 0.25, overwrite: true });
+				},
+				onUpdate: self => {
+					const p = self.progress;
+					if (marker) gsap.set(marker, { x: G + p * (W - 2 * G), y: trackY });
+					const i = Math.min(panels.length - 1, Math.floor(p * panels.length + 0.0001));
+					if (i !== shown) {
+						shown = i;
+						if (markerN) markerN.textContent = String(i + 1).padStart(2, "0");
+						panels.forEach((el, n) => el.classList.toggle("is-current", n === i));
+					}
+				}
+			}
+		});
+		tl.to(track, { x: () => -dist(), ease: "none" });
+	});
+</script>

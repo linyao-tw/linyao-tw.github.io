@@ -1,0 +1,329 @@
+---
+import { manifesto } from "../../lib/copy";
+---
+
+<section class="man" id="manifesto" aria-labelledby="d08-man-a d08-man-b">
+	<div class="in d08-shell">
+		<p class="d08-head">
+			<span class="d08-coord">[04.00]</span>
+			<b>MODULE — TWO STATES</b>
+			<i aria-hidden="true"></i>
+			<span>SAME GEOMETRY / DIFFERENT ROUTE</span>
+		</p>
+
+		<div class="states">
+			<div class="state state-dep">
+				<p class="tag"><span class="d08-coord">[04.A]</span> STATE — DEPRECATED</p>
+				<div class="mod">
+					<span class="nd nd-in" aria-hidden="true"></span>
+					<span class="rt rt-lead" aria-hidden="true"></span>
+					<h2 id="d08-man-a" class="line">{manifesto.headlineParts[0]}</h2>
+					<span class="rt rt-main" aria-hidden="true"><i class="brk">×</i></span>
+					<span class="out"><span class="nd nd-out" aria-hidden="true"></span>⟦ WEBSITE ⟧</span>
+				</div>
+			</div>
+
+			<div class="state state-act">
+				<p class="tag"><span class="d08-coord">[04.B]</span> STATE — ACTIVE</p>
+				<div class="mod">
+					<span class="nd nd-in" aria-hidden="true"></span>
+					<span class="rt rt-lead" aria-hidden="true"></span>
+					<h2 id="d08-man-b" class="line">{manifesto.headlineParts[1]}</h2>
+					<span class="rt rt-main" aria-hidden="true"><i class="arw">▶</i></span>
+					<span class="out"><span class="nd nd-out" aria-hidden="true"></span>⟦ EXPERIENCE ⟧</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="tail">
+			<p class="cp">{manifesto.body.map(l => <span class="cl">{l}</span>)}</p>
+			<dl class="legend">
+				<div><dt><span class="k k-dep" aria-hidden="true"></span>04.A</dt><dd>ROUTE TERMINATED</dd></div>
+				<div><dt><span class="k k-act" aria-hidden="true"></span>04.B</dt><dd>ROUTE RESOLVED</dd></div>
+			</dl>
+		</div>
+	</div>
+</section>
+
+<style>
+	.man {
+		min-height: 100svh;
+		display: flex;
+		align-items: center;
+		padding-block: clamp(4rem, 12vw, 10rem);
+		overflow: clip;
+	}
+
+	.in {
+		width: 100%;
+	}
+
+	.states {
+		padding-block: clamp(2.5rem, 7vw, 6rem) clamp(2rem, 6vw, 5rem);
+		display: grid;
+		gap: clamp(2rem, 5vw, 4rem);
+	}
+
+	.tag {
+		font-size: 0.6875rem;
+		letter-spacing: 0.18em;
+		color: var(--dim);
+		margin-bottom: 0.9rem;
+	}
+
+	.state-act .tag {
+		color: var(--accent-ink);
+	}
+
+	.mod {
+		display: flex;
+		align-items: center;
+		gap: clamp(0.75rem, 1.6vw, 1.5rem);
+	}
+
+	.nd {
+		flex: none;
+		width: 0.75rem;
+		height: 0.75rem;
+		border: 1px solid var(--fg);
+	}
+
+	.nd-in {
+		background: var(--ink-deep);
+		border-color: var(--ink-deep);
+	}
+
+	.state-dep .nd-out {
+		border-style: dashed;
+		border-color: var(--dimmer);
+		background: transparent;
+	}
+
+	.state-act .nd-out {
+		background: var(--accent);
+		border-color: var(--accent);
+	}
+
+	.rt {
+		position: relative;
+		flex: none;
+	}
+
+	.rt-lead {
+		width: clamp(1.5rem, 4vw, 4rem);
+		height: 1px;
+		background: var(--fg);
+		transform-origin: left center;
+	}
+
+	.state-dep .rt-lead {
+		background: var(--dimmer);
+	}
+
+	.state-act .rt-lead {
+		background: var(--accent);
+	}
+
+	.rt-main {
+		flex: 1 1 auto;
+		min-width: 2rem;
+		height: 1px;
+		transform-origin: left center;
+	}
+
+	.state-dep .rt-main {
+		background-image: repeating-linear-gradient(to right, var(--dimmer) 0 0.4rem, transparent 0.4rem 0.85rem);
+	}
+
+	.state-act .rt-main {
+		height: 0.125rem;
+		background: var(--accent);
+	}
+
+	.brk,
+	.arw {
+		position: absolute;
+		top: 50%;
+		font-style: normal;
+		line-height: 1;
+		transform: translateY(-50%);
+	}
+
+	.brk {
+		left: 50%;
+		margin-left: -0.35rem;
+		font-size: 1rem;
+		color: var(--dimmer);
+		background: var(--paper-hi);
+		padding-inline: 0.35rem;
+	}
+
+	.arw {
+		right: -0.1rem;
+		font-size: 0.75rem;
+		color: var(--accent);
+	}
+
+	.line {
+		font-family: var(--font-cjk);
+		font-weight: 600;
+		font-size: clamp(1.75rem, 5.4vw, 4.75rem);
+		line-height: 1;
+		letter-spacing: 0.02em;
+		white-space: nowrap;
+	}
+
+	.state-dep .line {
+		color: var(--dim);
+	}
+
+	.state-act .line {
+		color: var(--fg);
+	}
+
+	.out {
+		flex: none;
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-size: clamp(0.625rem, 1.1vw, 0.8125rem);
+		letter-spacing: 0.16em;
+		white-space: nowrap;
+	}
+
+	.state-dep .out {
+		color: var(--dim);
+		text-decoration: line-through;
+		text-decoration-color: var(--dimmer);
+	}
+
+	.state-act .out {
+		color: var(--accent-ink);
+	}
+
+	.tail {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 24ch);
+		gap: var(--mod);
+		border-top: 1px solid var(--rule);
+		padding-top: clamp(1.5rem, 3vw, 2.5rem);
+	}
+
+	.cp {
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9375rem, 1.15vw, 1.0625rem);
+		line-height: 2;
+		letter-spacing: 0.05em;
+		max-width: 44ch;
+	}
+
+	.cl {
+		display: block;
+	}
+
+	.legend {
+		font-size: 0.6875rem;
+		letter-spacing: 0.12em;
+		align-self: start;
+	}
+
+	.legend > div {
+		display: grid;
+		grid-template-columns: 9ch 1fr;
+		gap: 1ch;
+		border-top: 1px solid var(--rule-soft);
+		padding-block: 0.5rem;
+	}
+
+	.legend dt {
+		display: flex;
+		align-items: center;
+		gap: 1ch;
+		color: var(--dim);
+	}
+
+	.k {
+		width: 1.25rem;
+		height: 1px;
+	}
+
+	.k-dep {
+		background-image: repeating-linear-gradient(to right, var(--dimmer) 0 0.2rem, transparent 0.2rem 0.4rem);
+	}
+
+	.k-act {
+		background: var(--accent);
+		height: 0.125rem;
+	}
+
+	@media (max-width: 68rem) {
+		.tail {
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--s-6);
+		}
+	}
+
+	@media (max-width: 56rem) {
+		.man {
+			min-height: 0;
+		}
+
+		.mod {
+			display: grid;
+			grid-template-columns: 0.75rem clamp(1.5rem, 6vw, 3rem) 1fr;
+			row-gap: 0.9rem;
+			align-items: center;
+		}
+
+		.line {
+			grid-column: 3;
+			font-size: clamp(1.875rem, 8.6vw, 3rem);
+		}
+
+		.rt-main {
+			grid-column: 2 / 4;
+			min-width: 0;
+		}
+
+		.out {
+			grid-column: 2 / 4;
+		}
+
+		.brk {
+			left: 2rem;
+			margin-left: 0;
+		}
+	}
+</style>
+
+<script>
+	import { motion } from "../../lib/motion";
+
+	motion(({ gsap }) => {
+		gsap.from(".man .state-dep .line, .man .state-act .line", {
+			opacity: 0,
+			y: 22,
+			duration: 0.5,
+			stagger: 0.14,
+			ease: "power2.out",
+			scrollTrigger: { trigger: ".man .states", start: "top 76%" }
+		});
+
+		gsap.from(".man .rt-main, .man .rt-lead", {
+			scaleX: 0,
+			duration: 0.6,
+			stagger: 0.08,
+			ease: "power2.inOut",
+			scrollTrigger: { trigger: ".man .states", start: "top 76%" }
+		});
+
+		gsap.from(".man .nd, .man .out", {
+			opacity: 0,
+			duration: 0.3,
+			stagger: 0.06,
+			ease: "none",
+			delay: 0.35,
+			scrollTrigger: { trigger: ".man .states", start: "top 76%" }
+		});
+	});
+</script>

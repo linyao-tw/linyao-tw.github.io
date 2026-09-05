@@ -1,0 +1,231 @@
+---
+import { services } from "../../lib/copy";
+const s = services.items[1];
+---
+
+{
+	/* MOVEMENT 05 — a narrow column standing against a void. Nine tenths of this
+    screen is empty paper; the whole movement is squeezed into three columns. */
+}
+<section id="system" class="sy crop" aria-labelledby="sys-h" data-d10-section>
+	<div class="sy__g g12">
+		<span class="sy__ghost" aria-hidden="true">{s.index}</span>
+		<span class="sy__cross" aria-hidden="true"></span>
+		<span class="sy__drop" aria-hidden="true"></span>
+
+		<div class="sy__col">
+			<p class="sy__run note" aria-hidden="true">05 / MOVEMENT — {s.index}</p>
+
+			<h2 id="sys-h" class="sy__h" aria-label={`${s.en} ${s.zh}`} data-reveal>
+				<span class="sy__en" aria-hidden="true">SYSTEM</span>
+				<span class="sy__en sy__en--b" aria-hidden="true">DEVELOP<span class="sy__hy">-</span>MENT</span>
+				<span class="sy__zh" aria-hidden="true">{s.zh}</span>
+			</h2>
+
+			<p class="sy__pos">{s.position}</p>
+
+			<div class="sy__body">
+				{s.body.map(line => <span>{line}</span>)}
+			</div>
+
+			<ul class="sy__stack">
+				{
+					s.stack.map((t, i) => (
+						<li>
+							<span class="sy__i" aria-hidden="true">
+								{String(i + 1).padStart(2, "0")}
+							</span>
+							{t}
+						</li>
+					))
+				}
+			</ul>
+		</div>
+
+		<p class="sy__void note" aria-hidden="true">NEGATIVE FIELD — COLUMNS 05 THROUGH 12 LEFT EMPTY ON PURPOSE</p>
+	</div>
+</section>
+
+<style>
+	.sy {
+		position: relative;
+		padding-block: clamp(5rem, 14vw, 13rem) clamp(5rem, 14vw, 13rem);
+		min-height: 92svh;
+	}
+
+	.sy__g {
+		position: relative;
+		align-content: start;
+	}
+
+	.sy__col {
+		grid-column: 2 / 5;
+		display: grid;
+		gap: clamp(1rem, 2vw, 1.75rem);
+		position: relative;
+		z-index: 2;
+	}
+
+	.sy__run {
+		color: var(--d10-mark);
+		border-top: 0.1875rem solid var(--d10-accent);
+		padding-top: 0.5rem;
+	}
+
+	.sy__h {
+		display: grid;
+		gap: 0.125rem;
+	}
+
+	.sy__en {
+		display: block;
+		font-family: var(--font-grotesk);
+		font-weight: 700;
+		font-size: clamp(1.75rem, 4.4vw, 3.5rem);
+		line-height: 0.92;
+		letter-spacing: -0.035em;
+	}
+
+	.sy__en--b {
+		color: var(--d10-quiet);
+		font-weight: 400;
+	}
+
+	.sy__hy {
+		color: var(--d10-accent);
+	}
+
+	.sy__zh {
+		display: block;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(2.25rem, calc(3vw + 1.25rem), 4rem);
+		line-height: 1;
+		letter-spacing: -0.02em;
+		margin-top: 0.75rem;
+	}
+
+	.sy__pos {
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: 0.8125rem;
+		letter-spacing: 0.16em;
+		color: var(--d10-mark);
+	}
+
+	.sy__body {
+		display: grid;
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+		line-height: 2;
+		letter-spacing: 0.04em;
+	}
+
+	.sy__stack {
+		display: grid;
+		border-top: var(--hairline) solid var(--d10-rule);
+	}
+
+	.sy__stack li {
+		display: grid;
+		grid-template-columns: 2.5rem 1fr;
+		gap: 0.75rem;
+		padding-block: 0.5rem;
+		border-bottom: var(--hairline) solid var(--d10-faint);
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--d10-quiet);
+	}
+
+	.sy__i {
+		color: var(--d10-mark);
+	}
+
+	/* --- the void: one enormous outlined numeral, one rule, one drop ---- */
+	.sy__ghost {
+		position: absolute;
+		z-index: 0;
+		top: -0.1em;
+		right: -0.24em;
+		font-family: var(--font-grotesk);
+		font-weight: 700;
+		font-size: clamp(9rem, 34vw, 28rem);
+		line-height: 0.74;
+		letter-spacing: -0.06em;
+		color: transparent;
+		-webkit-text-stroke: 1px color-mix(in oklab, var(--d10-ink) 30%, transparent);
+		pointer-events: none;
+	}
+
+	.sy__cross {
+		position: absolute;
+		z-index: 1;
+		left: 8.333%;
+		right: -8vw;
+		top: 46%;
+		height: var(--hairline);
+		background: var(--d10-rule);
+	}
+
+	.sy__drop {
+		position: absolute;
+		z-index: 1;
+		left: 58.333%;
+		top: 46%;
+		bottom: -3rem;
+		width: 0.375rem;
+		background: var(--d10-accent);
+	}
+
+	.sy__void {
+		grid-column: 7 / 13;
+		align-self: end;
+		margin-top: clamp(3rem, 8vw, 7rem);
+		color: var(--d10-quiet);
+		text-align: right;
+		border-bottom: var(--hairline) solid var(--d10-rule);
+		padding-bottom: 0.5rem;
+	}
+
+	@media (max-width: 74.99em) {
+		.sy__col {
+			grid-column: 2 / 7;
+		}
+	}
+
+	@media (max-width: 63.99em) {
+		.sy {
+			min-height: 0;
+		}
+
+		.sy__col {
+			grid-column: 1 / 11;
+		}
+
+		.sy__ghost {
+			font-size: clamp(9rem, 44vw, 20rem);
+			top: auto;
+			bottom: -0.1em;
+			opacity: 0.55;
+		}
+
+		.sy__cross {
+			left: 0;
+			top: 30%;
+		}
+
+		.sy__drop {
+			left: 83.333%;
+			top: 30%;
+			bottom: auto;
+			height: 8rem;
+		}
+
+		.sy__void {
+			grid-column: 1 / 13;
+			text-align: left;
+		}
+	}
+</style>

@@ -1,0 +1,208 @@
+---
+/**
+ * design-04 · plate frame
+ *
+ * Every section of the catalogue is a printed plate: L-shaped crop marks set in
+ * from the four corners, registration targets on the top and bottom gutter axis,
+ * a plate number and a sheet number. Marks live inside the padding box, so they
+ * can never push the document sideways.
+ */
+
+import type { HTMLTag } from "astro/types";
+
+interface Props {
+	as?: HTMLTag;
+	id?: string;
+	labelledby?: string;
+	/** e.g. "PL. 04 — WEB DEVELOPMENT" */
+	plate?: string;
+	/** e.g. "04/09" */
+	sheet?: string;
+	tone?: "hi" | "paper" | "ink";
+	/** vertical measure of the plate */
+	pad?: "xl" | "lg" | "md" | "sm";
+	clip?: boolean;
+	class?: string;
+}
+
+const { as: Tag = "section", id, labelledby, plate, sheet, tone = "hi", pad = "lg", clip = false, class: className }: Props = Astro.props;
+---
+
+<Tag id={id} aria-labelledby={labelledby} class:list={["plate", `t-${tone}`, `p-${pad}`, { clip }, className]}>
+	<span class="crop tl" aria-hidden="true"></span>
+	<span class="crop tr" aria-hidden="true"></span>
+	<span class="crop bl" aria-hidden="true"></span>
+	<span class="crop br" aria-hidden="true"></span>
+
+	<svg class="reg reg-t" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+		<circle cx="12" cy="12" r="6.5" fill="none" stroke="currentColor" stroke-width="1"></circle>
+		<circle cx="12" cy="12" r="1.6" fill="currentColor"></circle>
+		<path d="M12 0v6M12 18v6M0 12h6M18 12h6" stroke="currentColor" stroke-width="1" fill="none"></path>
+	</svg>
+	<svg class="reg reg-b" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+		<circle cx="12" cy="12" r="6.5" fill="none" stroke="currentColor" stroke-width="1"></circle>
+		<circle cx="12" cy="12" r="1.6" fill="currentColor"></circle>
+		<path d="M12 0v6M12 18v6M0 12h6M18 12h6" stroke="currentColor" stroke-width="1" fill="none"></path>
+	</svg>
+
+	{plate && <span class="plate-id">{plate}</span>}
+	{sheet && <span class="sheet-id">SHEET {sheet}</span>}
+
+	<div class="body"><slot /></div>
+</Tag>
+
+<style>
+	.plate {
+		position: relative;
+		padding: var(--plate-y) var(--plate-x);
+		z-index: 0;
+	}
+
+	.p-xl {
+		padding-block: clamp(4.5rem, 11vw, 11rem);
+	}
+
+	.p-md {
+		padding-block: clamp(3rem, 7vw, 6rem);
+	}
+
+	.p-sm {
+		padding-block: clamp(1.75rem, 3.4vw, 3.25rem);
+	}
+
+	.clip {
+		overflow: clip;
+	}
+
+	.t-paper {
+		background: var(--field);
+	}
+
+	.t-ink {
+		background: var(--ink-black);
+		color: var(--paper-hi);
+		--accent-text: var(--orange);
+		--rule: color-mix(in oklab, var(--paper-hi) 46%, transparent);
+		--rule-soft: color-mix(in oklab, var(--paper-hi) 24%, transparent);
+		--rule-faint: color-mix(in oklab, var(--paper-hi) 12%, transparent);
+	}
+
+	/* ---- crop marks -------------------------------------------------- */
+	.crop {
+		position: absolute;
+		width: var(--crop-len);
+		height: var(--crop-len);
+		color: var(--rule);
+		pointer-events: none;
+	}
+
+	.crop::before,
+	.crop::after {
+		content: "";
+		position: absolute;
+		background: currentColor;
+	}
+
+	.crop::before {
+		width: 100%;
+		height: 1px;
+	}
+
+	.crop::after {
+		width: 1px;
+		height: 100%;
+	}
+
+	.tl {
+		top: var(--crop-inset);
+		left: var(--crop-inset);
+	}
+	.tl::before,
+	.tl::after {
+		top: 0;
+		left: 0;
+	}
+
+	.tr {
+		top: var(--crop-inset);
+		right: var(--crop-inset);
+	}
+	.tr::before,
+	.tr::after {
+		top: 0;
+		right: 0;
+	}
+
+	.bl {
+		bottom: var(--crop-inset);
+		left: var(--crop-inset);
+	}
+	.bl::before,
+	.bl::after {
+		bottom: 0;
+		left: 0;
+	}
+
+	.br {
+		bottom: var(--crop-inset);
+		right: var(--crop-inset);
+	}
+	.br::before,
+	.br::after {
+		bottom: 0;
+		right: 0;
+	}
+
+	/* ---- registration targets ---------------------------------------- */
+	.reg {
+		position: absolute;
+		left: 50%;
+		width: 1.05rem;
+		height: 1.05rem;
+		margin-left: -0.525rem;
+		color: var(--rule-soft);
+		pointer-events: none;
+	}
+
+	.reg-t {
+		top: var(--crop-inset);
+	}
+
+	.reg-b {
+		bottom: var(--crop-inset);
+	}
+
+	/* ---- notation ----------------------------------------------------- */
+	.plate-id,
+	.sheet-id {
+		position: absolute;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		text-transform: uppercase;
+		color: color-mix(in oklab, currentColor 62%, transparent);
+		white-space: nowrap;
+	}
+
+	.plate-id {
+		top: calc(var(--crop-inset) - 0.1rem);
+		left: calc(var(--crop-inset) + var(--crop-len) + 0.6rem);
+	}
+
+	.sheet-id {
+		bottom: calc(var(--crop-inset) - 0.1rem);
+		right: calc(var(--crop-inset) + var(--crop-len) + 0.6rem);
+	}
+
+	@media (max-width: 32rem) {
+		.plate-id,
+		.sheet-id {
+			font-size: 0.625rem;
+			letter-spacing: 0.1em;
+		}
+	}
+
+	.body {
+		position: relative;
+	}
+</style>

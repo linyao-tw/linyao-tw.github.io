@@ -1,0 +1,37 @@
+---
+/**
+ * design-01 motion — deliberately restrained.
+ * Native scroll (no Lenis). Only two behaviours: clipped line reveals on the
+ * display headlines, and rules drawing in from the left. The marquee is CSS.
+ */
+---
+
+<script>
+	import { bindAnchorScroll, motion } from "../../lib/motion";
+
+	bindAnchorScroll();
+
+	motion(({ gsap }) => {
+		document.querySelectorAll<HTMLElement>(".d01-lines").forEach(group => {
+			const lines = group.querySelectorAll<HTMLElement>(".d01-line > span");
+			if (!lines.length) return;
+			gsap.from(lines, {
+				yPercent: 125,
+				duration: 1.05,
+				ease: "expo.out",
+				stagger: 0.075,
+				scrollTrigger: { trigger: group, start: "top 88%", once: true }
+			});
+		});
+
+		gsap.utils.toArray<HTMLElement>(".d01-draw").forEach(rule => {
+			gsap.from(rule, {
+				scaleX: 0,
+				transformOrigin: "left center",
+				duration: 1.1,
+				ease: "expo.out",
+				scrollTrigger: { trigger: rule, start: "top 96%", once: true }
+			});
+		});
+	});
+</script>

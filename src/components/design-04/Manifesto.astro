@@ -1,0 +1,165 @@
+---
+/**
+ * design-04 · sheet 07 — thesis
+ *
+ * The dense typographic band. Two lines set solid at full measure: the first
+ * knocked out to an outline (the unprinted plate), the second solid ink over a
+ * cropped halftone field. Margin notation runs down both edges.
+ */
+import { manifesto } from "../../lib/copy";
+import Plate from "./Plate.astro";
+---
+
+<Plate as="section" id="manifesto" labelledby="manifesto-h" plate="PL. 07 — THESIS" sheet="07/09" tone="paper" pad="xl" clip>
+	<div class="wrap">
+		<p class="tag" aria-hidden="true"><span>THESIS 07.1</span><span class="r"></span><span>SET SOLID · 6 CHAR MEASURE</span></p>
+
+		<div class="stage">
+			<div class="ht" aria-hidden="true" data-reg="flip">
+				<svg viewBox="0 0 480 480" preserveAspectRatio="xMidYMid slice" focusable="false"><use href="#d04-halftone"></use></svg>
+			</div>
+			<h2 id="manifesto-h">
+				{manifesto.headlineParts.map((part, i) => <span class:list={["ln", i === 0 ? "out" : "sol"]}>{part}</span>)}
+			</h2>
+		</div>
+
+		<div class="under">
+			<p class="body">{manifesto.body.map(line => <span class="l">{line}</span>)}</p>
+			<dl class="notes">
+				<div><dt>PLATE</dt><dd>07 / THESIS</dd></div>
+				<div><dt>SET</dt><dd>OUTLINE + SOLID</dd></div>
+				<div><dt>SCREEN</dt><dd>ORANGE RED 85 LPI</dd></div>
+			</dl>
+		</div>
+	</div>
+</Plate>
+
+<style>
+	.wrap {
+		display: grid;
+		gap: clamp(1.5rem, 4vw, 3rem);
+	}
+
+	.tag {
+		display: flex;
+		align-items: center;
+		gap: 0.9rem;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: var(--track);
+		color: color-mix(in oklab, currentColor 58%, transparent);
+	}
+
+	.tag .r {
+		flex: 1;
+		height: 1px;
+		background: var(--rule-soft);
+	}
+
+	.stage {
+		position: relative;
+	}
+
+	.ht {
+		position: absolute;
+		right: calc(var(--plate-x) * -1);
+		bottom: -8%;
+		width: min(26rem, 52%);
+		height: 84%;
+		z-index: 0;
+	}
+
+	.ht svg {
+		width: 100%;
+		height: 100%;
+		opacity: 0.9;
+	}
+
+	h2 {
+		position: relative;
+		z-index: 1;
+		font-family: var(--font-cjk);
+		font-weight: 800;
+		font-size: clamp(3rem, 13vw, 11.5rem);
+		line-height: 0.94;
+		letter-spacing: 0.005em;
+	}
+
+	.ln {
+		display: block;
+	}
+
+	.sol {
+		color: var(--ink-black);
+	}
+
+	.out {
+		color: var(--ink-black);
+	}
+
+	@supports (-webkit-text-stroke: 1px currentColor) {
+		.out {
+			color: transparent;
+			-webkit-text-stroke: 0.055rem var(--ink-black);
+		}
+	}
+
+	.under {
+		display: grid;
+		gap: clamp(1.25rem, 3vw, 2.5rem);
+		padding-top: clamp(1rem, 2.5vw, 2rem);
+		border-top: 1px solid var(--rule);
+	}
+
+	.body {
+		display: grid;
+		gap: 0.3rem;
+		max-width: 30rem;
+		font-family: var(--font-cjk);
+		font-size: clamp(0.92rem, 0.88rem + 0.3vw, 1.1rem);
+		line-height: 1.9;
+		letter-spacing: 0.04em;
+		color: var(--ink);
+	}
+
+	.body .l {
+		display: block;
+	}
+
+	.notes {
+		display: grid;
+		gap: 0.5rem;
+		font-family: var(--font-mono);
+		font-size: var(--mono);
+		letter-spacing: 0.1em;
+		align-content: start;
+	}
+
+	.notes div {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		border-bottom: 1px solid var(--rule-faint);
+		padding-bottom: 0.35rem;
+	}
+
+	.notes dt {
+		color: color-mix(in oklab, currentColor 48%, transparent);
+	}
+
+	.notes dd {
+		color: var(--accent-text);
+	}
+
+	@media (min-width: 60rem) {
+		.under {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 18rem);
+			column-gap: clamp(2rem, 6vw, 6rem);
+			align-items: start;
+		}
+
+		.sol {
+			padding-left: 8vw;
+		}
+	}
+</style>

@@ -1,0 +1,184 @@
+---
+import { brand } from "../../lib/copy";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="foot">
+	<svg class="grid" viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+		<g fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
+			<line x1="100" y1="0" x2="0" y2="60"></line>
+			<line x1="100" y1="0" x2="200" y2="60"></line>
+			<line x1="100" y1="0" x2="40" y2="60"></line>
+			<line x1="100" y1="0" x2="160" y2="60"></line>
+			<line x1="0" y1="24" x2="200" y2="24"></line>
+			<line x1="0" y1="44" x2="200" y2="44"></line>
+		</g>
+	</svg>
+
+	<div class="inner">
+		<div class="id">
+			<p class="en">{brand.nameEn}</p>
+			<p class="zh">{brand.nameZh}</p>
+			<p class="eq">{brand.equation}</p>
+		</div>
+
+		<div class="col">
+			<p class="lbl" aria-hidden="true">CONTACT</p>
+			<a class="mail" href={`mailto:${brand.email}`}>{brand.email}</a>
+			<p class="disc">{brand.disciplines}</p>
+		</div>
+
+		<div class="col end">
+			<p class="lbl" aria-hidden="true">EXIT · z −0000</p>
+			<a class="top" href="#top">BACK TO SURFACE ↑</a>
+		</div>
+	</div>
+
+	<p class="legal">
+		<span>{brand.copyright}</span>
+		<span aria-hidden="true">{year}</span>
+	</p>
+</footer>
+
+<style>
+	.foot {
+		position: relative;
+		background: var(--stage-far);
+		color: var(--on-stage);
+		padding: clamp(3rem, 9vh, 6rem) var(--gutter) clamp(1.5rem, 4vh, 2.5rem);
+		overflow: clip;
+		border-top: 1px solid var(--orange-dim);
+	}
+
+	.grid {
+		position: absolute;
+		inset: auto 0 0 0;
+		width: 100%;
+		height: 60%;
+		color: color-mix(in oklab, var(--paper) 9%, transparent);
+	}
+
+	.inner {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto;
+		gap: clamp(1.75rem, 4vw, 4rem);
+		align-items: start;
+		padding-bottom: clamp(2.5rem, 8vh, 5rem);
+	}
+
+	.en {
+		font-family: var(--font-grotesk);
+		font-weight: 600;
+		font-size: clamp(1.35rem, 3.6vw, 2.6rem);
+		line-height: 1.05;
+		letter-spacing: 0.02em;
+		color: var(--on-stage-hi);
+	}
+
+	.zh {
+		margin-top: 0.55rem;
+		font-family: var(--font-cjk);
+		font-size: 0.9375rem;
+		letter-spacing: 0.36em;
+		color: var(--on-stage-dim);
+	}
+
+	.eq {
+		margin-top: 1.1rem;
+		font-family: var(--font-mono);
+		font-size: var(--mark);
+		letter-spacing: 0.26em;
+		color: var(--orange);
+	}
+
+	.col {
+		display: grid;
+		gap: 0.75rem;
+		justify-items: start;
+	}
+
+	.col.end {
+		justify-items: end;
+		text-align: right;
+	}
+
+	.lbl {
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.2em;
+		color: var(--on-stage-mute);
+	}
+
+	.mail {
+		font-family: var(--font-mono);
+		font-size: clamp(0.875rem, 1.4vw, 1.0625rem);
+		letter-spacing: 0.08em;
+		color: var(--on-stage-hi);
+		border-bottom: 1px solid var(--orange);
+		padding-bottom: 0.2rem;
+		min-height: 2.75rem;
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.disc {
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		letter-spacing: 0.18em;
+		color: var(--on-stage-dim);
+	}
+
+	.top {
+		font-family: var(--font-mono);
+		font-size: var(--mark);
+		letter-spacing: 0.16em;
+		color: var(--on-stage-dim);
+		border: 1px solid var(--edge-soft);
+		padding: 0.85rem 1.1rem;
+		min-height: 2.75rem;
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.top:hover,
+	.top:focus-visible {
+		color: var(--on-stage-hi);
+		border-color: var(--orange);
+	}
+
+	.legal {
+		position: relative;
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		border-top: 1px solid var(--edge-soft);
+		padding-top: 1.1rem;
+		font-family: var(--font-mono);
+		font-size: 0.625rem;
+		letter-spacing: 0.18em;
+		color: var(--on-stage-mute);
+	}
+
+	@media (max-width: 64rem) {
+		.inner {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		}
+		.col.end {
+			grid-column: 1 / -1;
+			justify-items: start;
+			text-align: left;
+		}
+	}
+
+	@media (max-width: 48rem) {
+		.inner {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 2rem;
+		}
+		.zh {
+			letter-spacing: 0.24em;
+		}
+	}
+</style>

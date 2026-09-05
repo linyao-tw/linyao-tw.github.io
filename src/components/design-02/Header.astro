@@ -1,0 +1,335 @@
+---
+import { brand, cta, nav } from "../../lib/copy";
+---
+
+<header class="head" id="d02-head">
+	<a class="mark" href="#top">
+		<span class="zh">{brand.nameZh}</span>
+		<span class="en">{brand.nameEn}</span>
+	</a>
+
+	<nav class="desk" aria-label="主要導覽">
+		<ul>
+			{
+				nav.map((n, i) => (
+					<li>
+						<a href={n.href}>
+							<i>{String(i + 1).padStart(2, "0")}</i>
+							<b>{n.label}</b>
+							<em>{n.zh}</em>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+
+	<button class="burger" type="button" id="d02-burger" aria-expanded="false" aria-controls="d02-menu">
+		<span class="visually-hidden">選單</span>
+		<span class="bars" aria-hidden="true"><i></i><i></i></span>
+		<span class="btxt" aria-hidden="true">MENU</span>
+	</button>
+</header>
+
+<div class="menu" id="d02-menu" hidden>
+	<nav aria-label="行動裝置導覽">
+		<ul>
+			{
+				nav.map((n, i) => (
+					<li>
+						<a href={n.href} data-d02-menu-link>
+							<i>{String(i + 1).padStart(2, "0")}</i>
+							<span class="lat">{n.label}</span>
+							<span class="cjk">{n.zh}</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+	<div class="mfoot">
+		<button class="mcta" type="button" data-d02-inquiry>{cta.button}</button>
+		<a class="mmail" href={`mailto:${brand.email}`}>{brand.email}</a>
+	</div>
+</div>
+
+<style>
+	.head {
+		position: fixed;
+		inset-block-start: 0;
+		inset-inline: 0;
+		z-index: 60;
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: var(--s-4);
+		padding: clamp(0.85rem, 1.8vw, 1.5rem) var(--edge);
+		mix-blend-mode: multiply;
+		pointer-events: none;
+		transition: background-color 0.25s linear;
+	}
+
+	/* once the page moves, oversized type runs under the masthead — it needs ground */
+	.head.is-solid {
+		mix-blend-mode: normal;
+		background: var(--paper);
+		border-bottom: var(--hairline) solid var(--rule);
+		padding-block: clamp(0.7rem, 1.4vw, 1.1rem);
+	}
+
+	.head > * {
+		pointer-events: auto;
+	}
+
+	.mark {
+		display: grid;
+		gap: 0.1rem;
+		line-height: 1.05;
+	}
+
+	.mark .zh {
+		font-family: var(--font-cjk);
+		font-size: 0.9rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		color: var(--ink);
+	}
+
+	.mark .en {
+		font-family: var(--font-mono);
+		font-size: 0.6rem;
+		letter-spacing: 0.24em;
+		color: var(--dim);
+	}
+
+	.desk {
+		display: none;
+	}
+
+	.desk ul {
+		display: flex;
+		align-items: flex-start;
+		gap: clamp(1rem, 2.4vw, 2.4rem);
+	}
+
+	.desk a {
+		display: grid;
+		grid-template-areas:
+			"i b"
+			"i e";
+		column-gap: 0.4rem;
+		align-items: baseline;
+		padding-block: 0.25rem;
+	}
+
+	.desk i {
+		grid-area: i;
+		font-family: var(--font-mono);
+		font-size: 0.55rem;
+		font-style: normal;
+		letter-spacing: 0.1em;
+		color: var(--accent-txt);
+		transform: translateY(-0.15rem);
+	}
+
+	.desk b {
+		grid-area: b;
+		font-size: 0.7rem;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		color: var(--ink);
+	}
+
+	.desk em {
+		grid-area: e;
+		font-family: var(--font-cjk);
+		font-style: normal;
+		font-size: 0.62rem;
+		letter-spacing: 0.2em;
+		color: var(--dim);
+	}
+
+	.desk a:hover b,
+	.desk a:focus-visible b {
+		color: var(--accent-txt);
+	}
+
+	/* --- burger ------------------------------------------------------- */
+	.burger {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		min-height: 2.75rem;
+		min-width: 2.75rem;
+		justify-content: flex-end;
+	}
+
+	.bars {
+		display: grid;
+		gap: 0.3rem;
+		width: 1.5rem;
+	}
+
+	.bars i {
+		display: block;
+		height: 1px;
+		background: var(--ink);
+	}
+
+	.btxt {
+		font-family: var(--font-mono);
+		font-size: 0.6rem;
+		letter-spacing: 0.2em;
+		color: var(--ink);
+	}
+
+	.burger[aria-expanded="true"] .bars i:first-child {
+		background: var(--accent);
+	}
+
+	/* --- full screen menu --------------------------------------------- */
+	.menu {
+		position: fixed;
+		inset: 0;
+		z-index: 58;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: var(--s-8);
+		padding: clamp(4.5rem, 14vh, 7rem) var(--edge) var(--edge);
+		background: var(--paper);
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+
+	.menu[hidden] {
+		display: none;
+	}
+
+	.menu ul {
+		border-top: var(--hairline) solid var(--rule-soft);
+	}
+
+	.menu li {
+		border-bottom: var(--hairline) solid var(--rule-soft);
+	}
+
+	.menu li a {
+		display: flex;
+		align-items: baseline;
+		gap: 0.75rem;
+		padding-block: clamp(0.7rem, 2.4vh, 1.1rem);
+		min-height: 2.75rem;
+	}
+
+	.menu i {
+		font-family: var(--font-mono);
+		font-style: normal;
+		font-size: 0.6rem;
+		letter-spacing: 0.1em;
+		color: var(--accent-txt);
+	}
+
+	.menu .lat {
+		font-size: clamp(1.75rem, 9vw, 2.75rem);
+		font-weight: 700;
+		letter-spacing: -0.03em;
+		line-height: 0.95;
+	}
+
+	.menu .cjk {
+		font-family: var(--font-cjk);
+		font-size: 0.8rem;
+		letter-spacing: 0.24em;
+		color: var(--dim);
+		margin-inline-start: auto;
+	}
+
+	.mfoot {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.mcta {
+		justify-self: start;
+		font-family: var(--font-cjk);
+		font-size: clamp(1.5rem, 8vw, 2.25rem);
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		color: var(--accent);
+		min-height: 2.75rem;
+	}
+
+	.mmail {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		letter-spacing: 0.16em;
+		color: var(--dim);
+	}
+
+	@media (min-width: 62rem) {
+		.desk {
+			display: block;
+		}
+
+		.burger,
+		.menu {
+			display: none;
+		}
+	}
+</style>
+
+<script>
+	const head = document.getElementById("d02-head");
+	if (head) {
+		const onScroll = () => head.classList.toggle("is-solid", window.scrollY > 48);
+		window.addEventListener("scroll", onScroll, { passive: true });
+		onScroll();
+	}
+
+	const burger = document.getElementById("d02-burger");
+	const menu = document.getElementById("d02-menu");
+
+	if (burger && menu) {
+		const body = document.body;
+		const focusables = () => Array.from(menu.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"));
+
+		const setOpen = (open: boolean) => {
+			burger.setAttribute("aria-expanded", String(open));
+			menu.hidden = !open;
+			body.classList.toggle("d02-locked", open);
+			if (open) focusables()[0]?.focus();
+			else burger.focus();
+		};
+
+		burger.addEventListener("click", () => setOpen(Boolean(menu.hidden)));
+
+		menu.querySelectorAll("[data-d02-menu-link]").forEach(a => a.addEventListener("click", () => setOpen(false)));
+
+		document.addEventListener("keydown", event => {
+			if (menu.hidden) return;
+			if (event.key === "Escape") {
+				event.preventDefault();
+				setOpen(false);
+				return;
+			}
+			if (event.key !== "Tab") return;
+			const items = focusables();
+			if (!items.length) return;
+			const first = items[0];
+			const last = items[items.length - 1];
+			if (event.shiftKey && document.activeElement === first) {
+				event.preventDefault();
+				last.focus();
+			} else if (!event.shiftKey && document.activeElement === last) {
+				event.preventDefault();
+				first.focus();
+			}
+		});
+
+		const wide = window.matchMedia("(min-width: 62rem)");
+		wide.addEventListener("change", e => {
+			if (e.matches && !menu.hidden) setOpen(false);
+		});
+	}
+</script>

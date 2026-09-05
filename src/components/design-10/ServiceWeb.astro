@@ -1,0 +1,180 @@
+---
+import { services } from "../../lib/copy";
+const s = services.items[0];
+---
+
+{
+	/* MOVEMENT 04 — full-bleed inversion. Horizontal mass, everything pushed to
+    the outer edges, the number cropped away on the left. */
+}
+<section id="web" class="wb inv crop" aria-labelledby="web-h" data-d10-section>
+	<span class="wb__ghost" aria-hidden="true">{s.index}</span>
+
+	<div class="wb__g g12">
+		<p class="wb__run note" aria-hidden="true">04 / MOVEMENT — {s.index}</p>
+
+		<h2 id="web-h" class="wb__h" aria-label={`${s.en} ${s.zh}`} data-reveal>
+			<span class="wb__big" aria-hidden="true">WEB</span>
+			<span class="wb__small" aria-hidden="true">DEVELOPMENT</span>
+			<span class="wb__zh" aria-hidden="true">{s.zh}</span>
+		</h2>
+
+		<p class="wb__pos">{s.position}</p>
+
+		<div class="wb__body">
+			{s.body.map(line => <span>{line}</span>)}
+		</div>
+
+		<ul class="wb__stack">
+			{
+				s.stack.map(t => (
+					<li>
+						<span aria-hidden="true" class="wb__slash">
+							/
+						</span>
+						{t}
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.wb {
+		position: relative;
+		padding-block: clamp(4.5rem, 11vw, 10rem) clamp(3.5rem, 8vw, 8rem);
+	}
+
+	.wb__ghost {
+		position: absolute;
+		top: -0.16em;
+		left: -0.22em;
+		font-family: var(--font-grotesk);
+		font-weight: 700;
+		font-size: clamp(14rem, 52vw, 40rem);
+		line-height: 0.72;
+		letter-spacing: -0.06em;
+		color: transparent;
+		-webkit-text-stroke: 1px color-mix(in oklab, var(--d10-paper) 22%, transparent);
+		pointer-events: none;
+	}
+
+	.wb__g {
+		position: relative;
+		z-index: 1;
+		row-gap: clamp(1.5rem, 3vw, 2.5rem);
+		align-items: end;
+	}
+
+	.wb__run {
+		grid-column: 1 / 6;
+		color: var(--d10-accent);
+	}
+
+	.wb__h {
+		grid-column: 1 / 13;
+		display: grid;
+		gap: 0.25rem;
+	}
+
+	.wb__big {
+		display: block;
+		font-family: var(--font-grotesk);
+		font-weight: 700;
+		font-size: clamp(4.5rem, 25vw, 19rem);
+		line-height: 0.74;
+		letter-spacing: -0.055em;
+		margin-left: -0.045em;
+	}
+
+	.wb__small {
+		display: block;
+		font-family: var(--font-grotesk);
+		font-weight: 400;
+		font-size: clamp(1.375rem, 7.4vw, 5.5rem);
+		line-height: 0.9;
+		letter-spacing: 0.03em;
+		color: var(--d10-accent);
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	.wb__zh {
+		display: block;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(1.125rem, 2.6vw, 2rem);
+		letter-spacing: 0.5em;
+		color: var(--d10-paper);
+		border-top: var(--hairline) solid var(--d10-rule);
+		padding-top: 0.75rem;
+		margin-top: 0.75rem;
+	}
+
+	.wb__pos {
+		grid-column: 1 / 6;
+		font-family: var(--font-cjk);
+		font-size: 0.8125rem;
+		letter-spacing: 0.18em;
+		color: var(--d10-accent);
+	}
+
+	.wb__body {
+		grid-column: 6 / 12;
+		display: grid;
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+		line-height: 2;
+		letter-spacing: 0.04em;
+		color: var(--d10-paper);
+	}
+
+	.wb__stack {
+		grid-column: 1 / 13;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.375rem clamp(0.75rem, 1.8vw, 1.75rem);
+		margin-top: clamp(1.5rem, 4vw, 3.5rem);
+		padding-top: 1rem;
+		border-top: var(--hairline) solid var(--d10-rule);
+	}
+
+	.wb__stack li {
+		display: flex;
+		align-items: baseline;
+		gap: 0.5rem;
+		font-family: var(--font-mono);
+		font-size: clamp(0.6875rem, 1.15vw, 0.875rem);
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--d10-quiet);
+	}
+
+	.wb__slash {
+		color: var(--d10-accent);
+	}
+
+	@media (max-width: 63.99em) {
+		.wb__run {
+			grid-column: 1 / 13;
+		}
+
+		.wb__pos {
+			grid-column: 1 / 13;
+		}
+
+		.wb__body {
+			grid-column: 1 / 13;
+		}
+
+		.wb__small {
+			text-align: left;
+			letter-spacing: 0.01em;
+		}
+
+		.wb__zh {
+			letter-spacing: 0.32em;
+		}
+	}
+</style>
