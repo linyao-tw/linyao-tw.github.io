@@ -24,10 +24,9 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 	<div class="eq" aria-label={brand.equation}>
 		<div class="eq-track ly-eq-track" aria-hidden="true">
 			{
-				eqRepeat.map(i => (
+				eqRepeat.map(() => (
 					<span class="eq-item">
 						<span class="eq-txt">{brand.equation}</span>
-						<span class="eq-mark">/{String(i + 1).padStart(2, "0")}</span>
 					</span>
 				))
 			}
@@ -36,11 +35,6 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 
 	<div class="foot">
 		<p class="cue">{hero.scrollCue}</p>
-		<p class="loc">
-			<span>24.1616°N</span>
-			<span>120.6742°E</span>
-			<span>TAICHUNG</span>
-		</p>
 	</div>
 </section>
 

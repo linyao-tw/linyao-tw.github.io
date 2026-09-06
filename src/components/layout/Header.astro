@@ -1,5 +1,9 @@
 ---
 import { brand, cta, nav } from "../../lib/copy";
+
+/** "/#services" stays a smooth in-page jump while on the home page */
+const onHome = Astro.url.pathname === "/";
+const href = (h: string) => (onHome && h.startsWith("/#") ? h.slice(1) : h);
 ---
 
 <header class="head" id="ly-head">
@@ -8,39 +12,37 @@ import { brand, cta, nav } from "../../lib/copy";
 		<span class="en">{brand.nameEn}</span>
 	</a>
 
-	<nav class="desk" aria-label="主要導覽">
-		<ul>
-			{
-				nav.map((n, i) => (
-					<li>
-						<a href={n.href}>
-							<i>{String(i + 1).padStart(2, "0")}</i>
-							<b>{n.label}</b>
-							<em>{n.zh}</em>
-						</a>
-					</li>
-				))
-			}
-		</ul>
-	</nav>
+	<div class="right">
+		<nav class="desk" aria-label="主要導覽">
+			<ul>
+				{
+					nav.map(n => (
+						<li>
+							<a href={href(n.href)}>{n.label}</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
 
-	<button class="burger" type="button" id="ly-burger" aria-expanded="false" aria-controls="ly-menu">
-		<span class="visually-hidden">選單</span>
-		<span class="bars" aria-hidden="true"><i></i><i></i></span>
-		<span class="btxt" aria-hidden="true">MENU</span>
-	</button>
+		<button class="cta" type="button" data-ly-inquiry>{cta.button}</button>
+
+		<button class="burger" type="button" id="ly-burger" aria-expanded="false" aria-controls="ly-menu">
+			<span class="visually-hidden">選單</span>
+			<span class="bars" aria-hidden="true"><i></i><i></i></span>
+			<span class="btxt" aria-hidden="true">選單</span>
+		</button>
+	</div>
 </header>
 
 <div class="menu" id="ly-menu" hidden>
 	<nav aria-label="行動裝置導覽">
 		<ul>
 			{
-				nav.map((n, i) => (
+				nav.map(n => (
 					<li>
-						<a href={n.href} data-ly-menu-link>
-							<i>{String(i + 1).padStart(2, "0")}</i>
-							<span class="lat">{n.label}</span>
-							<span class="cjk">{n.zh}</span>
+						<a href={href(n.href)} data-ly-menu-link>
+							<span class="cjk">{n.label}</span>
 						</a>
 					</li>
 				))
@@ -60,7 +62,9 @@ import { brand, cta, nav } from "../../lib/copy";
 		inset-inline: 0;
 		z-index: 60;
 		display: flex;
-		align-items: flex-start;
+		/* the mark is a two-line lockup and the nav a single row — centre them
+		   against each other so the masthead reads as one line */
+		align-items: center;
 		justify-content: space-between;
 		gap: var(--s-4);
 		padding: clamp(0.85rem, 1.8vw, 1.5rem) var(--edge);
@@ -106,52 +110,51 @@ import { brand, cta, nav } from "../../lib/copy";
 		display: none;
 	}
 
+	.right {
+		display: flex;
+		align-items: center;
+		gap: clamp(0.75rem, 2vw, 1.75rem);
+	}
+
 	.desk ul {
 		display: flex;
-		align-items: flex-start;
-		gap: clamp(1rem, 2.4vw, 2.4rem);
+		align-items: center;
+		gap: clamp(1rem, 2.4vw, 2.25rem);
 	}
 
 	.desk a {
-		display: grid;
-		grid-template-areas:
-			"i b"
-			"i e";
-		column-gap: 0.4rem;
-		align-items: baseline;
-		padding-block: 0.25rem;
-	}
-
-	.desk i {
-		grid-area: i;
-		font-family: var(--font-mono);
-		font-size: 0.55rem;
-		font-style: normal;
-		letter-spacing: 0.1em;
-		color: var(--accent-txt);
-		transform: translateY(-0.15rem);
-	}
-
-	.desk b {
-		grid-area: b;
-		font-size: 0.7rem;
-		font-weight: 700;
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
+		font-family: var(--font-cjk);
+		font-size: 0.95rem;
+		font-weight: 600;
 		letter-spacing: 0.16em;
 		color: var(--ink);
 	}
 
-	.desk em {
-		grid-area: e;
-		font-family: var(--font-cjk);
-		font-style: normal;
-		font-size: 0.62rem;
-		letter-spacing: 0.2em;
-		color: var(--dim);
+	.desk a:hover,
+	.desk a:focus-visible {
+		color: var(--accent-txt);
 	}
 
-	.desk a:hover b,
-	.desk a:focus-visible b {
-		color: var(--accent-txt);
+	/* --- primary action ------------------------------------------------ */
+	.cta {
+		display: none;
+		align-items: center;
+		min-height: 2.75rem;
+		padding-inline: clamp(0.9rem, 1.8vw, 1.35rem);
+		background: var(--accent);
+		color: var(--paper-hi);
+		font-family: var(--font-cjk);
+		font-size: 0.9rem;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+	}
+
+	.cta:hover,
+	.cta:focus-visible {
+		background: var(--ink);
 	}
 
 	/* --- burger ------------------------------------------------------- */
@@ -268,6 +271,10 @@ import { brand, cta, nav } from "../../lib/copy";
 	}
 
 	@media (min-width: 62rem) {
+		.cta {
+			display: inline-flex;
+		}
+
 		.desk {
 			display: block;
 		}

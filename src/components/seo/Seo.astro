@@ -13,13 +13,15 @@ interface Props {
 	schemaType?: string;
 	/** keep this page out of the index (used by 404) */
 	noindex?: boolean;
+	/** include the product catalogue in this page's structured data */
+	listProducts?: boolean;
 }
 
-const { title, description, schemaType, noindex = false } = Astro.props;
+const { title, description, schemaType, noindex = false, listProducts = false } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL(site.ogImage, site.url).href;
-const schema = buildSchema({ url: canonical, title, description, type: schemaType });
+const schema = buildSchema({ url: canonical, title, description, type: schemaType, listProducts });
 ---
 
 <title>{title}</title>

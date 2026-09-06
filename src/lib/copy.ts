@@ -64,9 +64,9 @@ export const manifesto = {
 	headlineParts: ["我們不做網站", "我們創造體驗"],
 	body: ["好的網站讓人看懂。", "更好的網站，讓人想繼續探索。", "而真正好的體驗，", "在離開之後依然會被記得。"],
 	credibility: [
-		{ figure: "10+", label: "網頁開發經驗", en: "YEARS OF WEB DEVELOPMENT" },
-		{ figure: "GLOBAL", label: "橫掃全球網頁開發獎項肯定", en: "INTERNATIONAL AWARDS" },
-		{ figure: "AWWWARDS", label: "國際頂尖網頁設計獎項 Awwwards 常態評審", en: "STANDING JURY MEMBER" }
+		{ figure: "10+", label: "網頁開發經驗" },
+		{ figure: "GLOBAL", label: "橫掃全球網頁開發獎項肯定" },
+		{ figure: "AWWWARDS", label: "國際頂尖網頁設計獎項 Awwwards 常態評審" }
 	]
 } as const;
 
@@ -109,11 +109,8 @@ export const cta = {
 } as const;
 
 export const nav = [
-	{ label: "ABOUT", zh: "關於", href: "#intro" },
-	{ label: "SERVICES", zh: "服務", href: "#services" },
-	{ label: "WORK", zh: "觀點", href: "#manifesto" },
-	{ label: "PROCESS", zh: "流程", href: "#process" },
-	{ label: "CONTACT", zh: "聯絡", href: "#contact" }
+	{ label: "產品", href: "/products" },
+	{ label: "服務", href: "/#services" }
 ] as const;
 
 /**
@@ -125,13 +122,13 @@ export const inquiry = {
 	action: "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdn762fiVIKYnMLmxUh0c7QiM6lXr8NoV753rfktm8vmmCZYA/formResponse",
 	/** the four single-line questions, in form order */
 	fields: [
-		{ key: "name", entry: "entry.1762185661", label: "姓名 / NAME", type: "text", required: true, autocomplete: "name" },
-		{ key: "email", entry: "entry.850495699", label: "信箱 / EMAIL", type: "email", required: true, autocomplete: "email" },
-		{ key: "company", entry: "entry.862182163", label: "公司・單位 / COMPANY", type: "text", required: false, autocomplete: "organization" },
-		{ key: "budget", entry: "entry.1111530384", label: "預算範圍 / BUDGET", type: "text", required: false, autocomplete: "off" }
+		{ key: "name", entry: "entry.1762185661", label: "姓名", type: "text", required: true, autocomplete: "name" },
+		{ key: "email", entry: "entry.850495699", label: "信箱", type: "email", required: true, autocomplete: "email" },
+		{ key: "company", entry: "entry.862182163", label: "公司・單位", type: "text", required: false, autocomplete: "organization" },
+		{ key: "budget", entry: "entry.1111530384", label: "預算範圍", type: "text", required: false, autocomplete: "off" }
 	],
 	/** 專案內容 — rendered as a textarea */
-	message: { key: "message", entry: "entry.419321590", label: "專案內容 / MESSAGE", required: true },
+	message: { key: "message", entry: "entry.419321590", label: "專案內容", required: true },
 	sending: "正在送出…",
 	sent: "已送出，我們會盡快與你聯絡。",
 	invalid: "請填寫姓名、信箱與專案內容。",

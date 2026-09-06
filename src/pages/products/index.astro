@@ -1,0 +1,212 @@
+---
+import Footer from "../../components/layout/Footer.astro";
+import Header from "../../components/layout/Header.astro";
+import InquiryDialog from "../../components/ui/InquiryDialog.astro";
+import Motion from "../../components/ui/Motion.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { products, productsPage } from "../../lib/products";
+import { site } from "../../lib/site";
+---
+
+<BaseLayout
+	title={`${productsPage.title}｜${site.name} ${site.nameEn}`}
+	description={`${productsPage.lead}${products.map(p => `${p.name} ${p.nameZh}：${p.summary}。`).join("")}`}
+	schemaType="CollectionPage"
+	listProducts
+>
+	<a class="skip-link" href="#main">跳至主要內容</a>
+	<Header />
+
+	<main id="main">
+		<section class="top" aria-labelledby="ly-prod-h">
+			<div class="ghost" aria-hidden="true">品</div>
+			<h1 class="h" id="ly-prod-h" data-ly-lines>
+				<span class="ln"><span class="ly-li">{productsPage.title}</span></span>
+			</h1>
+			<p class="lead" lang="zh-Hant">{productsPage.lead}</p>
+		</section>
+
+		<ol class="rows">
+			{
+				products.map(p => (
+					<li>
+						<article class="row" aria-labelledby={`p-${p.index}`}>
+							<div class="shot" aria-hidden="true" />
+							<div class="body">
+								<p class="idx" aria-hidden="true">
+									{p.index}
+								</p>
+								<h2 class="name" id={`p-${p.index}`}>
+									<span class="lat">{p.name}</span>
+									<span class="cjk" lang="zh-Hant">
+										{p.nameZh}
+									</span>
+								</h2>
+								<div class="desc" lang="zh-Hant">
+									{p.body.map(line => (
+										<p>{line}</p>
+									))}
+								</div>
+								<a class="link" href={p.url} rel="noopener">
+									{p.host} ↗
+								</a>
+							</div>
+						</article>
+					</li>
+				))
+			}
+		</ol>
+	</main>
+
+	<Footer />
+	<InquiryDialog />
+	<Motion />
+</BaseLayout>
+
+<style>
+	.top {
+		position: relative;
+		overflow: clip;
+		padding: clamp(7rem, 18vh, 11rem) var(--edge) clamp(2.5rem, 7vh, 4rem);
+		border-bottom: var(--hairline) solid var(--rule);
+	}
+
+	.ghost {
+		position: absolute;
+		inset-block-start: -12%;
+		inset-inline-end: -4vw;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: 46vw;
+		line-height: 1;
+		color: var(--ghost);
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.h {
+		position: relative;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(3rem, 13vw, 10rem);
+		letter-spacing: 0.02em;
+		color: var(--ink);
+	}
+
+	.h .ln {
+		display: block;
+		overflow: clip;
+		padding-block: 0.16em;
+		margin-block: -0.16em;
+	}
+
+	.h .ly-li {
+		display: block;
+		line-height: 0.82;
+	}
+
+	.lead {
+		position: relative;
+		margin-block-start: clamp(1rem, 3vh, 1.75rem);
+		max-width: 34em;
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+		line-height: 2;
+		color: var(--dim);
+	}
+
+	/* --- rows ----------------------------------------------------------- */
+	.rows {
+		display: grid;
+	}
+
+	.rows > li + li {
+		border-top: var(--hairline) solid var(--rule);
+	}
+
+	.row {
+		display: grid;
+		gap: clamp(1.5rem, 4vw, 3.5rem);
+		align-items: center;
+		padding: clamp(2rem, 6vh, 4rem) var(--edge);
+	}
+
+	/* placeholder for artwork — a flat brand tone for now */
+	.shot {
+		aspect-ratio: 16 / 10;
+		background: var(--paper-lo);
+		border: var(--hairline) solid var(--rule-soft);
+	}
+
+	.body {
+		display: grid;
+		gap: 0.85rem;
+		justify-items: start;
+	}
+
+	.idx {
+		font-family: var(--font-mono);
+		font-size: 0.85rem;
+		letter-spacing: 0.2em;
+		color: var(--accent-txt);
+	}
+
+	.name {
+		display: flex;
+		align-items: baseline;
+		flex-wrap: wrap;
+		gap: 0.5rem 0.75rem;
+		line-height: 0.9;
+	}
+
+	.name .lat {
+		font-family: var(--font-grotesk);
+		font-weight: 900;
+		font-size: clamp(2.25rem, 6vw, 4.25rem);
+		letter-spacing: -0.02em;
+		color: var(--ink);
+	}
+
+	.name .cjk {
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(1.75rem, 4.4vw, 3rem);
+		letter-spacing: 0.04em;
+		color: var(--accent);
+	}
+
+	.desc {
+		display: grid;
+		gap: 0.6rem;
+		max-width: 36em;
+		font-family: var(--font-cjk);
+		font-size: clamp(0.9rem, 1.5vw, 1rem);
+		line-height: 2.05;
+		color: var(--dim);
+	}
+
+	.link {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
+		margin-block-start: 0.35rem;
+		padding-inline: 1.1rem;
+		border: var(--hairline) solid var(--ink);
+		font-family: var(--font-mono);
+		font-size: 0.78rem;
+		letter-spacing: 0.14em;
+		color: var(--ink);
+	}
+
+	.link:hover,
+	.link:focus-visible {
+		background: var(--ink);
+		color: var(--paper-hi);
+	}
+
+	@media (min-width: 56rem) {
+		.row {
+			grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+		}
+	}
+</style>

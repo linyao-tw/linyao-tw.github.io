@@ -10,10 +10,11 @@ interface Props {
 	description: string;
 	schemaType?: string;
 	noindex?: boolean;
+	listProducts?: boolean;
 	bodyClass?: string;
 }
 
-const { title, description, schemaType, noindex, bodyClass } = Astro.props;
+const { title, description, schemaType, noindex, listProducts, bodyClass } = Astro.props;
 ---
 
 <!doctype html>
@@ -23,7 +24,7 @@ const { title, description, schemaType, noindex, bodyClass } = Astro.props;
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
 
-		<Seo title={title} description={description} schemaType={schemaType} noindex={noindex} />
+		<Seo title={title} description={description} schemaType={schemaType} noindex={noindex} listProducts={listProducts} />
 
 		{
 			/* GenKiGothicTW carries both the Latin and the Traditional Chinese voice.

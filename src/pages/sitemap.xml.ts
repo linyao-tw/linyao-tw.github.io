@@ -2,7 +2,10 @@ import type { APIRoute } from "astro";
 import { site } from "../lib/site";
 
 /** Every indexable route. 404 is intentionally absent. */
-const routes = [{ path: "/", changefreq: "monthly", priority: "1.0" }];
+const routes = [
+	{ path: "/", changefreq: "monthly", priority: "1.0" },
+	{ path: "/products", changefreq: "monthly", priority: "0.8" }
+];
 
 export const GET: APIRoute = () => {
 	const lastmod = new Date().toISOString().slice(0, 10);
