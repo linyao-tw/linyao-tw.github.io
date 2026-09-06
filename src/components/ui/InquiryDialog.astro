@@ -63,7 +63,27 @@ import { brand, inquiryFields } from "../../lib/copy";
 	if (dlg && form) {
 		let opener: HTMLElement | null = null;
 
+		const CLOSE_MS = 420;
+		const reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		let closeTimer = 0;
+
+		/** play the close state, then actually close */
+		const dismiss = () => {
+			if (!dlg.open || dlg.classList.contains("is-closing")) return;
+			if (reduced()) {
+				dlg.close();
+				return;
+			}
+			dlg.classList.add("is-closing");
+			closeTimer = window.setTimeout(() => {
+				dlg.classList.remove("is-closing");
+				dlg.close();
+			}, CLOSE_MS);
+		};
+
 		const open = (trigger: HTMLElement) => {
+			window.clearTimeout(closeTimer);
+			dlg.classList.remove("is-closing");
 			// opened from inside the full-screen menu: close that first so the
 			// scroll lock is released and focus has somewhere sane to return to
 			const menu = document.getElementById("ly-menu");
@@ -84,11 +104,17 @@ import { brand, inquiryFields } from "../../lib/copy";
 		});
 
 		dlg.querySelectorAll<HTMLElement>("[data-ly-close]").forEach(btn => {
-			btn.addEventListener("click", () => dlg.close());
+			btn.addEventListener("click", dismiss);
 		});
 
 		dlg.addEventListener("click", event => {
-			if (event.target === dlg) dlg.close();
+			if (event.target === dlg) dismiss();
+		});
+
+		// Esc would close instantly and skip the animation
+		dlg.addEventListener("cancel", event => {
+			event.preventDefault();
+			dismiss();
 		});
 
 		dlg.addEventListener("close", () => {
@@ -128,7 +154,7 @@ import { brand, inquiryFields } from "../../lib/copy";
 
 			if (err) err.textContent = "正在開啟你的郵件軟體…";
 			window.location.href = href;
-			window.setTimeout(() => dlg.close(), 600);
+			window.setTimeout(dismiss, 600);
 		});
 	}
 </script>
@@ -137,15 +163,15 @@ import { brand, inquiryFields } from "../../lib/copy";
 	.dlg {
 		border: 0;
 		padding: 0;
-		/* open/close transition — `overlay` and `display` are discrete
-		   properties, so they need allow-discrete to animate at all */
+		/* Opening animates from @starting-style. Closing is driven by the
+		   script, so `overlay`/`display` are deliberately not transitioned —
+		   they would keep the invisible dialog in the top layer after
+		   close(), where it would still swallow clicks. */
 		opacity: 0;
 		transform: translateY(1.25rem) scale(0.985);
 		transition:
-			opacity 320ms ease,
-			transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
-			overlay 420ms allow-discrete,
-			display 420ms allow-discrete;
+			opacity 300ms ease,
+			transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
 		max-width: min(56rem, 100vw - 1.5rem);
 		width: 100%;
 		max-height: 92svh;
@@ -171,10 +197,7 @@ import { brand, inquiryFields } from "../../lib/copy";
 	.dlg::backdrop {
 		/* ::backdrop cannot see the page custom properties — the --void tone, literal */
 		background: rgb(14 14 13 / 0);
-		transition:
-			background 320ms ease,
-			overlay 420ms allow-discrete,
-			display 420ms allow-discrete;
+		transition: background 300ms ease;
 	}
 
 	.dlg[open]::backdrop {
@@ -187,13 +210,25 @@ import { brand, inquiryFields } from "../../lib/copy";
 		}
 	}
 
+	/* The script adds this, waits for the transition, then calls close() —
+	   a CSS-only close depends on `overlay`, which only Chrome supports. */
+	.dlg[open].is-closing {
+		opacity: 0;
+		transform: translateY(1.25rem) scale(0.985);
+	}
+
+	.dlg[open].is-closing::backdrop {
+		background: rgb(14 14 13 / 0);
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		.dlg,
 		.dlg::backdrop {
 			transition: none;
 		}
 
-		.dlg {
+		.dlg,
+		.dlg[open].is-closing {
 			transform: none;
 		}
 	}
@@ -214,8 +249,8 @@ import { brand, inquiryFields } from "../../lib/copy";
 		padding: 0.6rem clamp(1rem, 3vw, 2rem);
 		border-bottom: var(--hairline) solid var(--ink);
 		font-family: var(--font-mono);
-		font-size: 0.6rem;
-		letter-spacing: 0.24em;
+		font-size: 0.7rem;
+		letter-spacing: 0.18em;
 	}
 
 	.bar-l {
@@ -227,8 +262,8 @@ import { brand, inquiryFields } from "../../lib/copy";
 		display: inline-flex;
 		align-items: center;
 		font-family: var(--font-mono);
-		font-size: 0.6rem;
-		letter-spacing: 0.2em;
+		font-size: 0.72rem;
+		letter-spacing: 0.16em;
 		color: var(--accent-txt);
 	}
 
@@ -245,17 +280,17 @@ import { brand, inquiryFields } from "../../lib/copy";
 	.big-a {
 		font-family: var(--font-cjk);
 		font-weight: 700;
-		font-size: clamp(2.75rem, 11vw, 5.5rem);
+		font-size: clamp(1.9rem, 6.5vw, 3.25rem);
 		line-height: 0.82;
 		letter-spacing: 0.02em;
-		color: transparent;
-		-webkit-text-stroke: 1px var(--ghost-line);
+		/* solid accent — display weight and size, so pure orange is fine here */
+		color: var(--accent);
 	}
 
 	.big-b {
 		font-family: var(--font-mono);
-		font-size: 0.58rem;
-		letter-spacing: 0.24em;
+		font-size: 0.68rem;
+		letter-spacing: 0.18em;
 		color: var(--dim);
 		white-space: nowrap;
 	}
@@ -282,8 +317,8 @@ import { brand, inquiryFields } from "../../lib/copy";
 		align-items: baseline;
 		gap: 0.6rem;
 		font-family: var(--font-mono);
-		font-size: 0.58rem;
-		letter-spacing: 0.2em;
+		font-size: 0.8rem;
+		letter-spacing: 0.12em;
 		color: var(--quiet);
 	}
 
