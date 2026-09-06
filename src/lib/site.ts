@@ -45,4 +45,4 @@ export const site = {
 export const copyrightLine = `© ${site.copyrightYear} ${site.copyrightHolder}`;
 
 /** 麟曜數位工作室｜統一編號 61051820 */
-export const registrationLine = `${site.name}｜統一編號 ${site.taxId}`;
+export const registrationLine = `統一編號 ${site.taxId}`;
