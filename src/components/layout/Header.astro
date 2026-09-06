@@ -93,7 +93,7 @@ const href = (h: string) => (onHome && h.startsWith("/#") ? h.slice(1) : h);
 
 	.mark .zh {
 		font-family: var(--font-cjk);
-		font-size: 0.9rem;
+		font-size: 1.15rem;
 		font-weight: 600;
 		letter-spacing: 0.12em;
 		color: var(--ink);
@@ -101,8 +101,8 @@ const href = (h: string) => (onHome && h.startsWith("/#") ? h.slice(1) : h);
 
 	.mark .en {
 		font-family: var(--font-mono);
-		font-size: 0.6rem;
-		letter-spacing: 0.24em;
+		font-size: var(--fs-min);
+		letter-spacing: 0.1em;
 		color: var(--dim);
 	}
 
@@ -127,7 +127,7 @@ const href = (h: string) => (onHome && h.startsWith("/#") ? h.slice(1) : h);
 		align-items: center;
 		min-height: 2.75rem;
 		font-family: var(--font-cjk);
-		font-size: 0.95rem;
+		font-size: var(--fs-min);
 		font-weight: 600;
 		letter-spacing: 0.16em;
 		color: var(--ink);
@@ -147,7 +147,7 @@ const href = (h: string) => (onHome && h.startsWith("/#") ? h.slice(1) : h);
 		background: var(--accent);
 		color: var(--paper-hi);
 		font-family: var(--font-cjk);
-		font-size: 0.9rem;
+		font-size: var(--fs-min);
 		font-weight: 600;
 		letter-spacing: 0.14em;
 	}
@@ -181,7 +181,7 @@ const href = (h: string) => (onHome && h.startsWith("/#") ? h.slice(1) : h);
 
 	.btxt {
 		font-family: var(--font-mono);
-		font-size: 0.6rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.2em;
 		color: var(--ink);
 	}
@@ -228,7 +228,7 @@ const href = (h: string) => (onHome && h.startsWith("/#") ? h.slice(1) : h);
 	.menu i {
 		font-family: var(--font-mono);
 		font-style: normal;
-		font-size: 0.6rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.1em;
 		color: var(--accent-txt);
 	}
@@ -242,7 +242,7 @@ const href = (h: string) => (onHome && h.startsWith("/#") ? h.slice(1) : h);
 
 	.menu .cjk {
 		font-family: var(--font-cjk);
-		font-size: 0.8rem;
+		font-size: 1.25rem;
 		letter-spacing: 0.24em;
 		color: var(--dim);
 		margin-inline-start: auto;
@@ -265,7 +265,7 @@ const href = (h: string) => (onHome && h.startsWith("/#") ? h.slice(1) : h);
 
 	.mmail {
 		font-family: var(--font-mono);
-		font-size: 0.7rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.16em;
 		color: var(--dim);
 	}

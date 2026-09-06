@@ -122,6 +122,10 @@ img {
 	--font-cjk: var(--font-genki), "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
 	--font-mono: var(--font-noto-sans-mono), var(--font-genki), monospace;
 
+	/* Type floor. Nothing on the site is set below this — body copy, micro
+	   labels and decorative marks alike all sit at or above 17px. */
+	--fs-min: 1.0625rem;
+
 	/* --- space (rem only) --------------------------------------------- */
 	--s-1: 0.25rem;
 	--s-2: 0.5rem;
@@ -148,7 +152,7 @@ body {
 	background: var(--bg);
 	color: var(--fg);
 	font-family: var(--font-grotesk);
-	font-size: 1rem;
+	font-size: var(--fs-min);
 	line-height: 1.55;
 	font-synthesis-weight: none;
 	-webkit-font-smoothing: antialiased;
@@ -196,7 +200,7 @@ body {
 	color: #fff;
 	padding: var(--s-3) var(--s-6);
 	font-family: var(--font-mono);
-	font-size: 0.75rem;
+	font-size: var(--fs-min);
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
 }

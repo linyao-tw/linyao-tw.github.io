@@ -76,7 +76,7 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 		right: calc(var(--edge) * 0.3);
 		writing-mode: vertical-rl;
 		font-family: var(--font-cjk);
-		font-size: 0.64rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.26em;
 		color: var(--dim);
 		display: none;
@@ -165,7 +165,7 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 	/* --- disciplines line --------------------------------------------- */
 	.disc {
 		font-family: var(--font-cjk);
-		font-size: clamp(0.68rem, 1.1vw, 0.82rem);
+		font-size: clamp(var(--fs-min), 1.1vw, 1.35rem);
 		letter-spacing: 0.4em;
 		color: var(--dim);
 		padding: 1.25rem var(--edge) 1.1rem;
@@ -213,7 +213,7 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 
 	.eq-mark {
 		font-family: var(--font-mono);
-		font-size: 0.6rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.18em;
 		color: var(--accent-txt);
 	}
@@ -230,7 +230,7 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 
 	.cue {
 		font-family: var(--font-mono);
-		font-size: 0.62rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.24em;
 		color: var(--accent-txt);
 	}
@@ -239,7 +239,7 @@ const eqRepeat = Array.from({ length: 6 }, (_, i) => i);
 		display: flex;
 		gap: 1.25rem;
 		font-family: var(--font-mono);
-		font-size: 0.58rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.16em;
 		color: var(--dim);
 	}

@@ -91,7 +91,7 @@ const rows = [
 	}
 
 	.l3 {
-		font-size: clamp(0.9rem, 2.6vw, 1.9rem);
+		font-size: clamp(var(--fs-min), 2.6vw, 1.9rem);
 	}
 
 	.l3 .ly-li {
@@ -115,7 +115,7 @@ const rows = [
 		padding: 0.7rem var(--edge);
 		border-block: var(--hairline) solid var(--rule);
 		font-family: var(--font-mono);
-		font-size: 0.58rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.24em;
 		color: var(--dim);
 	}
@@ -140,7 +140,7 @@ const rows = [
 	.d-i i {
 		font-family: var(--font-cjk);
 		font-style: normal;
-		font-size: 0.68rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.14em;
 		color: var(--quiet);
 	}

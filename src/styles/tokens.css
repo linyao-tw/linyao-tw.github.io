@@ -26,7 +26,7 @@
 	--dim: color-mix(in oklab, var(--ink) 82%, var(--paper));
 	--quiet: color-mix(in oklab, var(--ink) 90%, var(--paper));
 
-	--measure: 20rem;
+	--measure: 26rem;
 }
 
 body {

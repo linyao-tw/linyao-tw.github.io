@@ -110,7 +110,7 @@ import { site } from "../../lib/site";
 		margin-block-start: clamp(1rem, 3vh, 1.75rem);
 		max-width: 34em;
 		font-family: var(--font-cjk);
-		font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+		font-size: clamp(var(--fs-min), 1.6vw, 1.25rem);
 		line-height: 2;
 		color: var(--dim);
 	}
@@ -146,7 +146,7 @@ import { site } from "../../lib/site";
 
 	.idx {
 		font-family: var(--font-mono);
-		font-size: 0.85rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.2em;
 		color: var(--accent-txt);
 	}
@@ -180,7 +180,7 @@ import { site } from "../../lib/site";
 		gap: 0.6rem;
 		max-width: 36em;
 		font-family: var(--font-cjk);
-		font-size: clamp(0.9rem, 1.5vw, 1rem);
+		font-size: clamp(var(--fs-min), 1.5vw, 1.2rem);
 		line-height: 2.05;
 		color: var(--dim);
 	}
@@ -193,7 +193,7 @@ import { site } from "../../lib/site";
 		padding-inline: 1.1rem;
 		border: var(--hairline) solid var(--ink);
 		font-family: var(--font-mono);
-		font-size: 0.78rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.14em;
 		color: var(--ink);
 	}

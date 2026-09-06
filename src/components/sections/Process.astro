@@ -111,7 +111,7 @@ import { process } from "../../lib/copy";
 	.hw {
 		writing-mode: vertical-rl;
 		font-family: var(--font-mono);
-		font-size: 0.58rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.3em;
 		text-transform: uppercase;
 		color: var(--accent-txt);
@@ -127,7 +127,7 @@ import { process } from "../../lib/copy";
 	}
 
 	.strip {
-		--st: clamp(0.95rem, 2.2vw, 1.6rem);
+		--st: clamp(var(--fs-min), 2.2vw, 1.6rem);
 		--sn: clamp(1.75rem, 4vw, 3rem);
 		display: grid;
 		width: 100%;
@@ -179,7 +179,7 @@ import { process } from "../../lib/copy";
 
 	.zh {
 		font-family: var(--font-cjk);
-		font-size: clamp(0.72rem, 0.95vw, 0.84rem);
+		font-size: clamp(var(--fs-min), 0.95vw, 1.15rem);
 		letter-spacing: 0.14em;
 		color: var(--quiet);
 		white-space: nowrap;

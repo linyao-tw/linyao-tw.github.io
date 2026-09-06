@@ -104,13 +104,13 @@ const headingId = `ly-svc-${item.index}`;
 	}
 
 	.idx-n {
-		font-size: 0.9rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.06em;
 		color: var(--accent-txt);
 	}
 
 	.idx-l {
-		font-size: 0.55rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.28em;
 	}
 
@@ -167,7 +167,7 @@ const headingId = `ly-svc-${item.index}`;
 		align-items: center;
 		gap: 0.6rem;
 		font-family: var(--font-cjk);
-		font-size: clamp(0.75rem, 1vw, 0.86rem);
+		font-size: clamp(var(--fs-min), 1vw, 1.15rem);
 		letter-spacing: 0.16em;
 		color: var(--dim);
 	}
@@ -182,9 +182,9 @@ const headingId = `ly-svc-${item.index}`;
 	.body {
 		display: grid;
 		gap: 0.1rem;
-		max-width: 26rem;
+		max-width: 30rem;
 		font-family: var(--font-cjk);
-		font-size: clamp(0.8rem, 1vw, 0.9rem);
+		font-size: clamp(var(--fs-min), 1vw, 1.15rem);
 		line-height: 2;
 		letter-spacing: 0.05em;
 		color: var(--quiet);
@@ -199,7 +199,7 @@ const headingId = `ly-svc-${item.index}`;
 		flex-wrap: wrap;
 		gap: 0.35rem 1.1rem;
 		font-family: var(--font-mono);
-		font-size: 0.6rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.16em;
 		text-transform: uppercase;
 		color: var(--dim);

@@ -60,7 +60,7 @@ import { copyrightLine, registrationLine, site } from "../../lib/site";
 	.zh {
 		font-family: var(--font-cjk);
 		font-weight: 600;
-		font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+		font-size: clamp(var(--fs-min), 1.4vw, 1.25rem);
 		letter-spacing: 0.36em;
 		color: var(--ink);
 	}
@@ -76,7 +76,7 @@ import { copyrightLine, registrationLine, site } from "../../lib/site";
 		align-items: center;
 		min-height: 2.75rem;
 		font-family: var(--font-mono);
-		font-size: 0.6rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.22em;
 		color: var(--dim);
 	}
@@ -108,7 +108,7 @@ import { copyrightLine, registrationLine, site } from "../../lib/site";
 		padding: 0.85rem var(--edge) 1.1rem;
 		border-top: var(--hairline) solid var(--rule);
 		font-family: var(--font-mono);
-		font-size: 0.58rem;
+		font-size: var(--fs-min);
 		letter-spacing: 0.2em;
 		color: var(--dim);
 	}
@@ -125,7 +125,7 @@ import { copyrightLine, registrationLine, site } from "../../lib/site";
 		padding: 0 var(--edge) clamp(1.5rem, 4vh, 2.25rem);
 		font-family: var(--font-cjk);
 		font-style: normal;
-		font-size: 0.75rem;
+		font-size: var(--fs-min);
 		line-height: 1.9;
 		letter-spacing: 0.06em;
 		color: var(--dim);
