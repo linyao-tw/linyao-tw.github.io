@@ -116,10 +116,24 @@ export const nav = [
 	{ label: "CONTACT", zh: "聯絡", href: "#contact" }
 ] as const;
 
-/** Inquiry form fields — used by every version's contact dialog. */
-export const inquiryFields = [
-	{ name: "name", label: "姓名 / NAME", type: "text", required: true, autocomplete: "name" },
-	{ name: "email", label: "信箱 / EMAIL", type: "email", required: true, autocomplete: "email" },
-	{ name: "company", label: "公司・單位 / COMPANY", type: "text", required: false, autocomplete: "organization" },
-	{ name: "budget", label: "預算範圍 / BUDGET", type: "text", required: false, autocomplete: "off" }
-] as const;
+/**
+ * Inquiry form. Responses post straight to a Google Form, so each field
+ * carries the entry id of its question there; `key` is only used locally for
+ * label/input wiring and validation.
+ */
+export const inquiry = {
+	action: "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdn762fiVIKYnMLmxUh0c7QiM6lXr8NoV753rfktm8vmmCZYA/formResponse",
+	/** the four single-line questions, in form order */
+	fields: [
+		{ key: "name", entry: "entry.1762185661", label: "姓名 / NAME", type: "text", required: true, autocomplete: "name" },
+		{ key: "email", entry: "entry.850495699", label: "信箱 / EMAIL", type: "email", required: true, autocomplete: "email" },
+		{ key: "company", entry: "entry.862182163", label: "公司・單位 / COMPANY", type: "text", required: false, autocomplete: "organization" },
+		{ key: "budget", entry: "entry.1111530384", label: "預算範圍 / BUDGET", type: "text", required: false, autocomplete: "off" }
+	],
+	/** 專案內容 — rendered as a textarea */
+	message: { key: "message", entry: "entry.419321590", label: "專案內容 / MESSAGE", required: true },
+	sending: "正在送出…",
+	sent: "已送出，我們會盡快與你聯絡。",
+	invalid: "請填寫姓名、信箱與專案內容。",
+	failed: "送出失敗，請改用下方信箱與我們聯絡。"
+} as const;

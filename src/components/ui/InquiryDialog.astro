@@ -1,5 +1,5 @@
 ---
-import { brand, inquiryFields } from "../../lib/copy";
+import { brand, inquiry } from "../../lib/copy";
 ---
 
 <dialog class="dlg" id="ly-inquiry" aria-labelledby="ly-dlg-h">
@@ -17,12 +17,12 @@ import { brand, inquiryFields } from "../../lib/copy";
 			<span class="big-b">{brand.equation}</span>
 		</div>
 
-		<form class="form" id="ly-form" novalidate>
+		<form class="form" id="ly-form" action={inquiry.action} method="post" target="ly-sink" novalidate>
 			<div class="fields">
 				{
-					inquiryFields.map((f, i) => (
+					inquiry.fields.map((f, i) => (
 						<p class="f">
-							<label for={`ly-f-${f.name}`}>
+							<label for={`ly-f-${f.key}`}>
 								<span class="f-i">{String(i + 1).padStart(2, "0")}</span>
 								<span class="f-t">{f.label}</span>
 								{f.required && (
@@ -31,17 +31,17 @@ import { brand, inquiryFields } from "../../lib/copy";
 									</span>
 								)}
 							</label>
-							<input id={`ly-f-${f.name}`} name={f.name} type={f.type} required={f.required} autocomplete={f.autocomplete} />
+							<input id={`ly-f-${f.key}`} name={f.entry} type={f.type} required={f.required} autocomplete={f.autocomplete} />
 						</p>
 					))
 				}
 				<p class="f f-wide">
-					<label for="ly-f-message">
+					<label for={`ly-f-${inquiry.message.key}`}>
 						<span class="f-i">05</span>
-						<span class="f-t">專案內容 / MESSAGE</span>
+						<span class="f-t">{inquiry.message.label}</span>
 						<span class="f-q" aria-hidden="true">必填</span>
 					</label>
-					<textarea id="ly-f-message" name="message" rows="4" required></textarea>
+					<textarea id={`ly-f-${inquiry.message.key}`} name={inquiry.message.entry} rows="4" required></textarea>
 				</p>
 			</div>
 
@@ -55,10 +55,25 @@ import { brand, inquiryFields } from "../../lib/copy";
 	</div>
 </dialog>
 
+<iframe class="sink" name="ly-sink" title="表單送出結果" aria-hidden="true" tabindex="-1"></iframe>
+
 <script>
 	const dlg = document.getElementById("ly-inquiry") as HTMLDialogElement | null;
 	const form = document.getElementById("ly-form") as HTMLFormElement | null;
 	const err = document.getElementById("ly-err");
+
+	const FIELD = {
+		name: "entry.1762185661",
+		email: "entry.850495699",
+		message: "entry.419321590"
+	};
+
+	const COPY = {
+		sending: "正在送出…",
+		sent: "已送出，我們會盡快與你聯絡。",
+		invalid: "請填寫姓名、信箱與專案內容。",
+		failed: "送出失敗，請改用下方信箱與我們聯絡。"
+	};
 
 	if (dlg && form) {
 		let opener: HTMLElement | null = null;
@@ -122,39 +137,51 @@ import { brand, inquiryFields } from "../../lib/copy";
 			opener = null;
 		});
 
-		form.addEventListener("submit", event => {
-			event.preventDefault();
-			const data = new FormData(form);
-			const get = (k: string) => String(data.get(k) ?? "").trim();
+		const send = form.querySelector<HTMLButtonElement>('button[type="submit"]');
 
-			const name = get("name");
-			const email = get("email");
-			const message = get("message");
+		form.addEventListener("submit", async event => {
+			event.preventDefault();
+			if (form.dataset.sending === "1") return;
+
+			const data = new FormData(form);
+			const at = (entry: string) => String(data.get(entry) ?? "").trim();
+
+			const name = at(FIELD.name);
+			const email = at(FIELD.email);
+			const message = at(FIELD.message);
 
 			if (!name || !email || !message) {
-				if (err) err.textContent = "請填寫姓名、信箱與專案內容。";
+				if (err) err.textContent = COPY.invalid;
 				const first = !name ? "name" : !email ? "email" : "message";
 				document.getElementById(`ly-f-${first}`)?.focus();
 				return;
 			}
 
-			const lines = [
-				`姓名 / NAME: ${name}`,
-				`信箱 / EMAIL: ${email}`,
-				`公司・單位 / COMPANY: ${get("company") || "—"}`,
-				`預算範圍 / BUDGET: ${get("budget") || "—"}`,
-				"",
-				"專案內容 / MESSAGE:",
-				message,
-				"",
-				"— 麟曜數位工作室 LINYAO DIGITAL STUDIO"
-			].join("\r\n");
+			form.dataset.sending = "1";
+			if (send) send.disabled = true;
+			if (err) err.textContent = COPY.sending;
 
-			const href = `mailto:contact@linyao.tw?subject=${encodeURIComponent(`詢案 INQUIRY — ${name}`)}&body=${encodeURIComponent(lines)}`;
-
-			if (err) err.textContent = "正在開啟你的郵件軟體…";
-			window.location.href = href;
-			window.setTimeout(dismiss, 600);
+			try {
+				// Google Forms sends no CORS headers, so the response is opaque —
+				// urlencoded POST is a simple request, so it still reaches them.
+				await fetch(form.action, {
+					method: "POST",
+					mode: "no-cors",
+					headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+					body: new URLSearchParams(data as unknown as Record<string, string>)
+				});
+				if (err) err.textContent = COPY.sent;
+				form.reset();
+				window.setTimeout(dismiss, 1400);
+			} catch {
+				// network refused the request entirely — fall back to a native
+				// post into the hidden frame so the response is not lost
+				if (err) err.textContent = COPY.failed;
+				form.submit();
+			} finally {
+				form.dataset.sending = "";
+				if (send) send.disabled = false;
+			}
 		});
 	}
 </script>
@@ -231,6 +258,10 @@ import { brand, inquiryFields } from "../../lib/copy";
 		.dlg[open].is-closing {
 			transform: none;
 		}
+	}
+
+	.sink {
+		display: none;
 	}
 
 	.panel {
