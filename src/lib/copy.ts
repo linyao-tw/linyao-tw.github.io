@@ -64,9 +64,54 @@ export const manifesto = {
 	headlineParts: ["我們不做網站", "我們創造體驗"],
 	body: ["好的網站讓人看懂。", "更好的網站，讓人想繼續探索。", "而真正好的體驗，", "在離開之後依然會被記得。"],
 	credibility: [
-		{ figure: "10+", label: "網頁開發經驗" },
+		{ figure: "十年", label: "網頁開發經驗" },
 		{ figure: "GLOBAL", label: "橫掃全球網頁開發獎項肯定" },
 		{ figure: "AWWWARDS", label: "國際頂尖網頁設計獎項 Awwwards 常態評審" }
+	]
+} as const;
+
+/** web-related awards, listed under the credibility figures */
+export const awards = {
+	title: "獲獎紀錄",
+	items: [
+		{ org: "Awwwards", title: "Honorable Mention", year: "2024" },
+		{ org: "CSS Light", title: "Featured of the Day", year: "2024" },
+		{ org: "Web Guru Awards", title: "Guru of the Day", year: "2024" },
+		{ org: "TopDesignKing", title: "King of the Day", year: "2024" },
+		{ org: "CSSREELS", title: "Featured", year: "2024" },
+		{ org: "Top CSS Gallery", title: "精選收錄", year: "2024" },
+		{ org: "iThome 鐵人賽", title: "DevOps 組 佳作", year: "2024" },
+		{ org: "iThome 鐵人賽", title: "Modern Web 組 鐵人", year: "2023" }
+	]
+} as const;
+
+/** selected collaborations — screenshots live in /public/project */
+export const works = {
+	kicker: "合作案例",
+	headlineParts: ["與頂尖的人", "做頂尖的作品"],
+	body: ["從國立大學、歌手到當代藝術家，", "我們與各領域最頂尖的人並肩合作，", "把他們的作品變成值得被記住的數位體驗。"],
+	items: [
+		{
+			client: "國立陽明交通大學",
+			role: "學術機構",
+			project: "ICT 創創工坊官網",
+			image: "/project/國立陽明交通大學.webp",
+			alt: "國立陽明交通大學 ICT 創創工坊官網首頁"
+		},
+		{
+			client: "蘇裔非",
+			role: "藝人",
+			project: "《少年殺人事件》專輯網站",
+			image: "/project/蘇裔非.webp",
+			alt: "蘇裔非《少年殺人事件》專輯網站首頁"
+		},
+		{
+			client: "妙妙男爵",
+			role: "藝術家",
+			project: "《半嬌面》黃聿謙個展網站",
+			image: "/project/半嬌面 - 黃聿謙個展.webp",
+			alt: "《半嬌面》黃聿謙個展網站首頁"
+		}
 	]
 } as const;
 

@@ -1,0 +1,190 @@
+---
+import { works } from "../../lib/copy";
+---
+
+<section class="works" id="works" aria-labelledby="ly-works-h">
+	<div class="top">
+		<p class="kicker">{works.kicker}</p>
+		<h2 class="h" id="ly-works-h" aria-label={`${works.headlineParts[0]}，${works.headlineParts[1]}`} data-ly-lines>
+			<span class="ln a"><span class="ly-li">{works.headlineParts[0]}</span></span>
+			<span class="ln b"><span class="ly-li">{works.headlineParts[1]}</span></span>
+		</h2>
+		<div class="body" lang="zh-Hant">
+			{works.body.map(line => <p>{line}</p>)}
+		</div>
+	</div>
+
+	<ol class="grid">
+		{
+			works.items.map((w, i) => (
+				<li class="item">
+					<figure class="shot">
+						<img src={encodeURI(w.image)} alt={w.alt} width="1200" height="678" loading="lazy" decoding="async" />
+					</figure>
+					<div class="cap">
+						<p class="role">
+							<span class="n">{String(i + 1).padStart(2, "0")}</span>
+							<span lang="zh-Hant">{w.role}</span>
+						</p>
+						<h3 class="client" lang="zh-Hant">
+							{w.client}
+						</h3>
+						<p class="project" lang="zh-Hant">
+							{w.project}
+						</p>
+					</div>
+				</li>
+			))
+		}
+	</ol>
+</section>
+
+<style>
+	.works {
+		position: relative;
+		overflow: clip;
+		padding: clamp(4rem, 12vh, 8rem) var(--edge) clamp(3rem, 9vh, 6rem);
+		border-top: var(--hairline) solid var(--rule);
+	}
+
+	.top {
+		display: grid;
+		gap: 1rem;
+		padding-block-end: clamp(2rem, 7vh, 4rem);
+	}
+
+	.kicker {
+		font-family: var(--font-mono);
+		font-size: var(--fs-min);
+		letter-spacing: 0.34em;
+		color: var(--accent-txt);
+	}
+
+	.h {
+		display: grid;
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		color: var(--ink);
+	}
+
+	.ln {
+		display: block;
+		overflow: clip;
+		/* same clip-box padding as the process headline — keeps CJK descenders */
+		padding-block: 0.16em;
+		margin-block: -0.16em;
+	}
+
+	.ln .ly-li {
+		display: block;
+		line-height: 0.95;
+		white-space: nowrap;
+		will-change: transform;
+	}
+
+	.a {
+		font-size: clamp(1.4rem, 4.6vw, 3.5rem);
+	}
+
+	.a .ly-li {
+		letter-spacing: 0.14em;
+		color: var(--dim);
+	}
+
+	.b {
+		font-size: clamp(2.4rem, 9vw, 7rem);
+	}
+
+	.b .ly-li {
+		letter-spacing: -0.02em;
+		margin-inline-start: -0.04em;
+	}
+
+	.body {
+		max-width: 30em;
+		margin-block-start: 0.5rem;
+		font-family: var(--font-cjk);
+		font-size: clamp(var(--fs-min), 1.5vw, 1.2rem);
+		line-height: 2;
+		color: var(--dim);
+	}
+
+	.grid {
+		display: grid;
+		gap: clamp(2rem, 6vh, 3rem);
+	}
+
+	.item {
+		display: grid;
+		gap: 1rem;
+		align-content: start;
+	}
+
+	.shot {
+		overflow: clip;
+		border: var(--hairline) solid var(--rule-soft);
+		background: var(--paper-lo);
+	}
+
+	.shot img {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 1200 / 678;
+		object-fit: cover;
+	}
+
+	.cap {
+		display: grid;
+		gap: 0.35rem;
+		padding-block-start: 0.85rem;
+		border-top: var(--hairline) solid var(--ink);
+	}
+
+	.role {
+		display: flex;
+		gap: 0.75rem;
+		font-family: var(--font-mono);
+		font-size: var(--fs-min);
+		letter-spacing: 0.2em;
+		color: var(--accent-txt);
+	}
+
+	.client {
+		font-family: var(--font-cjk);
+		font-weight: 700;
+		font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+		line-height: 1.25;
+		letter-spacing: 0.04em;
+		color: var(--ink);
+	}
+
+	.project {
+		font-family: var(--font-cjk);
+		font-size: var(--fs-min);
+		line-height: 1.7;
+		color: var(--dim);
+	}
+
+	@media (min-width: 56rem) {
+		.top {
+			grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+			grid-template-rows: auto auto;
+			align-items: end;
+			column-gap: clamp(1.5rem, 4vw, 4rem);
+		}
+
+		.kicker {
+			grid-column: 1 / -1;
+		}
+
+		.body {
+			margin: 0;
+			justify-self: end;
+		}
+
+		.grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			column-gap: clamp(1rem, 2.4vw, 2.25rem);
+		}
+	}
+</style>

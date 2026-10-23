@@ -45,7 +45,7 @@ WebGL / Three.js / Canvas / Motion / Interaction / Creative Coding
 更好的網站，讓人想繼續探索。
 而真正好的體驗，
 在離開之後依然會被記得。
-* 10+ 網頁開發經驗
+* 十年網頁開發經驗
 * 橫掃全球網頁開發獎項肯定
 * 國際頂尖網頁設計獎項 Awwwards 常態評審
 ---
