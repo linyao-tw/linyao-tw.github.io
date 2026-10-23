@@ -14,17 +14,16 @@ import { works } from "../../lib/copy";
 		</div>
 	</div>
 
-	<ol class="grid">
+	<ul class="grid">
 		{
-			works.items.map((w, i) => (
+			works.items.map(w => (
 				<li class="item">
 					<figure class="shot">
 						<img src={encodeURI(w.image)} alt={w.alt} width="1200" height="678" loading="lazy" decoding="async" />
 					</figure>
 					<div class="cap">
-						<p class="role">
-							<span class="n">{String(i + 1).padStart(2, "0")}</span>
-							<span lang="zh-Hant">{w.role}</span>
+						<p class="role" lang="zh-Hant">
+							{w.role}
 						</p>
 						<h3 class="client" lang="zh-Hant">
 							{w.client}
@@ -36,7 +35,7 @@ import { works } from "../../lib/copy";
 				</li>
 			))
 		}
-	</ol>
+	</ul>
 </section>
 
 <style>
@@ -141,8 +140,6 @@ import { works } from "../../lib/copy";
 	}
 
 	.role {
-		display: flex;
-		gap: 0.75rem;
 		font-family: var(--font-mono);
 		font-size: var(--fs-min);
 		letter-spacing: 0.2em;

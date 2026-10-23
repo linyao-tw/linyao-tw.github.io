@@ -94,9 +94,9 @@ export const works = {
 		{
 			client: "國立陽明交通大學",
 			role: "學術機構",
-			project: "ICT 創創工坊官網",
+			project: "ICT 創創工坊課程報名、設備與教室借用系統",
 			image: "/project/國立陽明交通大學.webp",
-			alt: "國立陽明交通大學 ICT 創創工坊官網首頁"
+			alt: "國立陽明交通大學 ICT 創創工坊課程報名、設備與教室借用系統首頁"
 		},
 		{
 			client: "蘇裔非",
