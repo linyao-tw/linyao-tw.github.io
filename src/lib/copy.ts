@@ -155,7 +155,8 @@ export const cta = {
 
 export const nav = [
 	{ label: "產品", href: "/products" },
-	{ label: "服務", href: "/#services" }
+	{ label: "服務", href: "/#services" },
+	{ label: "商店", href: "https://store.linyao.tw" }
 ] as const;
 
 /**
